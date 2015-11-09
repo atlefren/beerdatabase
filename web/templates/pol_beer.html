@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <h1>{{pol_beer.name}}</h1>
+    {% if pol_beer.ratebeer %}
+        <p>På Ratebeer som <a href="{{pol_beer.ratebeer | ratebeer_url}}">{{pol_beer.ratebeer.name}}</a></p>
+
+        
+    {% endif %}
+
+
+    <a href="{{pol_beer.url}}">{{pol_beer.url}}</a>
+
+    <ul>
+        {% for store in available_at %}
+            <li>{{ store["pol_name"] }} ({{ store["stock"] }})</a></li>
+        {% endfor %}
+    </ul>
+
+
+</body>
+</html>
