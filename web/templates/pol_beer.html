@@ -7,19 +7,20 @@
 <body>
     <h1>{{pol_beer.name}}</h1>
     {% if pol_beer.ratebeer %}
+
         <p>På Ratebeer som <a href="{{pol_beer.ratebeer | ratebeer_url}}">{{pol_beer.ratebeer.name}}</a></p>
 
-        
+        <a href="{{pol_beer.url}}">{{pol_beer.url}}</a>
+
+        <ul>
+            {% for store in available_at %}
+                <li>{{ store["pol_name"] }} ({{ store["stock"] }})</a></li>
+            {% endfor %}
+        </ul>
+
+    {% else %}
+        <p>Fant ingen match med ratebeer...</p>
     {% endif %}
-
-
-    <a href="{{pol_beer.url}}">{{pol_beer.url}}</a>
-
-    <ul>
-        {% for store in available_at %}
-            <li>{{ store["pol_name"] }} ({{ store["stock"] }})</a></li>
-        {% endfor %}
-    </ul>
 
 
 </body>
