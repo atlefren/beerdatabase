@@ -24,6 +24,7 @@ if minify:
     css_filters.append('cssmin')
 
 css_base = Bundle(
+    'js/lib/fontawesome/css/font-awesome.css',
     Bundle(
         'js/lib/skeleton/css/normalize.css',
         'js/lib/skeleton/css/skeleton.css',
@@ -39,6 +40,7 @@ js_beer_list = Bundle(
     'js/lib/underscore/underscore-min.js',
     'js/lib/react/react.min.js',
     Bundle(
+        'js/src/util.js',
         'js/src/PolBeerTable.jsx',
         filters=js_filters
     ),

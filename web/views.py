@@ -28,7 +28,7 @@ def get_ratebeer_url(ratebeer_beer):
 @app.route('/')
 def index():
     pol_beers = current_app.db_session.query(PoletBeer).all()
-    pol_beers_json = json.dumps(pol_beers)
+    pol_beers_json = json.dumps([b.get_list_response() for b in pol_beers])
     return render_template('index.html', json=pol_beers_json)
 
 

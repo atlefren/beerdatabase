@@ -83,3 +83,17 @@ class PoletBeer(Base):
 
     def __init__(self):
         pass
+
+    def get_list_response(self):
+        has_rb = self.ratebeer is not None
+        return {
+            'name': self.ratebeer.name if has_rb else self.name,
+            'brewery': self.ratebeer.brewery.name if has_rb else self.producer,
+            'style': self.ratebeer.style.name if has_rb else None,
+            'abv': self.ratebeer.abv if has_rb else None,
+            'price': self.price,
+            'score_overall': self.ratebeer.score_overall if has_rb else None,
+            'score_style': self.ratebeer.score_style if has_rb else None,
+            'has_rb': has_rb,
+            'id': self.id,
+        }
