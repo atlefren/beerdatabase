@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block css %}
+{{ super() }}
+
+{% endblock %}
+
+{% block main %}
+
     <h1>{{pol_beer.name}}</h1>
     {% if pol_beer.ratebeer %}
 
@@ -22,6 +24,9 @@
         <p>Fant ingen match med ratebeer...</p>
     {% endif %}
 
+{% endblock %}
 
-</body>
-</html>
+{% block js %}
+{{ super() }}
+
+{% endblock %}

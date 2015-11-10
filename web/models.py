@@ -2,18 +2,27 @@
 
 import sqlalchemy as sa
 from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
+from flask.ext.jsontools import JsonSerializableBase
 
-from web import db
+Base = declarative_base(cls=(JsonSerializableBase,))
 
 
-class RatebeerBeer(db.Model):
+class BeerStyle(Base):
+    __tablename__ = 'style'
+    id = sa.Column('id', sa.Integer, primary_key=True)
+    name = sa.Column('name', sa.Unicode(255))
+
+
+class RatebeerBeer(Base):
     __tablename__ = 'rb_beer'
     id = sa.Column('id', sa.Integer, primary_key=True)
     name = sa.Column('name', sa.Unicode(255))
     shortname = sa.Column('shortname', sa.Unicode(255))
     alias = sa.Column('alias', sa.Boolean)
     retired = sa.Column('retired', sa.Boolean)
-    style_id = sa.Column('style_id', sa.Integer)
+    style_id = sa.Column('style_id', sa.Integer, sa.ForeignKey('style.id'))
+    style = relationship('BeerStyle', lazy=False)
     score_overall = sa.Column('score_overall', sa.Float)
     score_style = sa.Column('score_style', sa.Float)
     abv = sa.Column('abv', sa.Float)
@@ -25,7 +34,7 @@ class RatebeerBeer(db.Model):
         pass
 
 
-class RatebeerBrewery(db.Model):
+class RatebeerBrewery(Base):
     __tablename__ = 'rb_brewery'
     id = sa.Column('id', sa.Integer, primary_key=True)
     name = sa.Column('name', sa.Unicode(255))
@@ -37,7 +46,7 @@ class RatebeerBrewery(db.Model):
         pass
 
 
-class PoletBeer(db.Model):
+class PoletBeer(Base):
     __tablename__ = 'pol_beer'
     id = sa.Column('id', sa.Integer, primary_key=True)
     name = sa.Column('name', sa.Unicode(255))

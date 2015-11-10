@@ -1,15 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
-    <ul>
-        {% for beer in pol_beers %}
-            <li><a href="{{url_for('pol_beer', id=beer.id)}}">{{ beer.name }}</a></li>
-        {% endfor %}
-    </ul>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block css %}
+{{ super() }}
+
+{% endblock %}
+
+{% block main %}
+
+<div id="beer_list"></div>
+
+{%endblock %}
+
+
+{% block js %}
+{{ super() }}
+    {% assets "js_beer_list" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+    <script type="text/javascript">
+        //console.log({{ json | safe }});
+        (function () {
+            var beerList = {{ json | safe }};
+            bd.renderPolBeerTable(
+                beerList,
+                document.getElementById('beer_list')
+            );
+        }());
+        
+    </script>
+
+{% endblock %}

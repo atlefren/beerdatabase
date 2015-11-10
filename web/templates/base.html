@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} {% endblock %}</title>
+    {% block css %}
+        {% assets "css_base" %}
+        <link type="text/css" rel="stylesheet" href="{{ ASSET_URL }}">
+        {% endassets %}
+    {% endblock %}
+</head>
+<body>
+    <div class="container">
+    {% block main %}
+    {% endblock %}
+    </div>
+    {% block js %}
+    {% endblock %}
+</body>
+</html>

@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
 import os
+
 from flask import Flask
-# from webassets.loaders import PythonLoader
-# from flask.ext.assets import Environment
+from webassets.loaders import PythonLoader
+from flask.ext.assets import Environment
 # from flask_googlelogin import GoogleLogin
 # from flask_login import LoginManager
 from flask.ext.sqlalchemy import SQLAlchemy
-
+from flask.ext.jsontools import DynamicJSONEncoder
 
 app = Flask(__name__)
+
+app.json_encoder = DynamicJSONEncoder
 
 # load config
 app.config.update(
@@ -24,13 +27,13 @@ app.config.update(
 db = SQLAlchemy(app)
 
 # setup assetbundle
-'''
+
 assets = Environment(app)
 assets.debug = True if app.debug == 'True' else False
-bundles = PythonLoader('newbeercellar.assetbundles').load_bundles()
+bundles = PythonLoader('web.assetbundles').load_bundles()
 for name, bundle in bundles.iteritems():
     assets.register(name, bundle)
-'''
+
 
 # add various views
 from web import views

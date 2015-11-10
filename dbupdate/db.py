@@ -46,6 +46,18 @@ def get_rb_beers_for_brewery(brewery_id):
     return beers
 
 
+def get_pol_brewery(id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute('SELECT id, ratebeer_id FROM pol_beer where id=%s', (id,))
+    res = cur.fetchone()
+    cur.close()
+    conn.close()
+    if res:
+        return {'id': res[0], 'ratebeer_id': res[1]}
+    return None
+
+
 def get_rb_breweries():
     conn = get_connection()
     cur = conn.cursor()

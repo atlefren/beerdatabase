@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import re
 
-from flask import render_template, current_app
+
+from flask import render_template, current_app, abort, json
 from beertools import polchecker
 
 from web import app
@@ -27,11 +28,14 @@ def get_ratebeer_url(ratebeer_beer):
 @app.route('/')
 def index():
     pol_beers = current_app.db_session.query(PoletBeer).all()
-    return render_template('index.html', pol_beers=pol_beers)
+    pol_beers_json = json.dumps(pol_beers)
+    return render_template('index.html', json=pol_beers_json)
 
 
 @app.route('/pol_beer/<int:id>')
 def pol_beer(id):
     pol_beer = current_app.db_session.query(PoletBeer).get(id)
+    if not pol_beer:
+        abort(404)
     available_at = polchecker.check_beer(pol_beer.id)
     return render_template('pol_beer.html', pol_beer=pol_beer, available_at=available_at)

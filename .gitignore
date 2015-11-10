@@ -1,1 +1,3 @@
 *.pyc
+web/static/gen
+web/static/.webassets-cache/

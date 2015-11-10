@@ -4,7 +4,8 @@ from collections import defaultdict
 import psycopg2
 from beertools import read_pol_beers, BreweryNameMatcher, BeerNameMatcher
 
-from db import get_rb_beers_for_brewery, get_rb_breweries, run_upserts
+from db import (get_rb_beers_for_brewery, get_rb_breweries, run_upserts,
+                get_pol_brewery)
 
 
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
@@ -47,6 +48,13 @@ def match_pol_breweries(breweries_pol, breweries_rb):
 
 
 def match_pol_beer(pol_beer, beer_matcher):
+
+    from_db = get_pol_brewery(pol_beer['Varenummer'])
+    if from_db is not None:
+        print 'Aleready matchec'
+        pol_beer['ratebeer_id'] = from_db['ratebeer_id']
+        return pol_beer
+
     pol_beer_name = pol_beer['Varenavn']
     abv = pol_beer['Alkohol']
     beer_match = beer_matcher.match_name(pol_beer_name, abv=abv)
