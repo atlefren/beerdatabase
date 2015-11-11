@@ -4,6 +4,8 @@ import re
 
 from flask import render_template, current_app, abort, json
 from beertools import polchecker
+from sqlalchemy.sql import func
+from sqlalchemy import and_
 
 from web import app
 from models import PoletBeer, BeerStyle, RatebeerBeer, RatebeerBrewery
@@ -57,10 +59,39 @@ def style(id):
         .filter(RatebeerBeer.style_id == id)\
         .all()
     beers_json = json.dumps([b.get_list_response() for b in beers])
-    return render_template('style.html', json=beers_json, style=style, num=len(beers))
+    return render_template(
+        'style.html',
+        json=beers_json,
+        style=style,
+        num=len(beers)
+    )
 
 
 @app.route('/breweries/')
 def brewery_list():
-    breweries = current_app.db_session.query(RatebeerBrewery).all()
+    breweries = current_app.db_session.query(RatebeerBrewery, func.count())\
+        .join(RatebeerBeer)\
+        .join(PoletBeer)\
+        .group_by(RatebeerBrewery)\
+        .order_by(RatebeerBrewery.name)\
+        .all()
+
+    # TODO: incorporate in query
+    breweries = [b[0].get_list_response(count=b[1]) for b in breweries]
     return render_template('brewery_list.html', breweries=breweries)
+
+
+@app.route('/breweries/<int:id>')
+def brewery(id):
+    brewery = current_app.db_session.query(RatebeerBrewery).get(id)
+    beers = current_app.db_session.query(PoletBeer)\
+        .join(RatebeerBeer)\
+        .filter(RatebeerBeer.brewery_id == id)\
+        .all()
+    beers_json = json.dumps([b.get_list_response() for b in beers])
+    return render_template(
+        'brewery.html',
+        json=beers_json,
+        brewery=brewery,
+        num=len(beers)
+    )

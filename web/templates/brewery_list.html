@@ -9,7 +9,7 @@
 <h1>Bryggerier</h1>
 <ul>
     {% for brewery in breweries %}
-    <li><a href="/breweries/{{brewery.id}}">{{brewery.name}}</a></li>
+    <li><a href="/breweries/{{brewery.id}}">{{brewery.name}}</a> ({{brewery.num_beers_polet}})</li>
     {% endfor %}
 </ul>
 

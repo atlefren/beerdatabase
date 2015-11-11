@@ -29,6 +29,7 @@ class RatebeerBeer(Base):
     ibu = sa.Column('ibu', sa.Float)
     brewery_id = sa.Column('brewery_id', sa.Integer, sa.ForeignKey('rb_brewery.id'), nullable=False)
     brewery = relationship('RatebeerBrewery', lazy=False)
+    pol_beers = relationship('PoletBeer', lazy=False, back_populates='ratebeer')
 
     def __init__(self):
         pass
@@ -44,6 +45,14 @@ class RatebeerBrewery(Base):
 
     def __init__(self):
         pass
+
+    def get_list_response(self, count=None):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'country': self.country,
+            'num_beers_polet': count
+        }
 
 
 class PoletBeer(Base):
@@ -79,7 +88,7 @@ class PoletBeer(Base):
     bitterness = sa.Column('bitterness', sa.Integer)
     richness = sa.Column('richness', sa.Integer)
     ratebeer_id = sa.Column('ratebeer_id', sa.Integer, sa.ForeignKey('rb_beer.id'), nullable=True)
-    ratebeer = relationship('RatebeerBeer', lazy=False)
+    ratebeer = relationship('RatebeerBeer', lazy=False, back_populates='pol_beers')
 
     def __init__(self):
         pass
