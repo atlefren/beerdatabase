@@ -44,6 +44,11 @@ def pol_beer(id):
     return render_template('pol_beer.html', json=json.dumps(pol_beer))
 
 
+@app.route('/pol_beers/<int:id>/report')
+def pol_beer_report(id):
+    return 'Ok, kommer snart!'
+
+
 @app.route('/styles/')
 def style_list():
     # TODO limit to available styles at polet

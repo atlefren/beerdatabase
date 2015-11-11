@@ -4,14 +4,32 @@ var bd = this.bd || {};
 
     var BeerOverview = React.createClass({
 
+        getHelpMsg: function () {
+            var t = _.template('<strong>Hjelp:</strong> Dette ølet heter<strong><%= beer.name %></strong> og er brygget ' +
+                    'av <strong><%= beer.producer %></strong> ifølge Vinmonopolet. Hvis dette ikke stemmer ' +
+                    'kan det godt skyldes en feilmatching, fint om du kan si fra om feilen <a href="/pol_beers/<%= beer.id %>/report">her</a>.');
+            return t({beer: this.props.beer});
+        },
+
         render: function () {
             var beer = this.props.beer;
             var rbbeer = this.props.beer.ratebeer;
+            var report_link = '/pol_beers/' + beer.id + '/report';
+
             return (
                 <div>
                     <h1>{rbbeer.name}</h1>
+
+                    <p>Brygget av {rbbeer.brewery.name}</p> 
+
                     <div className="row">
-                         <div className="four columns">
+                        <div className="one column">
+                            <div><strong>Overall</strong></div>
+                            <div>{ns.Util.valueOrNa(rbbeer.score_overall)}</div>
+                            <div>Style</div>
+                            <div>{ns.Util.valueOrNa(rbbeer.score_style)}</div>
+                        </div>
+                        <div className="four columns">
                             <table className="u-full-width">
                                 <tr>
                                     <th>Stil</th>
@@ -25,8 +43,11 @@ var bd = this.bd || {};
                                     <th>Ibu</th>
                                     <td>{ns.Util.valueOrNa(rbbeer.ibu)}</td>
                                 </tr>
+                                <tr>
+                                    <th>Alias</th>
+                                    <td>{rbbeer.alias}</td>
+                                </tr>
                             </table>
-                            <a href="">Mer hos Ratebeer</a>
                          </div>
                          <div className="four columns">
                             <table className="u-full-width">
@@ -49,9 +70,13 @@ var bd = this.bd || {};
                             </table>
                          </div>
                          <div className="four columns">
-                           
                          </div>
                     </div>
+
+                    <a href="">Mer hos Ratebeer</a> 
+                    <a href="">Mer hos Vinmonopolet</a> 
+                    <a href="">Mer hos Apéritif.no</a>
+
                      <table className="u-full-width">
                         <tr>
                             <th>Karakteristikk</th>
@@ -78,6 +103,8 @@ var bd = this.bd || {};
                             <td>{beer.storage_notes}</td>
                         </tr>
                     </table>
+
+                    <p>{this.getHelpMsg()}</p>
                 </div>
             );
         }
