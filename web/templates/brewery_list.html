@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block css %}
+{{ super() }}
+
+{% endblock %}
+
+{% block main %}
+<h1>Bryggerier</h1>
+<ul>
+    {% for brewery in breweries %}
+    <li><a href="/breweries/{{brewery.id}}">{{brewery.name}}</a></li>
+    {% endfor %}
+</ul>
+
+{%endblock %}
+
+
+{% block js %}
+{{ super() }}
+    {% assets "js_beer_list" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+    <script type="text/javascript">
+        (function () {
+        }());
+        
+    </script>
+
+{% endblock %}

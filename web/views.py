@@ -6,7 +6,7 @@ from flask import render_template, current_app, abort, json
 from beertools import polchecker
 
 from web import app
-from models import PoletBeer, BeerStyle, RatebeerBeer
+from models import PoletBeer, BeerStyle, RatebeerBeer, RatebeerBrewery
 
 RATEBEER_BASE_URL = 'http://www.ratebeer.com/beer'
 
@@ -43,6 +43,7 @@ def pol_beer(id):
 
 @app.route('/styles/')
 def style_list():
+    # TODO limit to available styles at polet
     styles = current_app.db_session.query(BeerStyle).all()
     styles_json = json.dumps(styles)
     return render_template('style_list.html', json=styles_json)
@@ -56,4 +57,10 @@ def style(id):
         .filter(RatebeerBeer.style_id == id)\
         .all()
     beers_json = json.dumps([b.get_list_response() for b in beers])
-    return render_template('style.html', json=beers_json, style=style)
+    return render_template('style.html', json=beers_json, style=style, num=len(beers))
+
+
+@app.route('/breweries/')
+def brewery_list():
+    breweries = current_app.db_session.query(RatebeerBrewery).all()
+    return render_template('brewery_list.html', breweries=breweries)

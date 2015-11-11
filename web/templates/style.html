@@ -7,6 +7,11 @@
 
 {% block main %}
 <h1>{{style.name}}</h1>
+{%if num > 0 %}
+<p>Det er pr nå registrert {{num}} øl av stilen {{style.name}} hos Vinmonopolet.</p>
+{% else %}
+<p>Det er pr nå ikke registrert noen øl av stilen {{style.name}} hos Vinmonopolet.</p>
+{%endif %}
 <div id="beer_list"></div>
 
 {%endblock %}
@@ -21,11 +26,13 @@
     <script type="text/javascript">
         (function () {
             var beerList = {{ json | safe }};
-            bd.renderPolBeerTable(
-                beerList,
-                ['name', 'brewery', 'rating', 'abv', 'price'],
-                document.getElementById('beer_list')
-            );
+            if (beerList.length) {
+                bd.renderPolBeerTable(
+                    beerList,
+                    ['name', 'brewery', 'rating', 'abv', 'price'],
+                    document.getElementById('beer_list')
+                );
+            }
         }());
         
     </script>
