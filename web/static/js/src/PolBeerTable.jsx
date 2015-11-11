@@ -173,7 +173,7 @@ var bd = this.bd || {};
             },
             sortParams: 'score_overall',
             isSorted: false,
-            sortDirection: 'asc'
+            sortDirection: 'desc'
         },
         {
             id: 'abv',
@@ -183,7 +183,7 @@ var bd = this.bd || {};
             },
             sortParams: 'abv',
             isSorted: false,
-            sortDirection: 'asc'
+            sortDirection: 'desc'
         },
         {
             id: 'price',
@@ -193,7 +193,7 @@ var bd = this.bd || {};
             },
             sortParams: 'price',
             isSorted: false,
-            sortDirection: 'asc'
+            sortDirection: 'desc'
         }
     ];
 

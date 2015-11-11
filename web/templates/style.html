@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block css %}
+{{ super() }}
+
+{% endblock %}
+
+{% block main %}
+<h1>{{style.name}}</h1>
+<div id="beer_list"></div>
+
+{%endblock %}
+
+
+{% block js %}
+{{ super() }}
+    {% assets "js_beer_list" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+    <script type="text/javascript">
+        (function () {
+            var beerList = {{ json | safe }};
+            bd.renderPolBeerTable(
+                beerList,
+                ['name', 'brewery', 'rating', 'abv', 'price'],
+                document.getElementById('beer_list')
+            );
+        }());
+        
+    </script>
+
+{% endblock %}
