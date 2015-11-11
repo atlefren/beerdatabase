@@ -25,14 +25,14 @@ def get_ratebeer_url(ratebeer_beer):
     return ratebeer_url(ratebeer_beer.id, ratebeer_beer.shortname)
 
 
-@app.route('/')
+@app.route('/pol_beers/')
 def index():
     pol_beers = current_app.db_session.query(PoletBeer).all()
     pol_beers_json = json.dumps([b.get_list_response() for b in pol_beers])
-    return render_template('index.html', json=pol_beers_json)
+    return render_template('pol_beer_list.html', json=pol_beers_json)
 
 
-@app.route('/pol_beer/<int:id>')
+@app.route('/pol_beers/<int:id>')
 def pol_beer(id):
     pol_beer = current_app.db_session.query(PoletBeer).get(id)
     if not pol_beer:

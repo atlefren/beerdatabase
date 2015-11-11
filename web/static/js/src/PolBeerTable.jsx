@@ -47,7 +47,7 @@ var bd = this.bd || {};
                 }
             }
 
-            this.props.onSort(this.props.name, direction);
+            this.props.onSort(this.props.columnId, direction);
         },
 
         render: function () {
@@ -74,18 +74,17 @@ var bd = this.bd || {};
             };
         },
 
-        onSort: function (name, direction) {
-
+        onSort: function (columnId, direction) {
             var desc = (direction === 'desc');
             var col = _.find(this.state.columns, function (column) {
-                return (column.name === name);
+                return (column.id === columnId);
             });
             var beers = _.clone(this.props.beers)
                             .sort(ns.Util.getSorter(col.sortParams, desc));
 
             var columns = _.map(this.state.columns, function (column) {
                 column = _.clone(column);
-                if (column.name === name) {
+                if (column.id === columnId) {
                     column.sortDirection = direction;
                     column.isSorted = true;
                 } else {
@@ -109,6 +108,7 @@ var bd = this.bd || {};
             var header = _.map(this.state.columns, function (column) {
                 return (<TableHeaderCell
                             name={column.name}
+                            columnId={column.id}
                             onSort={this.onSort}
                             sortDirection={column.sortDirection}
                             isSorted={column.isSorted} />
@@ -132,9 +132,10 @@ var bd = this.bd || {};
 
     var columns = [
         {
+            id: 'name',
             name: 'Navn',
             formatter: function (beer) {
-                var beerLink = '/pol_beer/' + beer.id;
+                var beerLink = '/pol_beers/' + beer.id;
                 return (<a href={beerLink}>{beer.name}</a>);
             },
             sortParams: 'name',
@@ -142,6 +143,7 @@ var bd = this.bd || {};
             sortDirection: 'asc'
         },
         {
+            id: 'brewery',
             name: 'Bryggeri',
             formatter: function (beer) {
                 return beer.brewery;
@@ -151,6 +153,7 @@ var bd = this.bd || {};
             sortDirection: 'asc'
         },
         {
+            id: 'style',
             name: 'Stil',
             formatter: function (beer) {
                 return valueOrNa(beer.style);
@@ -160,6 +163,7 @@ var bd = this.bd || {};
             sortDirection: 'asc'
         },
         {
+            id: 'rating',
             name: 'Rating',
             formatter: function (beer) {
                 if (beer.score_overall && beer.score_style) {
@@ -172,6 +176,7 @@ var bd = this.bd || {};
             sortDirection: 'asc'
         },
         {
+            id: 'abv',
             name: 'ABV',
             formatter: function (beer) {
                 return fixedOrNa(beer.abv, 2);
@@ -181,6 +186,7 @@ var bd = this.bd || {};
             sortDirection: 'asc'
         },
         {
+            id: 'price',
             name: 'Pris',
             formatter: function (beer) {
                 return fixedOrNa(beer.price, 2);
@@ -191,10 +197,17 @@ var bd = this.bd || {};
         }
     ];
 
+    function getColumnsForTable(columnIds) {
 
-    ns.renderPolBeerTable = function(beerList, component) {
+        return _.filter(columns, function (column) {
+            return (columnIds.indexOf(column.id) > -1);
+        });
+    }
+
+    ns.renderPolBeerTable = function(beerList, columnIds, component) {
         beerList = beerList.sort(ns.Util.getSorter(['name'], false));
-        React.render(<BeerTable beers={beerList} columns={columns} />, component);
+        var columnsForTable = getColumnsForTable(columnIds);
+        React.render(<BeerTable beers={beerList} columns={columnsForTable} />, component);
     }
 
 }(bd));

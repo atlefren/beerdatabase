@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block main %}
-
+<h1>Øl på polet</h1>
 <div id="beer_list"></div>
 
 {%endblock %}
@@ -24,6 +24,7 @@
             var beerList = {{ json | safe }};
             bd.renderPolBeerTable(
                 beerList,
+                ['name', 'brewery', 'style', 'rating', 'abv', 'price'],
                 document.getElementById('beer_list')
             );
         }());
