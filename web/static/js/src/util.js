@@ -3,6 +3,21 @@ bd.Util = {};
 (function (ns) {
     'use strict';
 
+    ns.valueOrNa = function (value, naValue) {
+        naValue = naValue || '-';
+        if (value === null) {
+            return naValue;
+        }
+        return value;
+    };
+
+    ns.fixedOrNa = function (value, decimals, naValue) {
+        if (value === null) {
+            return ns.valueOrNa(value, naValue);
+        }
+        return value.toFixed(decimals);
+    };
+
     ns.getSorter = function (properties, desc) {
         if (!_.isArray(properties)) {
             properties = [properties];

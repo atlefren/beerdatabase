@@ -2,20 +2,7 @@ var bd = this.bd || {};
 (function (ns) {
     'use strict';
 
-    function valueOrNa(value, naValue) {
-        naValue = naValue || '-';
-        if (value === null) {
-            return naValue;
-        }
-        return value;
-    }
 
-    function fixedOrNa(value, decimals, naValue) {
-        if (value === null) {
-            return valueOrNa(value, naValue);
-        }
-        return value.toFixed(decimals);
-    }
 
 
     var BeerRow = React.createClass({
@@ -60,7 +47,13 @@ var bd = this.bd || {};
                     sort = (<i className="fa fa-caret-up"></i>);
                 }
             }
-            return (<th onClick={this.sort}>{this.props.name}&nbsp;{sort}</th>);
+            return (
+                <th
+                    className="sortable"
+                    onClick={this.sort}>
+                    {this.props.name}&nbsp;{sort}
+                </th>
+            );
         }
 
     });
@@ -116,7 +109,7 @@ var bd = this.bd || {};
             }, this);
 
             return (
-                <table className="u-full-width">
+                <table className="u-full-width beertable">
                     <thead>
                         <tr>
                            {header}
@@ -156,7 +149,7 @@ var bd = this.bd || {};
             id: 'style',
             name: 'Stil',
             formatter: function (beer) {
-                return valueOrNa(beer.style);
+                return ns.Util.valueOrNa(beer.style);
             },
             sortParams: 'style',
             isSorted: false,
@@ -179,7 +172,7 @@ var bd = this.bd || {};
             id: 'abv',
             name: 'ABV',
             formatter: function (beer) {
-                return fixedOrNa(beer.abv, 2);
+                return ns.Util.fixedOrNa(beer.abv, 2);
             },
             sortParams: 'abv',
             isSorted: false,
@@ -189,7 +182,7 @@ var bd = this.bd || {};
             id: 'price',
             name: 'Pris',
             formatter: function (beer) {
-                return fixedOrNa(beer.price, 2);
+                return ns.Util.fixedOrNa(beer.price, 2);
             },
             sortParams: 'price',
             isSorted: false,

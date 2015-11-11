@@ -7,26 +7,24 @@
 
 {% block main %}
 
-    <h1>{{pol_beer.name}}</h1>
-    {% if pol_beer.ratebeer %}
-
-        <p>På Ratebeer som <a href="{{pol_beer.ratebeer | ratebeer_url}}">{{pol_beer.ratebeer.name}}</a></p>
-
-        <a href="{{pol_beer.url}}">{{pol_beer.url}}</a>
-
-        <ul>
-            {% for store in available_at %}
-                <li>{{ store["pol_name"] }} ({{ store["stock"] }})</a></li>
-            {% endfor %}
-        </ul>
-
-    {% else %}
-        <p>Fant ingen match med ratebeer...</p>
-    {% endif %}
+    <div id="beer_details"></div>
 
 {% endblock %}
 
 {% block js %}
 {{ super() }}
+    {% assets "js_beer_list" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+    <script type="text/javascript">
+        (function () {
+            var beer = {{ json | safe }};
+            bd.renderBeerOverview(beer,
+                document.getElementById('beer_details')
+            );
+        }());
+
+    </script>
 
 {% endblock %}

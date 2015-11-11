@@ -42,6 +42,7 @@ js_beer_list = Bundle(
     Bundle(
         'js/src/util.js',
         'js/src/PolBeerTable.jsx',
+        'js/src/BeerOverview.jsx',
         'js/src/StyleList.jsx',
         filters=js_filters
     ),

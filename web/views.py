@@ -39,8 +39,9 @@ def pol_beer(id):
     pol_beer = current_app.db_session.query(PoletBeer).get(id)
     if not pol_beer:
         abort(404)
-    available_at = polchecker.check_beer(pol_beer.id)
-    return render_template('pol_beer.html', pol_beer=pol_beer, available_at=available_at)
+    if pol_beer.ratebeer is None:
+        return u'Dette ølet er ikke matched med ratebeer, hjelp?'
+    return render_template('pol_beer.html', json=json.dumps(pol_beer))
 
 
 @app.route('/styles/')
@@ -54,6 +55,8 @@ def style_list():
 @app.route('/styles/<int:id>')
 def style(id):
     style = current_app.db_session.query(BeerStyle).get(id)
+    if not style:
+        abort(404)
     beers = current_app.db_session.query(PoletBeer)\
         .join(RatebeerBeer)\
         .filter(RatebeerBeer.style_id == id)\
@@ -84,6 +87,8 @@ def brewery_list():
 @app.route('/breweries/<int:id>')
 def brewery(id):
     brewery = current_app.db_session.query(RatebeerBrewery).get(id)
+    if not brewery:
+        abort(404)
     beers = current_app.db_session.query(PoletBeer)\
         .join(RatebeerBeer)\
         .filter(RatebeerBeer.brewery_id == id)\
