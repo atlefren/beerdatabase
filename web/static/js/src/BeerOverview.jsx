@@ -5,10 +5,16 @@ var bd = this.bd || {};
     var BeerOverview = React.createClass({
 
         getHelpMsg: function () {
-            var t = _.template('<strong>Hjelp:</strong> Dette ølet heter<strong><%= beer.name %></strong> og er brygget ' +
-                    'av <strong><%= beer.producer %></strong> ifølge Vinmonopolet. Hvis dette ikke stemmer ' +
-                    'kan det godt skyldes en feilmatching, fint om du kan si fra om feilen <a href="/pol_beers/<%= beer.id %>/report">her</a>.');
-            return t({beer: this.props.beer});
+            var err_url = '/pol_beers/' + this.props.beer.id + '/report';
+            return (
+                <div className="alert alert-warning">
+                    <strong>Hjelp:</strong>{' '}
+                    Dette ølet heter {' '} <em>{this.props.beer.name}</em>{' '} og er brygget
+                    av {' '} <em>{this.props.beer.producer}</em> {' '} ifølge Vinmonopolet.{' '}
+                    Hvis dette ikke stemmer kan det godt skyldes en feilmatching,{' '}
+                    fint om du kan si fra om feilen {' '} <a href={err_url}>her</a>.
+                </div>
+            );
         },
 
         render: function () {
@@ -104,7 +110,7 @@ var bd = this.bd || {};
                         </tr>
                     </table>
 
-                    <p>{this.getHelpMsg()}</p>
+                    {this.getHelpMsg()}
                 </div>
             );
         }
