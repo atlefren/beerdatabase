@@ -105,7 +105,9 @@ class PoletBeer(Base):
         return {
             'name': self.ratebeer.name if has_rb else self.name,
             'brewery': self.ratebeer.brewery.name if has_rb else self.producer,
+            'brewery_id': self.ratebeer.brewery.id if has_rb else None,
             'style': self.ratebeer.style.name if has_rb else None,
+            'style_id': self.ratebeer.style.id if has_rb else None,
             'abv': self.ratebeer.abv if has_rb else None,
             'price': self.price,
             'score_overall': self.ratebeer.score_overall if has_rb else None,

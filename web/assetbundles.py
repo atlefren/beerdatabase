@@ -39,6 +39,8 @@ js_beer_list = Bundle(
     'js/lib/react/react.min.js',
     Bundle(
         'js/src/util.js',
+        'js/src/SortableTable.jsx',
+        'js/src/BreweryTable.jsx',
         'js/src/PolBeerTable.jsx',
         'js/src/BeerOverview.jsx',
         'js/src/StyleList.jsx',

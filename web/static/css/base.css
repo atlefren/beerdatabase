@@ -1,4 +1,4 @@
-.beertable th.sortable {
+.table-sortable th.sortable {
     white-space: nowrap;
     cursor: pointer;
 }

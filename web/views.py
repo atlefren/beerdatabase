@@ -83,7 +83,7 @@ def brewery_list():
 
     # TODO: incorporate in query
     breweries = [b[0].get_list_response(count=b[1]) for b in breweries]
-    return render_template('brewery_list.html', breweries=breweries)
+    return render_template('brewery_list.html', json=json.dumps(breweries))
 
 
 @app.route('/breweries/<int:id>')

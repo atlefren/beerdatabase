@@ -119,6 +119,9 @@ var bd = this.bd || {};
         },
 
         render: function () {
+            if (!this.props.value) {
+                return null;
+            }
             return (
                 <div className="pie">
                     <span className="label"> {this.props.name}</span>
@@ -161,7 +164,7 @@ var bd = this.bd || {};
                 <div>
                     <h1>{rbbeer.name}</h1>
 
-                    <p>Brygget av{' '}{rbbeer.brewery.name}</p> 
+                    <p>Brygget av{' '}<a href={'/breweries/' + rbbeer.brewery.id}>{rbbeer.brewery.name}</a></p> 
 
                     <div className='row'>
                         <ScoreDisplay beer={rbbeer} />
@@ -169,7 +172,9 @@ var bd = this.bd || {};
                             <table className='u-full-width'>
                                 <tr>
                                     <th>Stil</th>
-                                    <td>{rbbeer.style.name}</td>
+                                    <td>
+                                        <a href={'/styles/' + rbbeer.style.id}>{rbbeer.style.name}</a>
+                                        </td>
                                 </tr>
                                 <tr>
                                     <th>Abv</th>

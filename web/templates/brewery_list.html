@@ -7,11 +7,7 @@
 
 {% block main %}
 <h1>Bryggerier</h1>
-<ul>
-    {% for brewery in breweries %}
-    <li><a href="/breweries/{{brewery.id}}">{{brewery.name}}</a> ({{brewery.num_beers_polet}})</li>
-    {% endfor %}
-</ul>
+<div id="brewery_list"></div>
 
 {%endblock %}
 
@@ -24,6 +20,9 @@
 
     <script type="text/javascript">
         (function () {
+
+            var breweryList = {{ json | safe }};
+            bd.renderBreweyTable(breweryList, ['name', 'country', 'num_beers'], document.getElementById('brewery_list'));
         }());
         
     </script>

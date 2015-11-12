@@ -2,134 +2,16 @@ var bd = this.bd || {};
 (function (ns) {
     'use strict';
 
-
-
-
-    var BeerRow = React.createClass({
-        render: function () {
-
-            var columns = _.map(this.props.columns, function (column) {
-                return (<td>{column.formatter(this.props.beer)}</td>);
-            }, this);
-
-            return (
-                <tr>
-                    {columns}
-                </tr>
-            );
-        }
-    });
-
-    var TableHeaderCell = React.createClass({
-
-        sort: function () {
-
-            var direction = this.props.sortDirection;
-            if (this.props.isSorted) {
-                if (this.props.sortDirection === 'asc') {
-                    direction = 'desc';
-                }
-                if (this.props.sortDirection === 'desc') {
-                    direction = 'asc';
-                }
-            }
-
-            this.props.onSort(this.props.columnId, direction);
-        },
-
-        render: function () {
-
-            var sort;
-            if (this.props.isSorted) {
-                if (this.props.sortDirection === 'desc') {
-                    sort = (<i className="fa fa-caret-down"></i>);
-                } else {
-                    sort = (<i className="fa fa-caret-up"></i>);
-                }
-            }
-            return (
-                <th
-                    className="sortable"
-                    onClick={this.sort}>
-                    {this.props.name}&nbsp;{sort}
-                </th>
-            );
-        }
-
-    });
-
-    var BeerTable = React.createClass({
-
-        getInitialState: function () {
-            return {
-                columns: this.props.columns,
-                beers: this.props.beers
-            };
-        },
-
-        onSort: function (columnId, direction) {
-            var desc = (direction === 'desc');
-            var col = _.find(this.state.columns, function (column) {
-                return (column.id === columnId);
-            });
-            var beers = _.clone(this.props.beers)
-                            .sort(ns.Util.getSorter(col.sortParams, desc));
-
-            var columns = _.map(this.state.columns, function (column) {
-                column = _.clone(column);
-                if (column.id === columnId) {
-                    column.sortDirection = direction;
-                    column.isSorted = true;
-                } else {
-                    column.isSorted = false;
-                }
-                return column;
-            });
-            this.setState({
-                columns: columns,
-                beers: beers
-            });
-        },
-
-        render: function () {
-
-            var rows = _.map(this.state.beers, function (beer, i) {
-                return (<BeerRow beer={beer} columns={this.state.columns} />);
-            }, this);
-
-
-            var header = _.map(this.state.columns, function (column) {
-                return (<TableHeaderCell
-                            name={column.name}
-                            columnId={column.id}
-                            onSort={this.onSort}
-                            sortDirection={column.sortDirection}
-                            isSorted={column.isSorted} />
-                );
-            }, this);
-
-            return (
-                <table className="u-full-width beertable">
-                    <thead>
-                        <tr>
-                           {header}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {rows}
-                    </tbody>
-                </table>
-            )
-        }
-    });
-
     var columns = [
         {
             id: 'name',
             name: 'Navn',
             formatter: function (beer) {
-                var beerLink = '/pol_beers/' + beer.id;
-                return (<a href={beerLink}>{beer.name}</a>);
+                return (
+                    <a href={'/pol_beers/' + beer.id}>
+                        {beer.name}
+                    </a>
+                );
             },
             sortParams: 'name',
             isSorted: true,
@@ -139,7 +21,11 @@ var bd = this.bd || {};
             id: 'brewery',
             name: 'Bryggeri',
             formatter: function (beer) {
-                return beer.brewery;
+                return (
+                    <a href={'/breweries/' + beer.brewery_id}>
+                        {beer.brewery}
+                    </a>
+                );
             },
             sortParams: 'brewery',
             isSorted: false,
@@ -149,7 +35,11 @@ var bd = this.bd || {};
             id: 'style',
             name: 'Stil',
             formatter: function (beer) {
-                return ns.Util.valueOrNa(beer.style);
+                return (
+                    <a href={'/styles/' + beer.style_id}>
+                        {ns.Util.valueOrNa(beer.style)}
+                    </a>
+                );
             },
             sortParams: 'style',
             isSorted: false,
@@ -200,7 +90,7 @@ var bd = this.bd || {};
     ns.renderPolBeerTable = function(beerList, columnIds, component) {
         beerList = beerList.sort(ns.Util.getSorter(['name'], false));
         var columnsForTable = getColumnsForTable(columnIds);
-        React.render(<BeerTable beers={beerList} columns={columnsForTable} />, component);
+        React.render(<ns.SortableTable items={beerList} columns={columnsForTable} />, component);
     }
 
 }(bd));

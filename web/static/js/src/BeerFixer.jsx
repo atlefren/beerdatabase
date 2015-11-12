@@ -18,9 +18,13 @@ var bd = this.bd || {};
                                     <th>Navn</th>
                                     <td>{this.props.beer.name}</td>
                                 </tr>
+                                <tr>
+                                    <th>Polets vareside</th>
+                                    <td><a href={this.props.beer.url} target="_blank">link</a></td>
+                                </tr>
                             </tbody>
                         </table>
-                        <table>
+                        <table  className='u-full-width'>
                             <tr>
                                 <th>Abv</th>
                                 <th>Farge</th>
