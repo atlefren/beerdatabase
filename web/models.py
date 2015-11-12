@@ -5,6 +5,8 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from flask.ext.jsontools import JsonSerializableBase
 
+from util import ratebeer_url
+
 Base = declarative_base(cls=(JsonSerializableBase,))
 
 
@@ -33,6 +35,11 @@ class RatebeerBeer(Base):
 
     def __init__(self):
         pass
+
+    @property
+    def url(self):
+        print "!"
+        return ratebeer_url(self.id, self.shortname)
 
 
 class RatebeerBrewery(Base):

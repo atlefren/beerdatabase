@@ -6,7 +6,7 @@
 .alert {
     border: 1px solid #E1E1E1;
     border-radius: 4px;
-    padding: .2rem .5rem;
+    padding: 1rem 2rem;
     margin: 0 .2rem;
 }
 
@@ -15,3 +15,42 @@
     border-color: #faebcc;
     color: #8a6d3b;
 }
+
+
+.score-box {
+    padding-top: 12px;
+}
+
+.score-box .overallScore {
+    font-size: 250%;
+    font-weight: bold;
+    margin-top: -15px;
+}
+
+.score-box .styleScore {
+    font-size: 150%;
+    font-weight: bold;
+    margin-top: -10px;
+}
+
+.score-box .styleHeader {
+    font-size: 80%;
+}
+
+  .navbar-list {
+    list-style: none;
+    margin-bottom: 0; }
+
+  .navbar-item {
+    position: relative;
+    float: left;
+    margin-bottom: 0; }
+
+  .navbar-link {
+    margin-right: 35px;
+    text-decoration: none;
+    line-height: 6.5rem;
+    color: #222; }
+
+  .navbar-link.active {
+    color: #33C3F0; }

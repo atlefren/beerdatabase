@@ -8,9 +8,7 @@ transformer = jsx.JSXTransformer()
 
 
 def react_filter(_in, out, **kw):
-    ins = _in.read()
-    print ins
-    out.write(transformer.transform_string(ins))
+    out.write(transformer.transform_string(_in.read()))
 
 
 js_filters = []

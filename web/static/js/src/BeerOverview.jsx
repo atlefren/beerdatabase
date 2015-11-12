@@ -2,6 +2,66 @@ var bd = this.bd || {};
 (function (ns) {
     'use strict';
 
+    var pairings = [
+        'Skalldyr',
+        'Lyst kjøtt',
+        'Dessert, kake, frukt',
+        'Fisk',
+        'Aperitiff/avec',
+        'Lam og sau',
+        'Ost',
+        'Småvilt og fugl',
+        'Svinekjøtt',
+        'Grønnsaker',
+        'Storfe',
+        'Storvilt'
+    ];
+
+    var ScoreDisplay = React.createClass({
+
+        render: function () {
+            return (
+                <div className="one column score-box">
+                    <strong>Score</strong>
+                    <div className="styleHeader">Overall</div>
+                    <div className="overallScore">{ns.Util.valueOrNa(this.props.beer.score_overall)}</div>
+                    <div className="styleHeader">Style</div>
+                    <div className="styleScore">{ns.Util.valueOrNa(this.props.beer.score_style)}</div>
+                </div>
+            );
+        }
+
+    });
+
+
+    var ExternalLink = React.createClass({
+        render: function () {
+            return (
+                <li className="navbar-item">
+                    <a href={this.props.link.url} className="navbar-link">
+                        <i className="fa fa-external-link-square"></i>{' '}
+                        Mer hos {' '}{this.props.link.name}
+                    </a>
+                </li>
+            );
+        }
+    });
+
+    var ExternalLinks = React.createClass({
+
+        render: function () {
+            var links = _.map(this.props.links, function (link) {
+                return (<ExternalLink link={link} />);
+            });
+
+            return (
+                <ul className="navbar-list">
+                    {links}
+                </ul>
+            );
+        }
+    });
+
     var BeerOverview = React.createClass({
 
         getHelpMsg: function () {
@@ -17,6 +77,14 @@ var bd = this.bd || {};
             );
         },
 
+        getExternalLinks: function () {
+            return [
+                {name: 'Ratebeer', url: '#'},
+                {name: 'Vinmonopolet', url: this.props.beer.url},
+                {name: 'Apéritif.no', url: '#'}
+            ];
+        },
+
         render: function () {
             var beer = this.props.beer;
             var rbbeer = this.props.beer.ratebeer;
@@ -26,15 +94,10 @@ var bd = this.bd || {};
                 <div>
                     <h1>{rbbeer.name}</h1>
 
-                    <p>Brygget av {rbbeer.brewery.name}</p> 
+                    <p>Brygget av{' '}{rbbeer.brewery.name}</p> 
 
                     <div className="row">
-                        <div className="one column">
-                            <div><strong>Overall</strong></div>
-                            <div>{ns.Util.valueOrNa(rbbeer.score_overall)}</div>
-                            <div>Style</div>
-                            <div>{ns.Util.valueOrNa(rbbeer.score_style)}</div>
-                        </div>
+                        <ScoreDisplay beer={rbbeer} />
                         <div className="four columns">
                             <table className="u-full-width">
                                 <tr>
@@ -79,11 +142,9 @@ var bd = this.bd || {};
                          </div>
                     </div>
 
-                    <a href="">Mer hos Ratebeer</a> 
-                    <a href="">Mer hos Vinmonopolet</a> 
-                    <a href="">Mer hos Apéritif.no</a>
+                    <ExternalLinks links={this.getExternalLinks()}/>
 
-                     <table className="u-full-width">
+                    <table className="u-full-width">
                         <tr>
                             <th>Karakteristikk</th>
                             <td>{beer.sweetness} | {beer.freshness} | {beer.bitterness} | {beer.richness}</td>
