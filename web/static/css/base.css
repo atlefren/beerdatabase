@@ -54,3 +54,14 @@
 
   .navbar-link.active {
     color: #33C3F0; }
+
+
+.pie {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 1em;
+}
+
+.pie span.label {
+    margin-right: 2rem;
+}

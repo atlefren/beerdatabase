@@ -21,12 +21,12 @@ var bd = this.bd || {};
 
         render: function () {
             return (
-                <div className="one column score-box">
+                <div className='one column score-box'>
                     <strong>Score</strong>
-                    <div className="styleHeader">Overall</div>
-                    <div className="overallScore">{ns.Util.valueOrNa(this.props.beer.score_overall)}</div>
-                    <div className="styleHeader">Style</div>
-                    <div className="styleScore">{ns.Util.valueOrNa(this.props.beer.score_style)}</div>
+                    <div className='styleHeader'>Overall</div>
+                    <div className='overallScore'>{ns.Util.valueOrNa(this.props.beer.score_overall)}</div>
+                    <div className='styleHeader'>Style</div>
+                    <div className='styleScore'>{ns.Util.valueOrNa(this.props.beer.score_style)}</div>
                 </div>
             );
         }
@@ -37,9 +37,9 @@ var bd = this.bd || {};
     var ExternalLink = React.createClass({
         render: function () {
             return (
-                <li className="navbar-item">
-                    <a href={this.props.link.url} className="navbar-link">
-                        <i className="fa fa-external-link-square"></i>{' '}
+                <li className='navbar-item'>
+                    <a href={this.props.link.url} className='navbar-link'>
+                        <i className='fa fa-external-link-square'></i>{' '}
                         Mer hos {' '}{this.props.link.name}
                     </a>
                 </li>
@@ -55,19 +55,86 @@ var bd = this.bd || {};
             });
 
             return (
-                <ul className="navbar-list">
+                <ul className='navbar-list'>
                     {links}
                 </ul>
             );
         }
     });
 
+    var SVGComponent = React.createClass({
+        render: function() {
+            return (
+                <svg
+                    version='1.1'
+                    xmlns='http://www.w3.org/2000/svg'
+                    {...this.props}>
+                    {this.props.children}
+                </svg>
+            );
+        }
+    });
+
+    var Pie = React.createClass({
+
+        getDefaultProps: function () {
+            return {size: 20};
+        },
+
+        getSvg: function () {
+            var size = 20;
+            var value = this.props.value * 10;
+            var radius  = this.props.size / 2
+
+            if (value >= 100) {
+                return (
+                    <SVGComponent height={size} width={size} >
+                        <circle r={radius} cx={radius} cy={radius} />
+                    </SVGComponent> 
+                );
+            }
+
+            var x = Math.cos((2 * Math.PI) / (100 / value));
+            var y = Math.sin((2 * Math.PI) / (100 / value));
+
+            //should the arc go the long way round?
+            var longArc = (value <= 50) ? 0 : 1;
+
+            var d = [
+                'M' + radius + ' ' + radius,
+                'L' + radius + ' ' + 0,
+                'A' + radius + ' ' + radius,
+                '0 ' + longArc,
+                '1 ' + (radius + y * radius),
+                (radius - x*radius),
+                'z'
+            ];
+
+            d = d.join(' ');
+            return (
+                <SVGComponent height={size} width={size}>
+                    <path d={d} />
+                </SVGComponent>
+            );
+        },
+
+        render: function () {
+            return (
+                <div className="pie">
+                    <span className="label"> {this.props.name}</span>
+                    {this.getSvg()}
+                </div>
+            );
+        }
+
+    })
+
     var BeerOverview = React.createClass({
 
         getHelpMsg: function () {
             var err_url = '/pol_beers/' + this.props.beer.id + '/report';
             return (
-                <div className="alert alert-warning">
+                <div className='alert alert-warning'>
                     <strong>Hjelp:</strong>{' '}
                     Dette ølet heter {' '} <em>{this.props.beer.name}</em>{' '} og er brygget
                     av {' '} <em>{this.props.beer.producer}</em> {' '} ifølge Vinmonopolet.{' '}
@@ -96,10 +163,10 @@ var bd = this.bd || {};
 
                     <p>Brygget av{' '}{rbbeer.brewery.name}</p> 
 
-                    <div className="row">
+                    <div className='row'>
                         <ScoreDisplay beer={rbbeer} />
-                        <div className="four columns">
-                            <table className="u-full-width">
+                        <div className='four columns'>
+                            <table className='u-full-width'>
                                 <tr>
                                     <th>Stil</th>
                                     <td>{rbbeer.style.name}</td>
@@ -118,15 +185,15 @@ var bd = this.bd || {};
                                 </tr>
                             </table>
                          </div>
-                         <div className="four columns">
-                            <table className="u-full-width">
+                         <div className='four columns'>
+                            <table className='u-full-width'>
                                 <tr>
                                     <th>Pris</th>
-                                    <td>{ns.Util.fixedOrNa(beer.price, 2)} kr</td>
+                                    <td>{ns.Util.fixedOrNa(beer.price, 2)}{' '}kr</td>
                                 </tr>
                                 <tr>
                                     <th>Volum</th>
-                                    <td>{ns.Util.fixedOrNa(beer.volume, 2)} l</td>
+                                    <td>{ns.Util.fixedOrNa(beer.volume, 2)}{' '}l</td>
                                 </tr>
                                 <tr>
                                     <th>Butikkkatergori</th>
@@ -138,16 +205,21 @@ var bd = this.bd || {};
                                 </tr>
                             </table>
                          </div>
-                         <div className="four columns">
+                         <div className='four columns'>
                          </div>
                     </div>
 
                     <ExternalLinks links={this.getExternalLinks()}/>
 
-                    <table className="u-full-width">
+                    <table className='u-full-width'>
                         <tr>
                             <th>Karakteristikk</th>
-                            <td>{beer.sweetness} | {beer.freshness} | {beer.bitterness} | {beer.richness}</td>
+                            <td>
+                                <Pie name="Sødme" value={beer.sweetness} />
+                                <Pie name="Friskhet" value={beer.freshness} />
+                                <Pie name="Bitterhet" value={beer.bitterness} />
+                                <Pie name="Fylde" value={beer.richness} />
+                            </td>
                         </tr>
                         <tr>
                             <th>Passer til</th>

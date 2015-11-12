@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import render_template, current_app, abort, json
-from beertools import polchecker
 from sqlalchemy.sql import func
-from sqlalchemy import and_
 
 from web import app
 from models import PoletBeer, BeerStyle, RatebeerBeer, RatebeerBrewery
@@ -11,8 +9,8 @@ from models import PoletBeer, BeerStyle, RatebeerBeer, RatebeerBrewery
 
 @app.template_filter('ratebeer_url')
 def get_ratebeer_url(ratebeer_beer):
-    return ratebeer_url(ratebeer_beer.id, ratebeer_beer.shortname)
-
+    # return ratebeer_url(ratebeer_beer.id, ratebeer_beer.shortname)
+    pass
 
 @app.route('/pol_beers/')
 def index():
