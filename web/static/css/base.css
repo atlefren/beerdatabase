@@ -59,9 +59,12 @@
 .pie {
     display: inline-block;
     vertical-align: middle;
-    margin: 1em;
+}
+
+.pie svg {
+    margin-right: 2rem;
 }
 
 .pie span.label {
-    margin-right: 2rem;
+    margin-right: 1rem;
 }

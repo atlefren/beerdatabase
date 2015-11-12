@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block css %}
+{{ super() }}
+
+{% endblock %}
+
+{% block main %}
+    <h1>Fiks ølmatching</h1>
+    <div id="beer_fixer"></div>
+
+{% endblock %}
+
+{% block js %}
+{{ super() }}
+    {% assets "js_beer_list" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+    <script type="text/javascript">
+        (function () {
+            var data = {{ json | safe }};
+            console.log(data);
+            bd.renderBeerFixer(data.pol_beer, data.rb_beer, document.getElementById('beer_fixer'));
+        }());
+
+    </script>
+
+{% endblock %}

@@ -223,7 +223,7 @@ var bd = this.bd || {};
                         </tr>
                         <tr>
                             <th>Passer til</th>
-                            <td>{beer.pairs_with_1} | {beer.pairs_with_2} | {beer.pairs_with_3} </td>
+                            <td>{beer.pairs_with_1},{' '}{beer.pairs_with_2},{' '}{beer.pairs_with_3} </td>
                         </tr>
                         <tr>
                             <th>Lukt</th>

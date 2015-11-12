@@ -12,11 +12,22 @@ def get_ratebeer_url(ratebeer_beer):
     # return ratebeer_url(ratebeer_beer.id, ratebeer_beer.shortname)
     pass
 
+
 @app.route('/pol_beers/')
 def index():
     pol_beers = current_app.db_session.query(PoletBeer).all()
     pol_beers_json = json.dumps([b.get_list_response() for b in pol_beers])
     return render_template('pol_beer_list.html', json=pol_beers_json)
+
+
+def fix_beer(pol_beer, rb_beer=None):
+
+    data = {
+        'pol_beer': pol_beer,
+        'rb_beer': rb_beer
+    }
+
+    return render_template('fix_beer.html', json=json.dumps(data))
 
 
 @app.route('/pol_beers/<int:id>')
@@ -25,13 +36,14 @@ def pol_beer(id):
     if not pol_beer:
         abort(404)
     if pol_beer.ratebeer is None:
-        return u'Dette ølet er ikke matched med ratebeer, hjelp?'
+        return fix_beer(pol_beer)
     return render_template('pol_beer.html', json=json.dumps(pol_beer))
 
 
 @app.route('/pol_beers/<int:id>/report')
 def pol_beer_report(id):
-    return 'Ok, kommer snart!'
+    pol_beer = current_app.db_session.query(PoletBeer).get(id)
+    return fix_beer(pol_beer, pol_beer.ratebeer)
 
 
 @app.route('/styles/')
