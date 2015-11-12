@@ -3,6 +3,41 @@
     cursor: pointer;
 }
 
+
+.navbar {
+    left: 0;
+    position: fixed;
+    top: 0;
+    padding-left: 3rem;
+    padding-right: 3rem;
+}
+
+.navbar h1 {
+    display: inline-block;
+    float: left;
+    margin-right: 10rem;
+}
+
+.navbar, .navbar-spacer {
+    background: #fff none repeat scroll 0 0;
+    border-bottom: 1px solid #eee;
+    border-top: 1px solid #eee;
+    display: block;
+    height: 6.5rem;
+    width: 100%;
+    z-index: 99;
+}
+
+.navbar .navbar-search{
+    line-height: 6.5rem;
+    height: 6.5rem;
+    margin-right: 5rem;
+}
+
+.content {
+    margin-top: 10rem;
+}
+
 .alert {
     border: 1px solid #E1E1E1;
     border-radius: 4px;

@@ -13,8 +13,13 @@ def get_ratebeer_url(ratebeer_beer):
     pass
 
 
-@app.route('/pol_beers/')
+@app.route('/')
 def index():
+    return render_template('base.html')
+
+
+@app.route('/pol_beers/')
+def pol_beers():
     pol_beers = current_app.db_session.query(PoletBeer).all()
     pol_beers_json = json.dumps([b.get_list_response() for b in pol_beers])
     return render_template('pol_beer_list.html', json=pol_beers_json)
@@ -28,6 +33,16 @@ def fix_beer(pol_beer, rb_beer=None):
     }
 
     return render_template('fix_beer.html', json=json.dumps(data))
+
+
+@app.route('/pol_beers/unmatched/')
+def unmatched_beers():
+
+    unmatched = current_app.db_session.query(PoletBeer)\
+        .filter(PoletBeer.ratebeer_id == None)\
+        .all()
+    unmatched = [b.get_list_response() for b in unmatched]
+    return render_template('unmatched.html', json=json.dumps(unmatched))
 
 
 @app.route('/pol_beers/<int:id>')
