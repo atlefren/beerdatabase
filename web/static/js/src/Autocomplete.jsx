@@ -57,7 +57,7 @@ var bd = this.bd || {};
 
         //trigger a new search, resetting the results and selected item
         search: function () {
-            var val = this.refs.value.getDOMNode().value;
+            var val = this.refs.value.value;
 
             //only trigger a search if we have a search value
             if (val !== this.state.searchVal && val !== '') {

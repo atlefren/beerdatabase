@@ -50,8 +50,8 @@ var bd = this.bd || {};
     var ExternalLinks = React.createClass({
 
         render: function () {
-            var links = _.map(this.props.links, function (link) {
-                return (<ExternalLink link={link} />);
+            var links = _.map(this.props.links, function (link, i) {
+                return (<ExternalLink link={link} key={i} />);
             });
 
             return (
@@ -170,44 +170,48 @@ var bd = this.bd || {};
                         <ScoreDisplay beer={rbbeer} />
                         <div className='four columns'>
                             <table className='u-full-width'>
-                                <tr>
-                                    <th>Stil</th>
-                                    <td>
-                                        <a href={'/styles/' + rbbeer.style.id}>{rbbeer.style.name}</a>
-                                        </td>
-                                </tr>
-                                <tr>
-                                    <th>Abv</th>
-                                    <td>{ns.Util.fixedOrNa(rbbeer.abv, 2)}</td>
-                                </tr>
-                                <tr>
-                                    <th>Ibu</th>
-                                    <td>{ns.Util.valueOrNa(rbbeer.ibu)}</td>
-                                </tr>
-                                <tr>
-                                    <th>Alias</th>
-                                    <td>{rbbeer.alias}</td>
-                                </tr>
+                                <tbody>
+                                    <tr>
+                                        <th>Stil</th>
+                                        <td>
+                                            <a href={'/styles/' + rbbeer.style.id}>{rbbeer.style.name}</a>
+                                            </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Abv</th>
+                                        <td>{ns.Util.fixedOrNa(rbbeer.abv, 2)}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Ibu</th>
+                                        <td>{ns.Util.valueOrNa(rbbeer.ibu)}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Alias</th>
+                                        <td>{rbbeer.alias}</td>
+                                    </tr>
+                                </tbody>
                             </table>
                          </div>
                          <div className='four columns'>
                             <table className='u-full-width'>
-                                <tr>
-                                    <th>Pris</th>
-                                    <td>{ns.Util.fixedOrNa(beer.price, 2)}{' '}kr</td>
-                                </tr>
-                                <tr>
-                                    <th>Volum</th>
-                                    <td>{ns.Util.fixedOrNa(beer.volume, 2)}{' '}l</td>
-                                </tr>
-                                <tr>
-                                    <th>Butikkkatergori</th>
-                                    <td>{ns.Util.valueOrNa(beer.store_category)}</td>
-                                </tr>
-                                <tr>
-                                    <th>Produktutvalg</th>
-                                    <td>{ns.Util.valueOrNa(beer.produktutvalg)}</td>
-                                </tr>
+                                <tbody>
+                                    <tr>
+                                        <th>Pris</th>
+                                        <td>{ns.Util.fixedOrNa(beer.price, 2)}{' '}kr</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Volum</th>
+                                        <td>{ns.Util.fixedOrNa(beer.volume, 2)}{' '}l</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Butikkkatergori</th>
+                                        <td>{ns.Util.valueOrNa(beer.store_category)}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Produktutvalg</th>
+                                        <td>{ns.Util.valueOrNa(beer.produktutvalg)}</td>
+                                    </tr>
+                                </tbody>
                             </table>
                          </div>
                          <div className='four columns'>
@@ -217,37 +221,38 @@ var bd = this.bd || {};
                     <ExternalLinks links={this.getExternalLinks()}/>
 
                     <table className='u-full-width'>
-                        <tr>
-                            <th>Karakteristikk</th>
-                            <td>
-                                <Pie name="Sødme" value={beer.sweetness} />
-                                <Pie name="Friskhet" value={beer.freshness} />
-                                <Pie name="Bitterhet" value={beer.bitterness} />
-                                <Pie name="Fylde" value={beer.richness} />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Passer til</th>
-                            <td>{beer.pairs_with_1},{' '}{beer.pairs_with_2},{' '}{beer.pairs_with_3} </td>
-                        </tr>
-                        <tr>
-                            <th>Lukt</th>
-                            <td>{beer.smell}</td>
-                        </tr>
-                        <tr>
-                            <th>Smak</th>
-                            <td>{beer.taste}</td>
-                        </tr>
-                        <tr>
-                            <th>Metode</th>
-                            <td>{beer.method}</td>
-                        </tr>
-                        <tr>
-                            <th>Lagringsgrad</th>
-                            <td>{beer.storage_notes}</td>
-                        </tr>
+                        <tbody>
+                            <tr>
+                                <th>Karakteristikk</th>
+                                <td>
+                                    <Pie name="Sødme" value={beer.sweetness} />
+                                    <Pie name="Friskhet" value={beer.freshness} />
+                                    <Pie name="Bitterhet" value={beer.bitterness} />
+                                    <Pie name="Fylde" value={beer.richness} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Passer til</th>
+                                <td>{beer.pairs_with_1},{' '}{beer.pairs_with_2},{' '}{beer.pairs_with_3} </td>
+                            </tr>
+                            <tr>
+                                <th>Lukt</th>
+                                <td>{beer.smell}</td>
+                            </tr>
+                            <tr>
+                                <th>Smak</th>
+                                <td>{beer.taste}</td>
+                            </tr>
+                            <tr>
+                                <th>Metode</th>
+                                <td>{beer.method}</td>
+                            </tr>
+                            <tr>
+                                <th>Lagringsgrad</th>
+                                <td>{beer.storage_notes}</td>
+                            </tr>
+                        </tbody>
                     </table>
-
                     {this.getHelpMsg()}
                 </div>
             );
@@ -257,7 +262,7 @@ var bd = this.bd || {};
 
 
     ns.renderBeerOverview = function(beer, component) {
-        React.render(<BeerOverview beer={beer} />, component);
+        ReactDOM.render(<BeerOverview beer={beer} />, component);
     };
 
 }(bd));

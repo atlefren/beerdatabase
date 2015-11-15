@@ -16,6 +16,8 @@ css_filters = []
 
 minify = not app.debug
 
+react = 'js/lib/react/react.js'
+
 if minify:
     # Use jsmin and cssmin when not running in debug
     js_filters.append('jsmin')
@@ -36,7 +38,8 @@ css_base = Bundle(
 
 js_beer_list = Bundle(
     'js/lib/underscore/underscore-min.js',
-    'js/lib/react/react.js',
+    react,
+    'js/lib/react/react-dom.js',
     Bundle(
         'js/lib/atomic-fixed.js',
         'js/src/util.js',

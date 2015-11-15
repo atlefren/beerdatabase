@@ -44,7 +44,7 @@ var bd = this.bd || {};
     ns.renderBreweyTable = function(breweryList, columnIds, component) {
         breweryList = breweryList.sort(ns.Util.getSorter(['name'], false));
         var columnsForTable = getColumnsForTable(columnIds);
-        React.render(<ns.SortableTable items={breweryList} columns={columnsForTable} />, component);
+        ReactDOM.render(<ns.SortableTable items={breweryList} columns={columnsForTable} />, component);
     }
 
 }(bd));

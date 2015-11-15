@@ -23,7 +23,7 @@ var bd = this.bd || {};
             var styles = _.map(this.props.styles, function (style) {
                 var url = '/styles/' + style.id;
                 return (
-                    <li>
+                    <li key={style.id}>
                         <a href={url}>{style.name}</a>
                     </li>
                 );
@@ -53,7 +53,7 @@ var bd = this.bd || {};
                 var stop =  start + valuesPrColumn;
                 var styles = this.props.styles.slice(start, stop);
                 return (
-                    <div className={columnClass}>
+                    <div className={columnClass} key={i}>
                         <StyleList styles={styles}/>
                     </div>
                 );
@@ -65,7 +65,7 @@ var bd = this.bd || {};
     });
 
     ns.renderStyleList = function(styles, component) {
-        React.render(<StyleListWrapper styles={styles} valuesPrColumn={25}/>, component);
+        ReactDOM.render(<StyleListWrapper styles={styles} valuesPrColumn={25}/>, component);
     };
 
 }(bd));

@@ -20,7 +20,6 @@
     <script type="text/javascript">
         (function () {
             var data = {{ json | safe }};
-            console.log(data);
             bd.renderBeerFixer(data.pol_beer, data.rb_beer, document.getElementById('beer_fixer'));
         }());
 

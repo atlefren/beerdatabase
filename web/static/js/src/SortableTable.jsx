@@ -5,12 +5,12 @@ var bd = this.bd || {};
     var DataRow = React.createClass({
         render: function () {
 
-            var columns = _.map(this.props.columns, function (column) {
-                return (<td>{column.formatter(this.props.item)}</td>);
+            var columns = _.map(this.props.columns, function (column, i) {
+                return (<td key={i}>{column.formatter(this.props.item)}</td>);
             }, this);
 
             return (
-                <tr>
+                <tr key={this.props.item.id}>
                     {columns}
                 </tr>
             );
@@ -91,7 +91,7 @@ var bd = this.bd || {};
         render: function () {
 
             var rows = _.map(this.state.items, function (item, i) {
-                return (<DataRow item={item} columns={this.state.columns} />);
+                return (<DataRow item={item} key={i} columns={this.state.columns} />);
             }, this);
 
 
@@ -99,6 +99,7 @@ var bd = this.bd || {};
                 return (<TableHeaderCell
                             name={column.name}
                             columnId={column.id}
+                            key={column.id}
                             onSort={this.onSort}
                             sortDirection={column.sortDirection}
                             isSorted={column.isSorted} />

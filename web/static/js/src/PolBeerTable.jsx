@@ -90,7 +90,7 @@ var bd = this.bd || {};
     ns.renderPolBeerTable = function(beerList, columnIds, component) {
         beerList = beerList.sort(ns.Util.getSorter(['name'], false));
         var columnsForTable = getColumnsForTable(columnIds);
-        React.render(<ns.SortableTable items={beerList} columns={columnsForTable} />, component);
+        ReactDOM.render(<ns.SortableTable items={beerList} columns={columnsForTable} />, component);
     }
 
 }(bd));

@@ -267,7 +267,7 @@ var bd = this.bd || {};
     });
 
     ns.renderBeerFixer = function(pol_beer, rb_beer, component) {
-        React.render(<BeerFixer pol_beer={pol_beer} rb_beer={rb_beer}/>, component);
+        ReactDOM.render(<BeerFixer pol_beer={pol_beer} rb_beer={rb_beer}/>, component);
     };
 
 }(bd));

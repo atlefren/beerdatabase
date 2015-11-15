@@ -18795,6 +18795,49 @@ if ("development" !== 'production') {
 module.exports = warning;
 },{"136":136}]},{},[1])(1)
 });
+/**
+ * ReactDOM v0.14.2
+ *
+ * Copyright 2013-2015, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+// Based off https://github.com/ForbesLindesay/umd/blob/master/template.js
+;(function(f) {
+  // CommonJS
+  if (typeof exports === "object" && typeof module !== "undefined") {
+    module.exports = f(require('react'));
+
+  // RequireJS
+  } else if (typeof define === "function" && define.amd) {
+    define(['react'], f);
+
+  // <script>
+  } else {
+    var g
+    if (typeof window !== "undefined") {
+      g = window;
+    } else if (typeof global !== "undefined") {
+      g = global;
+    } else if (typeof self !== "undefined") {
+      g = self;
+    } else {
+      // works providing we're not in "use strict";
+      // needed for Java 8 Nashorn
+      // see https://github.com/facebook/react/issues/3037
+      g = this;
+    }
+    g.ReactDOM = f(g.React);
+  }
+
+})(function(React) {
+  return React.__SECRET_DOM_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+});
+
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     define(factory);
@@ -19011,7 +19054,7 @@ var bd = this.bd || {};
 
         //trigger a new search, resetting the results and selected item
         search: function () {
-            var val = this.refs.value.getDOMNode().value;
+            var val = this.refs.value.value;
 
             //only trigger a search if we have a search value
             if (val !== this.state.searchVal && val !== '') {
@@ -19126,12 +19169,12 @@ var bd = this.bd || {};
     var DataRow = React.createClass({displayName: 'DataRow',
         render: function () {
 
-            var columns = _.map(this.props.columns, function (column) {
-                return (React.createElement("td", null, column.formatter(this.props.item)));
+            var columns = _.map(this.props.columns, function (column, i) {
+                return (React.createElement("td", {key: i}, column.formatter(this.props.item)));
             }, this);
 
             return (
-                React.createElement("tr", null, 
+                React.createElement("tr", {key: this.props.item.id}, 
                     columns
                 )
             );
@@ -19212,7 +19255,7 @@ var bd = this.bd || {};
         render: function () {
 
             var rows = _.map(this.state.items, function (item, i) {
-                return (React.createElement(DataRow, {item: item, columns: this.state.columns}));
+                return (React.createElement(DataRow, {item: item, key: i, columns: this.state.columns}));
             }, this);
 
 
@@ -19220,6 +19263,7 @@ var bd = this.bd || {};
                 return (React.createElement(TableHeaderCell, {
                             name: column.name, 
                             columnId: column.id, 
+                            key: column.id, 
                             onSort: this.onSort, 
                             sortDirection: column.sortDirection, 
                             isSorted: column.isSorted})
@@ -19288,7 +19332,7 @@ var bd = this.bd || {};
     ns.renderBreweyTable = function(breweryList, columnIds, component) {
         breweryList = breweryList.sort(ns.Util.getSorter(['name'], false));
         var columnsForTable = getColumnsForTable(columnIds);
-        React.render(React.createElement(ns.SortableTable, {items: breweryList, columns: columnsForTable}), component);
+        ReactDOM.render(React.createElement(ns.SortableTable, {items: breweryList, columns: columnsForTable}), component);
     }
 
 }(bd));
@@ -19384,7 +19428,7 @@ var bd = this.bd || {};
     ns.renderPolBeerTable = function(beerList, columnIds, component) {
         beerList = beerList.sort(ns.Util.getSorter(['name'], false));
         var columnsForTable = getColumnsForTable(columnIds);
-        React.render(React.createElement(ns.SortableTable, {items: beerList, columns: columnsForTable}), component);
+        ReactDOM.render(React.createElement(ns.SortableTable, {items: beerList, columns: columnsForTable}), component);
     }
 
 }(bd));
@@ -19440,8 +19484,8 @@ var bd = this.bd || {};
     var ExternalLinks = React.createClass({displayName: 'ExternalLinks',
 
         render: function () {
-            var links = _.map(this.props.links, function (link) {
-                return (React.createElement(ExternalLink, {link: link}));
+            var links = _.map(this.props.links, function (link, i) {
+                return (React.createElement(ExternalLink, {link: link, key: i}));
             });
 
             return (
@@ -19560,43 +19604,47 @@ var bd = this.bd || {};
                         React.createElement(ScoreDisplay, {beer: rbbeer}), 
                         React.createElement("div", {className: "four columns"}, 
                             React.createElement("table", {className: "u-full-width"}, 
-                                React.createElement("tr", null, 
-                                    React.createElement("th", null, "Stil"), 
-                                    React.createElement("td", null, 
-                                        React.createElement("a", {href: '/styles/' + rbbeer.style.id}, rbbeer.style.name)
-                                        )
-                                ), 
-                                React.createElement("tr", null, 
-                                    React.createElement("th", null, "Abv"), 
-                                    React.createElement("td", null, ns.Util.fixedOrNa(rbbeer.abv, 2))
-                                ), 
-                                React.createElement("tr", null, 
-                                    React.createElement("th", null, "Ibu"), 
-                                    React.createElement("td", null, ns.Util.valueOrNa(rbbeer.ibu))
-                                ), 
-                                React.createElement("tr", null, 
-                                    React.createElement("th", null, "Alias"), 
-                                    React.createElement("td", null, rbbeer.alias)
+                                React.createElement("tbody", null, 
+                                    React.createElement("tr", null, 
+                                        React.createElement("th", null, "Stil"), 
+                                        React.createElement("td", null, 
+                                            React.createElement("a", {href: '/styles/' + rbbeer.style.id}, rbbeer.style.name)
+                                            )
+                                    ), 
+                                    React.createElement("tr", null, 
+                                        React.createElement("th", null, "Abv"), 
+                                        React.createElement("td", null, ns.Util.fixedOrNa(rbbeer.abv, 2))
+                                    ), 
+                                    React.createElement("tr", null, 
+                                        React.createElement("th", null, "Ibu"), 
+                                        React.createElement("td", null, ns.Util.valueOrNa(rbbeer.ibu))
+                                    ), 
+                                    React.createElement("tr", null, 
+                                        React.createElement("th", null, "Alias"), 
+                                        React.createElement("td", null, rbbeer.alias)
+                                    )
                                 )
                             )
                          ), 
                          React.createElement("div", {className: "four columns"}, 
                             React.createElement("table", {className: "u-full-width"}, 
-                                React.createElement("tr", null, 
-                                    React.createElement("th", null, "Pris"), 
-                                    React.createElement("td", null, ns.Util.fixedOrNa(beer.price, 2), ' ', "kr")
-                                ), 
-                                React.createElement("tr", null, 
-                                    React.createElement("th", null, "Volum"), 
-                                    React.createElement("td", null, ns.Util.fixedOrNa(beer.volume, 2), ' ', "l")
-                                ), 
-                                React.createElement("tr", null, 
-                                    React.createElement("th", null, "Butikkkatergori"), 
-                                    React.createElement("td", null, ns.Util.valueOrNa(beer.store_category))
-                                ), 
-                                React.createElement("tr", null, 
-                                    React.createElement("th", null, "Produktutvalg"), 
-                                    React.createElement("td", null, ns.Util.valueOrNa(beer.produktutvalg))
+                                React.createElement("tbody", null, 
+                                    React.createElement("tr", null, 
+                                        React.createElement("th", null, "Pris"), 
+                                        React.createElement("td", null, ns.Util.fixedOrNa(beer.price, 2), ' ', "kr")
+                                    ), 
+                                    React.createElement("tr", null, 
+                                        React.createElement("th", null, "Volum"), 
+                                        React.createElement("td", null, ns.Util.fixedOrNa(beer.volume, 2), ' ', "l")
+                                    ), 
+                                    React.createElement("tr", null, 
+                                        React.createElement("th", null, "Butikkkatergori"), 
+                                        React.createElement("td", null, ns.Util.valueOrNa(beer.store_category))
+                                    ), 
+                                    React.createElement("tr", null, 
+                                        React.createElement("th", null, "Produktutvalg"), 
+                                        React.createElement("td", null, ns.Util.valueOrNa(beer.produktutvalg))
+                                    )
                                 )
                             )
                          ), 
@@ -19607,37 +19655,38 @@ var bd = this.bd || {};
                     React.createElement(ExternalLinks, {links: this.getExternalLinks()}), 
 
                     React.createElement("table", {className: "u-full-width"}, 
-                        React.createElement("tr", null, 
-                            React.createElement("th", null, "Karakteristikk"), 
-                            React.createElement("td", null, 
-                                React.createElement(Pie, {name: "Sødme", value: beer.sweetness}), 
-                                React.createElement(Pie, {name: "Friskhet", value: beer.freshness}), 
-                                React.createElement(Pie, {name: "Bitterhet", value: beer.bitterness}), 
-                                React.createElement(Pie, {name: "Fylde", value: beer.richness})
+                        React.createElement("tbody", null, 
+                            React.createElement("tr", null, 
+                                React.createElement("th", null, "Karakteristikk"), 
+                                React.createElement("td", null, 
+                                    React.createElement(Pie, {name: "Sødme", value: beer.sweetness}), 
+                                    React.createElement(Pie, {name: "Friskhet", value: beer.freshness}), 
+                                    React.createElement(Pie, {name: "Bitterhet", value: beer.bitterness}), 
+                                    React.createElement(Pie, {name: "Fylde", value: beer.richness})
+                                )
+                            ), 
+                            React.createElement("tr", null, 
+                                React.createElement("th", null, "Passer til"), 
+                                React.createElement("td", null, beer.pairs_with_1, ",", ' ', beer.pairs_with_2, ",", ' ', beer.pairs_with_3, " ")
+                            ), 
+                            React.createElement("tr", null, 
+                                React.createElement("th", null, "Lukt"), 
+                                React.createElement("td", null, beer.smell)
+                            ), 
+                            React.createElement("tr", null, 
+                                React.createElement("th", null, "Smak"), 
+                                React.createElement("td", null, beer.taste)
+                            ), 
+                            React.createElement("tr", null, 
+                                React.createElement("th", null, "Metode"), 
+                                React.createElement("td", null, beer.method)
+                            ), 
+                            React.createElement("tr", null, 
+                                React.createElement("th", null, "Lagringsgrad"), 
+                                React.createElement("td", null, beer.storage_notes)
                             )
-                        ), 
-                        React.createElement("tr", null, 
-                            React.createElement("th", null, "Passer til"), 
-                            React.createElement("td", null, beer.pairs_with_1, ",", ' ', beer.pairs_with_2, ",", ' ', beer.pairs_with_3, " ")
-                        ), 
-                        React.createElement("tr", null, 
-                            React.createElement("th", null, "Lukt"), 
-                            React.createElement("td", null, beer.smell)
-                        ), 
-                        React.createElement("tr", null, 
-                            React.createElement("th", null, "Smak"), 
-                            React.createElement("td", null, beer.taste)
-                        ), 
-                        React.createElement("tr", null, 
-                            React.createElement("th", null, "Metode"), 
-                            React.createElement("td", null, beer.method)
-                        ), 
-                        React.createElement("tr", null, 
-                            React.createElement("th", null, "Lagringsgrad"), 
-                            React.createElement("td", null, beer.storage_notes)
                         )
                     ), 
-
                     this.getHelpMsg()
                 )
             );
@@ -19647,7 +19696,7 @@ var bd = this.bd || {};
 
 
     ns.renderBeerOverview = function(beer, component) {
-        React.render(React.createElement(BeerOverview, {beer: beer}), component);
+        ReactDOM.render(React.createElement(BeerOverview, {beer: beer}), component);
     };
 
 }(bd));
@@ -19676,7 +19725,7 @@ var bd = this.bd || {};
             var styles = _.map(this.props.styles, function (style) {
                 var url = '/styles/' + style.id;
                 return (
-                    React.createElement("li", null, 
+                    React.createElement("li", {key: style.id}, 
                         React.createElement("a", {href: url}, style.name)
                     )
                 );
@@ -19706,7 +19755,7 @@ var bd = this.bd || {};
                 var stop =  start + valuesPrColumn;
                 var styles = this.props.styles.slice(start, stop);
                 return (
-                    React.createElement("div", {className: columnClass}, 
+                    React.createElement("div", {className: columnClass, key: i}, 
                         React.createElement(StyleList, {styles: styles})
                     )
                 );
@@ -19718,7 +19767,7 @@ var bd = this.bd || {};
     });
 
     ns.renderStyleList = function(styles, component) {
-        React.render(React.createElement(StyleListWrapper, {styles: styles, valuesPrColumn: 25}), component);
+        ReactDOM.render(React.createElement(StyleListWrapper, {styles: styles, valuesPrColumn: 25}), component);
     };
 
 }(bd));
@@ -19991,7 +20040,7 @@ var bd = this.bd || {};
     });
 
     ns.renderBeerFixer = function(pol_beer, rb_beer, component) {
-        React.render(React.createElement(BeerFixer, {pol_beer: pol_beer, rb_beer: rb_beer}), component);
+        ReactDOM.render(React.createElement(BeerFixer, {pol_beer: pol_beer, rb_beer: rb_beer}), component);
     };
 
 }(bd));
