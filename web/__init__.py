@@ -37,5 +37,6 @@ for name, bundle in bundles.iteritems():
 
 # add various views
 from web import views
+from web import api
 
 app.db_session = db.session
