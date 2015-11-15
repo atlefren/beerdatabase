@@ -115,3 +115,17 @@ class PoletBeer(Base):
             'has_rb': has_rb,
             'id': self.id,
         }
+
+
+class RbPolBeerMapping(Base):
+    __tablename__ = 'pol_to_rb_mapping'
+    id = sa.Column('id', sa.Integer, primary_key=True)
+    comment = sa.Column('comment', sa.Unicode(255))
+    resolved = sa.Column('resolved', sa.Boolean, default=False)
+    rb_beer_id = sa.Column('rb_beer_id', sa.Integer, sa.ForeignKey('rb_beer.id'), nullable=False)
+    pol_beer_id = sa.Column('pol_beer_id', sa.Integer, sa.ForeignKey('pol_beer.id'), nullable=False)
+
+    def __init__(self, pol_id=None, rb_id=None, comment=None):
+        self.rb_beer_id = rb_id
+        self.pol_beer_id = pol_id
+        self.comment = comment

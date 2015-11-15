@@ -36,9 +36,11 @@ css_base = Bundle(
 
 js_beer_list = Bundle(
     'js/lib/underscore/underscore-min.js',
-    'js/lib/react/react.min.js',
+    'js/lib/react/react.js',
     Bundle(
+        'js/lib/atomic-fixed.js',
         'js/src/util.js',
+        'js/src/Autocomplete.jsx',
         'js/src/SortableTable.jsx',
         'js/src/BreweryTable.jsx',
         'js/src/PolBeerTable.jsx',
