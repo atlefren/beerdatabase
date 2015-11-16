@@ -19892,7 +19892,7 @@ var bd = this.bd || {};
                                     React.createElement("th", null, "Emballasje")
                                 ), 
                                 React.createElement("tr", null, 
-                                    React.createElement("td", null, this.props.beer.abv), 
+                                    React.createElement("td", null, ns.Util.fixedOrNa(this.props.beer.abv, 2)), 
                                     React.createElement("td", null, this.props.beer.color), 
                                     React.createElement("td", null, this.props.beer.packaging)
                                 )
@@ -19945,7 +19945,7 @@ var bd = this.bd || {};
                             ), 
                             React.createElement("tr", null, 
                                 React.createElement("td", null, this.state.beer.style.name), 
-                                React.createElement("td", null, this.state.beer.abv), 
+                                React.createElement("td", null, ns.Util.fixedOrNa(this.state.beer.abv, 2)), 
                                 React.createElement("td", null, this.state.beer.ibu), 
                                 React.createElement("td", null, this.state.beer.alias)
                             )

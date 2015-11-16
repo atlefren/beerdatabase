@@ -71,7 +71,7 @@ var bd = this.bd || {};
                                     <th>Emballasje</th>
                                 </tr>
                                 <tr>
-                                    <td>{this.props.beer.abv}</td>
+                                    <td>{ns.Util.fixedOrNa(this.props.beer.abv, 2)}</td>
                                     <td>{this.props.beer.color}</td>
                                     <td>{this.props.beer.packaging}</td>
                                 </tr>
@@ -124,7 +124,7 @@ var bd = this.bd || {};
                             </tr>
                             <tr>
                                 <td>{this.state.beer.style.name}</td>
-                                <td>{this.state.beer.abv}</td>
+                                <td>{ns.Util.fixedOrNa(this.state.beer.abv, 2)}</td>
                                 <td>{this.state.beer.ibu}</td>
                                 <td>{this.state.beer.alias}</td>
                             </tr>
