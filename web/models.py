@@ -44,8 +44,24 @@ class RatebeerBeer(Base):
 
     @property
     def url(self):
-        print "!"
         return ratebeer_url(self.id, self.shortname)
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'shortname': self.shortname,
+            'alias': self.alias,
+            'retired': self.retired,
+            'style_id': self.style_id,
+            'style': self.style,
+            'score_overall': self.score_overall,
+            'score_style': self.score_style,
+            'abv': self.abv,
+            'ibu': self.ibu,
+            'url': self.url,
+            'brewery': self.brewery,
+        }
 
 
 class RatebeerBrewery(Base):
@@ -121,6 +137,40 @@ class PoletBeer(Base):
             'score_style': self.ratebeer.score_style if has_rb else None,
             'has_rb': has_rb,
             'id': self.id,
+        }
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'store_category': self.store_category,
+            'produktutvalg': self.produktutvalg,
+            'producer': self.producer,
+            'distributor': self.distributor,
+            'varenummer': self.varenummer,
+            'abv': self.abv,
+            'volume': self.volume,
+            'color': self.color,
+            'smell': self.smell,
+            'taste': self.taste,
+            'method': self.method,
+            'cork_type': self.cork_type,
+            'packaging_type': self.packaging_type,
+            'price': self.price,
+            'country': self.country,
+            'district': self.district,
+            'subdistrict': self.subdistrict,
+            'url': self.url,
+            'vintage': self.vintage,
+            'ingredients': self.ingredients,
+            'pairs_with_1': self.pairs_with_1,
+            'pairs_with_2': self.pairs_with_2,
+            'pairs_with_3': self.pairs_with_3,
+            'storage_notes': self.storage_notes,
+            'sweetness': self.sweetness,
+            'freshness': self.freshness,
+            'bitterness': self.bitterness,
+            'richness': self.richness,
+            'ratebeer': self.ratebeer.serialize(),
         }
 
 

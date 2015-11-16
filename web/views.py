@@ -30,8 +30,8 @@ def pol_beers():
 def fix_beer(pol_beer, rb_beer=None):
 
     data = {
-        'pol_beer': pol_beer,
-        'rb_beer': rb_beer
+        'pol_beer': pol_beer.serialize(),
+        'rb_beer': rb_beer.serialize()
     }
 
     return render_template('fix_beer.html', json=json.dumps(data))
@@ -70,7 +70,10 @@ def pol_beer(id):
         abort(404)
     if pol_beer.ratebeer is None:
         return fix_beer(pol_beer)
-    return render_template('pol_beer.html', json=json.dumps(pol_beer))
+    return render_template(
+        'pol_beer.html',
+        json=json.dumps(pol_beer.serialize())
+    )
 
 
 @app.route('/pol_beers/<int:id>/report')

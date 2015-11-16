@@ -19631,7 +19631,7 @@ var bd = this.bd || {};
 
         getExternalLinks: function () {
             return [
-                {name: 'Ratebeer', url: '#'},
+                {name: 'Ratebeer', url: this.props.beer.ratebeer.url},
                 {name: 'Vinmonopolet', url: this.props.beer.url},
                 {name: 'Apéritif.no', url: '#'}
             ];
@@ -19880,7 +19880,7 @@ var bd = this.bd || {};
                                 ), 
                                 React.createElement("tr", null, 
                                     React.createElement("th", null, "Polets vareside"), 
-                                    React.createElement("td", null, React.createElement("a", {href: this.props.beer.url, target: "_blank"}, "link"))
+                                    React.createElement("td", null, React.createElement("a", {href: this.props.beer.url, target: "_blank"}, "Link"))
                                 )
                             )
                         ), 
@@ -19941,13 +19941,13 @@ var bd = this.bd || {};
                                 React.createElement("th", null, "Ølstil"), 
                                 React.createElement("th", null, "Abv"), 
                                 React.createElement("th", null, "Ibu"), 
-                                React.createElement("th", null, "Alias")
+                                React.createElement("th", null, "Ratebeer Url")
                             ), 
                             React.createElement("tr", null, 
                                 React.createElement("td", null, this.state.beer.style.name), 
                                 React.createElement("td", null, ns.Util.fixedOrNa(this.state.beer.abv, 2)), 
                                 React.createElement("td", null, this.state.beer.ibu), 
-                                React.createElement("td", null, this.state.beer.alias)
+                                React.createElement("td", null, React.createElement("a", {href: this.state.beer.url, target: "_blank"}, "Link"))
                             )
                         )
                     )

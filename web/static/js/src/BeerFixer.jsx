@@ -59,7 +59,7 @@ var bd = this.bd || {};
                                 </tr>
                                 <tr>
                                     <th>Polets vareside</th>
-                                    <td><a href={this.props.beer.url} target="_blank">link</a></td>
+                                    <td><a href={this.props.beer.url} target="_blank">Link</a></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -120,13 +120,13 @@ var bd = this.bd || {};
                                 <th>Ølstil</th>
                                 <th>Abv</th>
                                 <th>Ibu</th>
-                                <th>Alias</th>
+                                <th>Ratebeer Url</th>
                             </tr>
                             <tr>
                                 <td>{this.state.beer.style.name}</td>
                                 <td>{ns.Util.fixedOrNa(this.state.beer.abv, 2)}</td>
                                 <td>{this.state.beer.ibu}</td>
-                                <td>{this.state.beer.alias}</td>
+                                <td><a href={this.state.beer.url} target="_blank">Link</a></td>
                             </tr>
                         </tbody>
                     </table>
