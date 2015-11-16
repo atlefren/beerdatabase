@@ -19657,7 +19657,7 @@ var bd = this.bd || {};
                                         React.createElement("th", null, "Stil"), 
                                         React.createElement("td", null, 
                                             React.createElement("a", {href: '/styles/' + rbbeer.style.id}, rbbeer.style.name)
-                                            )
+                                        )
                                     ), 
                                     React.createElement("tr", null, 
                                         React.createElement("th", null, "Abv"), 
@@ -19715,7 +19715,7 @@ var bd = this.bd || {};
                             ), 
                             React.createElement("tr", null, 
                                 React.createElement("th", null, "Passer til"), 
-                                React.createElement("td", null, beer.pairs_with_1, ",", ' ', beer.pairs_with_2, ",", ' ', beer.pairs_with_3, " ")
+                                React.createElement("td", null, [beer.pairs_with_1, beer.pairs_with_2, beer.pairs_with_3].join(' '), " ")
                             ), 
                             React.createElement("tr", null, 
                                 React.createElement("th", null, "Lukt"), 

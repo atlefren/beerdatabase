@@ -175,7 +175,7 @@ var bd = this.bd || {};
                                         <th>Stil</th>
                                         <td>
                                             <a href={'/styles/' + rbbeer.style.id}>{rbbeer.style.name}</a>
-                                            </td>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>Abv</th>
@@ -233,7 +233,7 @@ var bd = this.bd || {};
                             </tr>
                             <tr>
                                 <th>Passer til</th>
-                                <td>{beer.pairs_with_1},{' '}{beer.pairs_with_2},{' '}{beer.pairs_with_3} </td>
+                                <td>{[beer.pairs_with_1, beer.pairs_with_2, beer.pairs_with_3].join(' ')} </td>
                             </tr>
                             <tr>
                                 <th>Lukt</th>
