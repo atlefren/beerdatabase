@@ -19646,7 +19646,9 @@ var bd = this.bd || {};
                 React.createElement("div", null, 
                     React.createElement("h1", null, rbbeer.name), 
 
-                    React.createElement("p", null, "Brygget av", ' ', React.createElement("a", {href: '/breweries/' + rbbeer.brewery.id}, rbbeer.brewery.name)), 
+                    React.createElement("p", null, 
+                        "Brygget av", ' ', React.createElement("a", {href: '/breweries/' + rbbeer.brewery.id}, rbbeer.brewery.name), 
+                        ' ', "(", rbbeer.brewery.country.name, ")"), 
 
                     React.createElement("div", {className: "row"}, 
                         React.createElement(ScoreDisplay, {beer: rbbeer}), 

@@ -164,7 +164,9 @@ var bd = this.bd || {};
                 <div>
                     <h1>{rbbeer.name}</h1>
 
-                    <p>Brygget av{' '}<a href={'/breweries/' + rbbeer.brewery.id}>{rbbeer.brewery.name}</a></p> 
+                    <p>
+                        Brygget av{' '}<a href={'/breweries/' + rbbeer.brewery.id}>{rbbeer.brewery.name}</a>
+                        {' '}({rbbeer.brewery.country.name})</p> 
 
                     <div className='row'>
                         <ScoreDisplay beer={rbbeer} />
