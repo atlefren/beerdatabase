@@ -43,6 +43,7 @@ js_beer_list = Bundle(
     Bundle(
         'js/lib/atomic-fixed.js',
         'js/src/util.js',
+        'js/src/api.js',
         'js/src/Autocomplete.jsx',
         'js/src/SortableTable.jsx',
         'js/src/BreweryTable.jsx',

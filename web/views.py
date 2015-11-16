@@ -2,9 +2,11 @@
 
 from flask import render_template, current_app, abort, json
 from sqlalchemy.sql import func
+from sqlalchemy.sql.expression import or_
 
 from web import app
-from models import (PoletBeer, BeerStyle, RatebeerBeer, RatebeerBrewery)
+from models import (PoletBeer, BeerStyle, RatebeerBeer, RatebeerBrewery,
+                    RbPolBeerMapping)
 
 
 @app.template_filter('ratebeer_url')
@@ -38,11 +40,22 @@ def fix_beer(pol_beer, rb_beer=None):
 @app.route('/pol_beers/unmatched/')
 def unmatched_beers():
 
-    unmatched = current_app.db_session.query(PoletBeer)\
+    unmatched = current_app.db_session.query(PoletBeer.id, PoletBeer.name, PoletBeer.producer, func.count(PoletBeer.id))\
+        .outerjoin(RbPolBeerMapping)\
         .filter(PoletBeer.ratebeer_id == None)\
+        .group_by(PoletBeer.id, PoletBeer.name, PoletBeer.producer)\
         .all()
-    unmatched = [b.get_list_response() for b in unmatched]
+    unmatched = [{'id': b[0], 'name': b[1], 'brewery': b[2], 'count': b[3]} for b in unmatched]
     return render_template('unmatched.html', json=json.dumps(unmatched))
+
+
+@app.route('/pol_beers/match_suggestions/')
+def match_suggestions():
+
+    suggestions = current_app.db_session.query(RbPolBeerMapping)\
+        .filter(RbPolBeerMapping.resolved == False)\
+        .all()
+    return render_template('match_suggestions.html', json=json.dumps(suggestions))
 
 
 @app.route('/pol_beers/<int:id>')

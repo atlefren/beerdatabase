@@ -18996,6 +18996,39 @@ bd.Util = {};
 
 }(bd.Util));
 var bd = this.bd || {};
+bd.api = bd.api || {};
+(function (ns) {
+    'use strict';
+
+    var API_BASE = '/api/v1/';
+
+    ns.confirmSuggestion = function (suggestion, callback) {
+        var data = {
+            pol_id: suggestion.pol_beer_id,
+            rb_id: suggestion.rb_beer_id
+        };
+
+        atomic.put(API_BASE + 'suggestions/' + suggestion.id, data)
+            .success(function (data, xhr) {
+                callback(data);
+            })
+            .error(function (data, xhr) {
+                console.error(data);
+            });
+    };
+
+    ns.rejectSuggestion = function (suggestion, callback) {
+        atomic.delete(API_BASE + 'suggestions/' + suggestion.id)
+            .success(function (data, xhr) {
+                callback(data);
+            })
+            .error(function (data, xhr) {
+                console.error(data);
+            });
+    };
+
+}(bd.api));
+var bd = this.bd || {};
 (function (ns) {
     'use strict';
 
@@ -19359,6 +19392,11 @@ var bd = this.bd || {};
             id: 'brewery',
             name: 'Bryggeri',
             formatter: function (beer) {
+
+                if (!beer.brewery_id) {
+                    return beer.brewery;
+                }
+
                 return (
                     React.createElement("a", {href: '/breweries/' + beer.brewery_id}, 
                         beer.brewery
@@ -19413,6 +19451,16 @@ var bd = this.bd || {};
                 return ns.Util.fixedOrNa(beer.price, 2);
             },
             sortParams: 'price',
+            isSorted: false,
+            sortDirection: 'desc'
+        },
+        {
+            id: 'num_unmatched',
+            name: 'Antall forslag',
+            formatter: function (beer) {
+                return beer.count;
+            },
+            sortParams: 'count',
             isSorted: false,
             sortDirection: 'desc'
         }
@@ -19806,7 +19854,7 @@ var bd = this.bd || {};
             polId: polId,
             comment: comment
         };
-        atomic.post('/api/v1/mappings/', data)
+        atomic.post('/api/v1/suggestions/', data)
             .success(callback)
             .error(function (data, xhr) {
                 console.error(data);
@@ -20041,6 +20089,190 @@ var bd = this.bd || {};
 
     ns.renderBeerFixer = function(pol_beer, rb_beer, component) {
         ReactDOM.render(React.createElement(BeerFixer, {pol_beer: pol_beer, rb_beer: rb_beer}), component);
+    };
+
+
+    function hasRbBrewery(suggestion) {
+        console.log(suggestion, suggestion.pol_beer.ratebeer_id)
+        return !(suggestion.pol_beer.ratebeer_id === null);
+    }
+
+    var MatchHandlerMixin = {
+
+        confirmSuggestion: function (e) {
+            ns.api.confirmSuggestion(this.props.suggestion, this.props.updated)
+        },
+
+        rejectSuggestion: function (e) {
+            ns.api.rejectSuggestion(this.props.suggestion, this.props.updated)
+        }
+    };
+
+    var NoMatchElement = React.createClass({displayName: 'NoMatchElement',
+
+        mixins: [MatchHandlerMixin],
+
+        render: function () {
+            var suggestion = this.props.suggestion;
+            return (
+                React.createElement("tr", {key: suggestion.id}, 
+                    React.createElement("td", null, suggestion.pol_beer.producer), 
+                    React.createElement("td", null, React.createElement("a", {href: suggestion.pol_beer.url, target: "_blank"}, suggestion.pol_beer.name)), 
+                    React.createElement("td", null, suggestion.rb_beer.brewery.name), 
+                    React.createElement("td", null, suggestion.rb_beer.name), 
+                    React.createElement("td", null, suggestion.comment), 
+                    React.createElement("td", null, 
+                        React.createElement("i", {
+                            onClick: this.confirmSuggestion, 
+                            className: "fa fa-check-circle fa-2x"}), 
+                        " ", 
+                        React.createElement("i", {
+                            onClick: this.rejectSuggestion, 
+                            className: "fa fa-minus-circle fa-2x"})
+                    )
+                )
+            );
+        }
+    });
+
+    var NoMatchList = React.createClass({displayName: 'NoMatchList',
+
+        render: function () {
+
+            if (!this.props.suggestions.length) {
+                return (React.createElement("p", null, "Ingen forslag."));
+            }
+
+            var list = _.map(this.props.suggestions, function (suggestion) {
+                return (
+                    React.createElement(NoMatchElement, {
+                        updated: this.props.updated, 
+                        suggestion: suggestion, 
+                        key: suggestion.id})
+                );
+            }, this);
+
+            return (
+                React.createElement("table", {className: "u-full-width"}, 
+                    React.createElement("thead", null, 
+                        React.createElement("tr", null, 
+                            React.createElement("th", null, "Bryggeri Polet"), 
+                            React.createElement("th", null, "Navn Polet"), 
+                            React.createElement("th", null, "Bryggeri Ratebeer"), 
+                            React.createElement("th", null, "Navn Ratebeer"), 
+                            React.createElement("th", null, "Kommentar"), 
+                            React.createElement("th", null, "Aksjoner")
+                        )
+                    ), 
+                    React.createElement("tbody", null, 
+                        list
+                    )
+                )
+            );
+        }
+
+    });
+
+    var ChangeElement = React.createClass({displayName: 'ChangeElement',
+
+        mixins: [MatchHandlerMixin],
+
+        render: function () {
+            var suggestion = this.props.suggestion;
+            return (
+                React.createElement("tr", {key: suggestion.id}, 
+                    React.createElement("td", null, suggestion.pol_beer.producer), 
+                    React.createElement("td", null, React.createElement("a", {href: suggestion.pol_beer.url, target: "_blank"}, suggestion.pol_beer.name)), 
+                    React.createElement("td", null, suggestion.pol_beer.ratebeer.brewery.name), 
+                    React.createElement("td", null, suggestion.pol_beer.ratebeer.name), 
+                    React.createElement("td", null, suggestion.rb_beer.brewery.name), 
+                    React.createElement("td", null, suggestion.rb_beer.name), 
+                    React.createElement("td", null, suggestion.comment), 
+                    React.createElement("td", null, 
+                        React.createElement("i", {
+                            onClick: this.confirmSuggestion, 
+                            title: "Godkjenn", 
+                            className: "fa fa-check-circle fa-2x"}), 
+                        " ", 
+                        React.createElement("i", {
+                            onClick: this.rejectSuggestion, 
+                            title: "Avvis", 
+                            className: "fa fa-minus-circle fa-2x"})
+                    )
+                )
+            );
+        }
+    });
+
+    var ChangesList = React.createClass({displayName: 'ChangesList',
+
+        render: function () {
+
+            if (!this.props.suggestions.length) {
+                return (React.createElement("p", null, "Ingen forslag."));
+            }
+
+            var list = _.map(this.props.suggestions, function (suggestion) {
+                return (
+                    React.createElement(ChangeElement, {
+                        updated: this.props.updated, 
+                        suggestion: suggestion, 
+                        key: suggestion.id})
+                );
+            }, this);
+
+            return (
+                React.createElement("table", {className: "u-full-width"}, 
+                    React.createElement("thead", null, 
+                        React.createElement("tr", null, 
+                            React.createElement("th", null, "Bryggeri Polet"), 
+                            React.createElement("th", null, "Navn Polet"), 
+                            React.createElement("th", null, "Bryggeri Ratebeer"), 
+                            React.createElement("th", null, "Navn Ratebeer"), 
+                            React.createElement("th", null, "Nytt Bryggeri Ratebeer"), 
+                            React.createElement("th", null, "Nytt Navn Ratebeer"), 
+                            React.createElement("th", null, "Kommentar"), 
+                            React.createElement("th", null, "Aksjoner")
+                        )
+                    ), 
+                    React.createElement("tbody", null, 
+                        list
+                    )
+                )
+            );
+        }
+
+    });
+
+    var BeerFixSuggestions = React.createClass({displayName: 'BeerFixSuggestions',
+
+        getInitialState: function () {
+            return {suggestions: this.props.suggestions};
+        },
+
+        updated: function (newList) {
+            console.log(newList);
+            this.setState({suggestions: newList});
+        },
+
+        render: function () {
+            var noMatch = _.reject(this.state.suggestions, hasRbBrewery);
+            var changes = _.filter(this.state.suggestions, hasRbBrewery);
+
+            return (
+                React.createElement("div", null, 
+                    React.createElement("h2", null, "Uten match"), 
+                    React.createElement(NoMatchList, {suggestions: noMatch, updated: this.updated}), 
+                    React.createElement("h2", null, "Endringer"), 
+                    React.createElement(ChangesList, {suggestions: changes, updated: this.updated})
+                )
+            );
+        }
+    });
+
+
+    ns.renderBeerFixSuggestions = function(suggestions, component) {
+        ReactDOM.render(React.createElement(BeerFixSuggestions, {suggestions: suggestions}), component);
     };
 
 }(bd));

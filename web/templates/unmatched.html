@@ -34,7 +34,7 @@
             var beerList = {{ json | safe }};
             bd.renderPolBeerTable(
                 beerList,
-                ['name', 'brewery'],
+                ['name', 'brewery', 'num_unmatched'],
                 document.getElementById('beer_list')
             );
         }());

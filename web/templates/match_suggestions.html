@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block css %}
+{{ super() }}
+
+{% endblock %}
+
+{% block main %}
+<h1>Match-hjelp øl</h1>
+
+<div id="beer_list"></div>
+
+{%endblock %}
+
+{% block js %}
+{{ super() }}
+    {% assets "js_beer_list" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+    <script type="text/javascript">
+        //console.log({{ json | safe }});
+        (function () {
+            var unmatched = {{ json | safe }};
+            console.log(unmatched)
+            bd.renderBeerFixSuggestions(unmatched, document.getElementById('beer_list'));
+        }());
+    </script>
+
+{% endblock %}

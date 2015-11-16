@@ -123,7 +123,9 @@ class RbPolBeerMapping(Base):
     comment = sa.Column('comment', sa.Unicode(255))
     resolved = sa.Column('resolved', sa.Boolean, default=False)
     rb_beer_id = sa.Column('rb_beer_id', sa.Integer, sa.ForeignKey('rb_beer.id'), nullable=False)
+    rb_beer = relationship('RatebeerBeer', lazy=False)
     pol_beer_id = sa.Column('pol_beer_id', sa.Integer, sa.ForeignKey('pol_beer.id'), nullable=False)
+    pol_beer = relationship('PoletBeer', lazy=False)
 
     def __init__(self, pol_id=None, rb_id=None, comment=None):
         self.rb_beer_id = rb_id

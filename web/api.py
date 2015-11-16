@@ -3,7 +3,7 @@
 from flask import current_app, json, request, Response
 
 from web import app
-from models import (RatebeerBeer, RatebeerBrewery, RbPolBeerMapping)
+from models import (RatebeerBeer, RatebeerBrewery, RbPolBeerMapping, PoletBeer)
 
 
 api_prefix = '/api/v1'
@@ -38,8 +38,8 @@ def search():
     return Response(json.dumps(x), content_type='application/json')
 
 
-@app.route(api_prefix + '/mappings/', methods=['POST'])
-def add_mapping():
+@app.route(api_prefix + '/suggestions/', methods=['POST'])
+def add_suggestion():
     data = request.json
     print data
     mapping = RbPolBeerMapping(
@@ -53,4 +53,47 @@ def add_mapping():
         json.dumps(mapping),
         content_type='application/json',
         status=201
+    )
+
+
+@app.route(api_prefix + '/suggestions/<int:id>', methods=['DELETE'])
+def remove_suggestion(id):
+    suggestion = current_app.db_session.query(RbPolBeerMapping)\
+        .get(id)
+    suggestion.resolved = True
+    current_app.db_session.commit()
+
+    suggestions = current_app.db_session.query(RbPolBeerMapping)\
+        .filter(RbPolBeerMapping.resolved == False)\
+        .all()
+
+    return Response(
+        json.dumps(suggestions),
+        content_type='application/json',
+        status=200
+    )
+
+
+@app.route(api_prefix + '/suggestions/<int:id>', methods=['PUT'])
+def confirm_suggestion(id):
+    data = request.json
+
+    suggestion = current_app.db_session.query(RbPolBeerMapping)\
+        .get(id)
+    suggestion.resolved = True
+
+    pol_beer = current_app.db_session.query(PoletBeer)\
+        .get(data.get('pol_id', None))
+    pol_beer.ratebeer_id = data.get('rb_id', None)
+
+    current_app.db_session.commit()
+
+    suggestions = current_app.db_session.query(RbPolBeerMapping)\
+        .filter(RbPolBeerMapping.resolved == False)\
+        .all()
+
+    return Response(
+        json.dumps(suggestions),
+        content_type='application/json',
+        status=200
     )

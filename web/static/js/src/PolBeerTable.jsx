@@ -21,6 +21,11 @@ var bd = this.bd || {};
             id: 'brewery',
             name: 'Bryggeri',
             formatter: function (beer) {
+
+                if (!beer.brewery_id) {
+                    return beer.brewery;
+                }
+
                 return (
                     <a href={'/breweries/' + beer.brewery_id}>
                         {beer.brewery}
@@ -75,6 +80,16 @@ var bd = this.bd || {};
                 return ns.Util.fixedOrNa(beer.price, 2);
             },
             sortParams: 'price',
+            isSorted: false,
+            sortDirection: 'desc'
+        },
+        {
+            id: 'num_unmatched',
+            name: 'Antall forslag',
+            formatter: function (beer) {
+                return beer.count;
+            },
+            sortParams: 'count',
             isSorted: false,
             sortDirection: 'desc'
         }
