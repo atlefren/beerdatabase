@@ -138,6 +138,7 @@ class PoletBeer(Base):
             'has_rb': has_rb,
             'id': self.id,
         }
+
     def serialize(self):
         return {
             'id': self.id,
@@ -170,7 +171,7 @@ class PoletBeer(Base):
             'freshness': self.freshness,
             'bitterness': self.bitterness,
             'richness': self.richness,
-            'ratebeer': self.ratebeer.serialize(),
+            'ratebeer': self.ratebeer.serialize() if self.ratebeer is not None else None,
         }
 
 
@@ -188,3 +189,13 @@ class RbPolBeerMapping(Base):
         self.rb_beer_id = rb_id
         self.pol_beer_id = pol_id
         self.comment = comment
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'comment': self.comment,
+            'rb_beer_id': self.rb_beer_id,
+            'pol_beer_id': self.pol_beer_id,
+            'pol_beer': self.pol_beer.serialize(),
+            'rb_beer': self.rb_beer.serialize() if self.rb_beer is not None else None
+        }

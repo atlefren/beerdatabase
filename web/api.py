@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import current_app, json, request, Response
+from sqlalchemy.sql.expression import and_
 
 from web import app
 from models import (RatebeerBeer, RatebeerBrewery, RbPolBeerMapping, PoletBeer)
@@ -78,19 +79,25 @@ def remove_suggestion(id):
 def confirm_suggestion(id):
     data = request.json
 
-    suggestion = current_app.db_session.query(RbPolBeerMapping)\
-        .get(id)
-    suggestion.resolved = True
-
     pol_beer = current_app.db_session.query(PoletBeer)\
         .get(data.get('pol_id', None))
     pol_beer.ratebeer_id = data.get('rb_id', None)
+
+    suggestions = current_app.db_session.query(RbPolBeerMapping)\
+        .filter(and_(
+            RbPolBeerMapping.rb_beer_id == pol_beer.ratebeer_id,
+            RbPolBeerMapping.pol_beer_id == pol_beer.id
+        ))\
+        .all()
+    for suggestion in suggestions:
+        suggestion.resolved = True
 
     current_app.db_session.commit()
 
     suggestions = current_app.db_session.query(RbPolBeerMapping)\
         .filter(RbPolBeerMapping.resolved == False)\
         .all()
+    suggestions = [s.serialize() for s in suggestions]
 
     return Response(
         json.dumps(suggestions),

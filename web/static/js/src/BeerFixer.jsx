@@ -101,7 +101,7 @@ var bd = this.bd || {};
         },
 
         selectBrewery: function (brewery) {
-            this.setState({brewery: brewery});
+            this.setState({brewery: brewery, beer: {name: '', style: {name: ''}}});
         },
 
         selectBeer: function (beer) {
@@ -272,8 +272,7 @@ var bd = this.bd || {};
 
 
     function hasRbBrewery(suggestion) {
-        console.log(suggestion, suggestion.pol_beer.ratebeer_id)
-        return !(suggestion.pol_beer.ratebeer_id === null);
+        return !(suggestion.pol_beer.ratebeer === null);
     }
 
     var MatchHandlerMixin = {
@@ -430,7 +429,6 @@ var bd = this.bd || {};
         },
 
         updated: function (newList) {
-            console.log(newList);
             this.setState({suggestions: newList});
         },
 
