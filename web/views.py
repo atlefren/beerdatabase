@@ -2,11 +2,11 @@
 
 from flask import render_template, current_app, abort, json
 from sqlalchemy.sql import func
-from sqlalchemy.sql.expression import or_
+# from sqlalchemy.sql.expression import or_
 
 from web import app
 from models import (PoletBeer, BeerStyle, RatebeerBeer, RatebeerBrewery,
-                    RbPolBeerMapping)
+                    RbPolBeerMapping, RatebeerCountry)
 
 
 @app.template_filter('ratebeer_url')
@@ -45,7 +45,12 @@ def unmatched_beers():
         .filter(PoletBeer.ratebeer_id == None)\
         .group_by(PoletBeer.id, PoletBeer.name, PoletBeer.producer)\
         .all()
-    unmatched = [{'id': b[0], 'name': b[1], 'brewery': b[2], 'count': b[3]} for b in unmatched]
+    unmatched = [{
+        'id': b[0],
+        'name': b[1],
+        'brewery': b[2],
+        'count': b[3]
+    } for b in unmatched]
     return render_template('unmatched.html', json=json.dumps(unmatched))
 
 
@@ -102,15 +107,21 @@ def style(id):
 
 @app.route('/breweries/')
 def brewery_list():
-    breweries = current_app.db_session.query(RatebeerBrewery, func.count())\
+    breweries = current_app.db_session.query(RatebeerBrewery.id, RatebeerBrewery.name, RatebeerCountry.id, RatebeerCountry.name, func.count())\
         .join(RatebeerBeer)\
         .join(PoletBeer)\
-        .group_by(RatebeerBrewery)\
+        .join(RatebeerCountry)\
+        .group_by(RatebeerBrewery.id, RatebeerBrewery.name, RatebeerCountry.id, RatebeerCountry.name)\
         .order_by(RatebeerBrewery.name)\
         .all()
 
     # TODO: incorporate in query
-    breweries = [b[0].get_list_response(count=b[1]) for b in breweries]
+    breweries = [{
+        'id': b[0],
+        'name': b[1],
+        'country': {'id': b[2], 'name': b[3]},
+        'num_beers_polet': b[4]
+    } for b in breweries]
     return render_template('brewery_list.html', json=json.dumps(breweries))
 
 
