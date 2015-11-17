@@ -24,7 +24,7 @@ var bd = this.bd || {};
                 var url = '/styles/' + style.id;
                 return (
                     <li key={style.id}>
-                        <a href={url}>{style.name}</a>
+                        <a href={url}>{style.name}</a> ({style.count})
                     </li>
                 );
             })

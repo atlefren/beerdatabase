@@ -61,8 +61,10 @@ def match_suggestions():
         .filter(RbPolBeerMapping.resolved == False)\
         .all()
     suggestions = [s.serialize() for s in suggestions]
-    print suggestions
-    return render_template('match_suggestions.html', json=json.dumps(suggestions))
+    return render_template(
+        'match_suggestions.html',
+        json=json.dumps(suggestions)
+    )
 
 
 @app.route('/pol_beers/<int:id>')
@@ -87,8 +89,16 @@ def pol_beer_report(id):
 @app.route('/styles/')
 def style_list():
     # TODO limit to available styles at polet
-    styles = current_app.db_session.query(BeerStyle).all()
-    styles_json = json.dumps(styles)
+    styles = current_app.db_session.query(BeerStyle, func.count())\
+        .join(RatebeerBeer)\
+        .join(PoletBeer)\
+        .group_by(BeerStyle.id, BeerStyle.name)\
+        .all()
+    styles_json = json.dumps([{
+        'id': r[0].id,
+        'name': r[0].name,
+        'count': r[1]
+    } for r in styles])
     return render_template('style_list.html', json=styles_json)
 
 

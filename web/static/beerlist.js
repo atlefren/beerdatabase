@@ -19776,7 +19776,7 @@ var bd = this.bd || {};
                 var url = '/styles/' + style.id;
                 return (
                     React.createElement("li", {key: style.id}, 
-                        React.createElement("a", {href: url}, style.name)
+                        React.createElement("a", {href: url}, style.name), " (", style.count, ")"
                     )
                 );
             })
