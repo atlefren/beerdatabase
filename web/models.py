@@ -199,3 +199,19 @@ class RbPolBeerMapping(Base):
             'pol_beer': self.pol_beer.serialize(),
             'rb_beer': self.rb_beer.serialize() if self.rb_beer is not None else None
         }
+
+
+class PolShop(Base):
+    __tablename__ = 'pol_shop'
+    id = sa.Column('id', sa.Integer, primary_key=True)
+    name = sa.Column('name', sa.Unicode(100))
+    street_address = sa.Column('street_address', sa.Unicode(100))
+    street_zipcode = sa.Column('street_zipcode', sa.Integer)
+    street_place = sa.Column('street_place', sa.Unicode(100))
+    post_address = sa.Column('post_address', sa.Unicode(100))
+    post_zipcode = sa.Column('post_zipcode', sa.Integer)
+    post_place = sa.Column('post_place', sa.Unicode(100))
+    phone = sa.Column('phone', sa.Unicode(30))
+    category = sa.Column('category', sa.Integer)
+    lon = sa.Column('lon', sa.Float)
+    lat = sa.Column('lat', sa.Float)

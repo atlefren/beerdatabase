@@ -6,7 +6,7 @@ from sqlalchemy.sql.expression import and_, or_
 
 from web import app
 from models import (PoletBeer, BeerStyle, RatebeerBeer, RatebeerBrewery,
-                    RbPolBeerMapping, RatebeerCountry)
+                    RbPolBeerMapping, RatebeerCountry, PolShop)
 
 
 @app.template_filter('ratebeer_url')
@@ -156,3 +156,17 @@ def brewery(id):
         brewery=brewery,
         num=len(beers)
     )
+
+
+@app.route('/pol_shops/')
+def pol_shops():
+    shops = current_app.db_session.query(PolShop).all()
+    return render_template('pol_shops.html', shops=shops)
+
+
+@app.route('/pol_shops/<int:id>')
+def pol_shop(id):
+    shop = current_app.db_session.query(PolShop).get(id)
+    if shop is None:
+        abort(404)
+    return render_template('pol_shop.html', json=json.dumps(shop))

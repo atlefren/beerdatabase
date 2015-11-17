@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block css %}
+{{ super() }}
+
+{% endblock %}
+
+{% block main %}
+
+    <div id="beer_details"></div>
+
+{% endblock %}
+
+{% block js %}
+{{ super() }}
+    {% assets "js_beer_list" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+    <script type="text/javascript">
+        (function () {
+            var shop = {{ json | safe }};
+            console.log(shop);
+        }());
+
+    </script>
+
+{% endblock %}
