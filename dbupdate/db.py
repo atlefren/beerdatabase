@@ -71,3 +71,33 @@ def get_rb_breweries():
     cur.close()
     conn.close()
     return breweries
+
+
+def get_pol_beers():
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute('SELECT id, name FROM pol_beer')
+    beers = []
+    for row in cur.fetchall():
+        beers.append({
+            'id': row[0],
+            'name': row[1]
+        })
+    cur.close()
+    conn.close()
+    return beers
+
+
+def get_pol_shops():
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute('SELECT id, name FROM pol_shop')
+    shops = []
+    for row in cur.fetchall():
+        shops.append({
+            'id': row[0],
+            'name': row[1]
+        })
+    cur.close()
+    conn.close()
+    return shops
