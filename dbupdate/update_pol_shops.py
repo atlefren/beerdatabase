@@ -65,11 +65,11 @@ def parse_line(line, parser):
 
 def save_shops(shops):
     sql = '''
-        INSERT INTO pol_shop (id, name, street_address, street_zipcode, street_place, post_address, post_zipcode, post_place, phone, category, lon, lat)
-        VALUES (%(id)s, %(Butikknavn)s, %(Gateadresse)s, %(Gate_postnummer)s, %(Gate_poststed)s, %(Postadresse)s, %(Post_postnummer)s, %(Post_poststed)s, %(Telefonnummer)s, %(Kategori)s, %(GPS_lengdegrad)s, %(GPS_breddegrad)s)
+        INSERT INTO pol_shop (id, name, street_address, street_zipcode, street_place, post_address, post_zipcode, post_place, phone, category, lon, lat, weeknum, open_monday, open_tuesday, open_wednesday, open_thursday, open_friday, open_saturday, weeknum_next, open_monday_next, open_tuesday_next, open_wednesday_next, open_thursday_next, open_friday_next, open_saturday_next)
+        VALUES (%(id)s, %(Butikknavn)s, %(Gateadresse)s, %(Gate_postnummer)s, %(Gate_poststed)s, %(Postadresse)s, %(Post_postnummer)s, %(Post_poststed)s, %(Telefonnummer)s, %(Kategori)s, %(GPS_lengdegrad)s, %(GPS_breddegrad)s, %(Ukenummer)s, %(Apn_mandag)s, %(Apn_tirsdag)s, %(Apn_onsdag)s, %(Apn_torsdag)s, %(Apn_fredag)s, %(Apn_lordag)s, %(Ukenummer_neste)s, %(Apn_neste_mandag)s, %(Apn_neste_tirsdag)s, %(Apn_neste_onsdag)s, %(Apn_neste_torsdag)s, %(Apn_neste_fredag)s, %(Apn_neste_lordag)s)
         ON CONFLICT (id) DO UPDATE
-        SET (id, name, street_address, street_zipcode, street_place, post_address, post_zipcode, post_place, phone, category, lon, lat) = 
-        (%(id)s, %(Butikknavn)s, %(Gateadresse)s, %(Gate_postnummer)s, %(Gate_poststed)s, %(Postadresse)s, %(Post_postnummer)s, %(Post_poststed)s, %(Telefonnummer)s, %(Kategori)s, %(GPS_lengdegrad)s, %(GPS_breddegrad)s);
+        SET (id, name, street_address, street_zipcode, street_place, post_address, post_zipcode, post_place, phone, category, lon, lat, weeknum, open_monday, open_tuesday, open_wednesday, open_thursday, open_friday, open_saturday, weeknum_next, open_monday_next, open_tuesday_next, open_wednesday_next, open_thursday_next, open_friday_next, open_saturday_next) = 
+        (%(id)s, %(Butikknavn)s, %(Gateadresse)s, %(Gate_postnummer)s, %(Gate_poststed)s, %(Postadresse)s, %(Post_postnummer)s, %(Post_poststed)s, %(Telefonnummer)s, %(Kategori)s, %(GPS_lengdegrad)s, %(GPS_breddegrad)s, %(Ukenummer)s, %(Apn_mandag)s, %(Apn_tirsdag)s, %(Apn_onsdag)s, %(Apn_torsdag)s, %(Apn_fredag)s, %(Apn_lordag)s, %(Ukenummer_neste)s, %(Apn_neste_mandag)s, %(Apn_neste_tirsdag)s, %(Apn_neste_onsdag)s, %(Apn_neste_torsdag)s, %(Apn_neste_fredag)s, %(Apn_neste_lordag)s);
     '''
     run_upserts(sql, shops)
 
