@@ -17,11 +17,14 @@ css_filters = []
 minify = not app.debug
 
 react = 'js/lib/react/react.js'
+react_dom = 'js/lib/react/react-dom.js'
 
 if minify:
     # Use jsmin and cssmin when not running in debug
     js_filters.append('jsmin')
     css_filters.append('cssmin')
+    react = 'js/lib/react/react.min.js'
+    react_dom = Bundle()
 
 css_base = Bundle(
     'js/lib/fontawesome/css/font-awesome.css',
@@ -39,7 +42,7 @@ css_base = Bundle(
 js_beer_list = Bundle(
     'js/lib/underscore/underscore-min.js',
     react,
-    'js/lib/react/react-dom.js',
+    react_dom,
     Bundle(
         'js/lib/atomic-fixed.js',
         'js/src/util.js',
@@ -51,6 +54,7 @@ js_beer_list = Bundle(
         'js/src/BeerOverview.jsx',
         'js/src/StyleList.jsx',
         'js/src/BeerFixer.jsx',
+        'js/src/PolShopOverview.jsx',
         filters=js_filters
     ),
     filters=[react_filter],

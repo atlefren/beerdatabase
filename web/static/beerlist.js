@@ -20276,3 +20276,28 @@ var bd = this.bd || {};
     };
 
 }(bd));
+
+var bd = this.bd || {};
+(function (ns) {
+    'use strict';
+
+    var PolShopOverview = React.createClass({displayName: 'PolShopOverview',
+
+        render: function () {
+            return (
+                React.createElement("div", {className: "row"}, 
+                    React.createElement("h2", null, this.props.shop.name), 
+                    React.createElement("div", {className: "six columns"}
+                    ), 
+                    React.createElement("div", {className: "six columns"})
+                )
+            );
+        }
+
+    });
+
+    ns.renderPolShopOverview = function(polShop, component) {
+        ReactDOM.render(React.createElement(PolShopOverview, {shop: polShop}), component);
+    };
+
+}(bd));

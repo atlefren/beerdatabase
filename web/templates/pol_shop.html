@@ -7,7 +7,7 @@
 
 {% block main %}
 
-    <div id="beer_details"></div>
+    <div id="shop_details"></div>
 
 {% endblock %}
 
@@ -20,7 +20,7 @@
     <script type="text/javascript">
         (function () {
             var shop = {{ json | safe }};
-            console.log(shop);
+            bd.renderPolShopOverview(shop, document.getElementById('shop_details'));
         }());
 
     </script>
