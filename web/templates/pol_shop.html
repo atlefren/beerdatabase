@@ -20,7 +20,8 @@
     <script type="text/javascript">
         (function () {
             var shop = {{ json | safe }};
-            bd.renderPolShopOverview(shop, document.getElementById('shop_details'));
+            var beers = {{beers_json | safe}};
+            bd.renderPolShopOverview(shop, beers, document.getElementById('shop_details'));
         }());
 
     </script>

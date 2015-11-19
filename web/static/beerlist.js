@@ -19411,6 +19411,9 @@ var bd = this.bd || {};
             id: 'style',
             name: 'Stil',
             formatter: function (beer) {
+                if (!beer.style_id) {
+                    return '-';
+                }
                 return (
                     React.createElement("a", {href: '/styles/' + beer.style_id}, 
                         ns.Util.valueOrNa(beer.style)
@@ -19466,8 +19469,7 @@ var bd = this.bd || {};
         }
     ];
 
-    function getColumnsForTable(columnIds) {
-
+    ns.getColumnsForTable = function(columnIds) {
         return _.filter(columns, function (column) {
             return (columnIds.indexOf(column.id) > -1);
         });
@@ -19475,7 +19477,7 @@ var bd = this.bd || {};
 
     ns.renderPolBeerTable = function(beerList, columnIds, component) {
         beerList = beerList.sort(ns.Util.getSorter(['name'], false));
-        var columnsForTable = getColumnsForTable(columnIds);
+        var columnsForTable = ns.getColumnsForTable(columnIds);
         ReactDOM.render(React.createElement(ns.SortableTable, {items: beerList, columns: columnsForTable}), component);
     }
 
@@ -20281,23 +20283,62 @@ var bd = this.bd || {};
 (function (ns) {
     'use strict';
 
+
+    var columns = ns.getColumnsForTable(['name', 'brewery', 'style', 'rating', 'price']);
+
+    columns.push({
+            id: 'stock',
+            name: 'Antall',
+            formatter: function (beer) {
+                return beer.stock;
+            },
+            sortParams: 'stock',
+            isSorted: false,
+            sortDirection: 'asc'
+    });
+
     var PolShopOverview = React.createClass({displayName: 'PolShopOverview',
 
         render: function () {
             return (
-                React.createElement("div", {className: "row"}, 
-                    React.createElement("h2", null, this.props.shop.name), 
-                    React.createElement("div", {className: "six columns"}
+                React.createElement("div", null, 
+                    React.createElement("h1", null, this.props.shop.name), 
+                    React.createElement("div", {className: "row"}, 
+                        React.createElement("div", {className: "four columns"}, 
+                            React.createElement("strong", null, "Kategori"), React.createElement("br", null), 
+                            this.props.shop.category
+                        ), 
+                        React.createElement("div", {className: "four columns"}, 
+                            React.createElement("strong", null, "Gateadresse"), 
+                            React.createElement("address", null, 
+                              this.props.shop.street_address, React.createElement("br", null), 
+                              this.props.shop.street_zipcode, ' ', this.props.shop.street_place, React.createElement("br", null)
+                            )
+                        ), 
+                        React.createElement("div", {className: "four columns"}, 
+                            React.createElement("strong", null, "Postadresse"), 
+                            React.createElement("address", null, 
+                              this.props.shop.post_address, React.createElement("br", null), 
+                              this.props.shop.post_zipcode, ' ', this.props.shop.post_place, React.createElement("br", null)
+                            )
+
+                        )
                     ), 
-                    React.createElement("div", {className: "six columns"})
+                    React.createElement("div", {className: "row"}, 
+
+                        React.createElement("div", {className: "twelve columns"}, 
+                            React.createElement("h3", null, "Tilgjengelige øl (", this.props.beers.length, ")"), 
+                            React.createElement(ns.SortableTable, {items: this.props.beers, columns: columns})
+                        )
+                    )
                 )
             );
         }
 
     });
 
-    ns.renderPolShopOverview = function(polShop, component) {
-        ReactDOM.render(React.createElement(PolShopOverview, {shop: polShop}), component);
+    ns.renderPolShopOverview = function(polShop, beers, component) {
+        ReactDOM.render(React.createElement(PolShopOverview, {shop: polShop, beers: beers}), component);
     };
 
 }(bd));

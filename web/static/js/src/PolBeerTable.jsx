@@ -40,6 +40,9 @@ var bd = this.bd || {};
             id: 'style',
             name: 'Stil',
             formatter: function (beer) {
+                if (!beer.style_id) {
+                    return '-';
+                }
                 return (
                     <a href={'/styles/' + beer.style_id}>
                         {ns.Util.valueOrNa(beer.style)}
@@ -95,8 +98,7 @@ var bd = this.bd || {};
         }
     ];
 
-    function getColumnsForTable(columnIds) {
-
+    ns.getColumnsForTable = function(columnIds) {
         return _.filter(columns, function (column) {
             return (columnIds.indexOf(column.id) > -1);
         });
@@ -104,7 +106,7 @@ var bd = this.bd || {};
 
     ns.renderPolBeerTable = function(beerList, columnIds, component) {
         beerList = beerList.sort(ns.Util.getSorter(['name'], false));
-        var columnsForTable = getColumnsForTable(columnIds);
+        var columnsForTable = ns.getColumnsForTable(columnIds);
         ReactDOM.render(<ns.SortableTable items={beerList} columns={columnsForTable} />, component);
     }
 

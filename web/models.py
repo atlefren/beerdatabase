@@ -123,9 +123,9 @@ class PoletBeer(Base):
     def __init__(self):
         pass
 
-    def get_list_response(self):
+    def get_list_response(self, extra_data=None):
         has_rb = self.ratebeer is not None
-        return {
+        res = {
             'name': self.ratebeer.name if has_rb else self.name,
             'brewery': self.ratebeer.brewery.name if has_rb else self.producer,
             'brewery_id': self.ratebeer.brewery.id if has_rb else None,
@@ -138,6 +138,9 @@ class PoletBeer(Base):
             'has_rb': has_rb,
             'id': self.id,
         }
+        if isinstance(extra_data, dict):
+            res.update(extra_data)
+        return res
 
     def serialize(self):
         return {
@@ -215,3 +218,12 @@ class PolShop(Base):
     category = sa.Column('category', sa.Integer)
     lon = sa.Column('lon', sa.Float)
     lat = sa.Column('lat', sa.Float)
+
+
+class PolStock(Base):
+    __tablename__ = 'pol_stock'
+    id = sa.Column('id', sa.Integer, primary_key=True)
+    stock = sa.Column('stock', sa.Integer)
+    updated = sa.Column('updated', sa.DateTime)
+    shop_id = sa.Column('shop_id', sa.Integer, sa.ForeignKey('pol_shop.id'), nullable=False)
+    pol_beer_id = sa.Column('pol_beer_id', sa.Integer, sa.ForeignKey('pol_beer.id'), nullable=False)
