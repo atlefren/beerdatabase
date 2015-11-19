@@ -9,7 +9,7 @@
 <h1>Polutsalg</h1>
 <ul>
 {% for shop in shops%}
-    <li><a href="{{url_for('pol_shop', id=shop.id)}}">{{shop.name}}</a></li>
+    <li><a href="{{url_for('pol_shop', shop_id=shop.id)}}">{{shop.name}}</a></li>
 {% endfor %}
 </ul>
 {% endblock %}

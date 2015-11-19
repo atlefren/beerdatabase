@@ -2,11 +2,11 @@
 
 from flask import render_template, current_app, abort, json
 from sqlalchemy.sql import func
-from sqlalchemy.sql.expression import and_, or_
 
 from web import app
 from models import (PoletBeer, BeerStyle, RatebeerBeer, RatebeerBrewery,
-                    RbPolBeerMapping, RatebeerCountry, PolShop, PolStock)
+                    RbPolBeerMapping, RatebeerCountry, PolShop)
+import queries
 
 
 @app.template_filter('ratebeer_url')
@@ -140,14 +140,14 @@ def brewery_list():
     return render_template('brewery_list.html', json=json.dumps(breweries))
 
 
-@app.route('/breweries/<int:id>')
-def brewery(id):
-    brewery = current_app.db_session.query(RatebeerBrewery).get(id)
+@app.route('/breweries/<int:brewery_id>')
+def brewery(brewery_id):
+    brewery = current_app.db_session.query(RatebeerBrewery).get(brewery_id)
     if not brewery:
         abort(404)
     beers = current_app.db_session.query(PoletBeer)\
         .join(RatebeerBeer)\
-        .filter(RatebeerBeer.brewery_id == id)\
+        .filter(RatebeerBeer.brewery_id == brewery_id)\
         .all()
     beers_json = json.dumps([b.get_list_response() for b in beers])
     return render_template(
@@ -160,23 +160,15 @@ def brewery(id):
 
 @app.route('/pol_shops/')
 def pol_shops():
-    shops = current_app.db_session.query(PolShop).all()
+    shops = queries.get_pol_shops()
+    shops = json.loads(shops)
     return render_template('pol_shops.html', shops=shops)
 
 
-@app.route('/pol_shops/<int:id>')
-def pol_shop(id):
-    shop = current_app.db_session.query(PolShop).get(id)
+@app.route('/pol_shops/<int:shop_id>')
+def pol_shop(shop_id):
+    shop = queries.get_pol_shop(shop_id)
     if shop is None:
         abort(404)
-    beers = current_app.db_session.query(PoletBeer, PolStock.stock)\
-        .join(PolStock)\
-        .filter(PolStock.shop_id == id)\
-        .order_by(PoletBeer.name)
-
-    beers_json = json.dumps([b[0].get_list_response({'stock': b[1]}) for b in beers.all()])
-    return render_template(
-        'pol_shop.html',
-        json=json.dumps(shop),
-        beers_json=beers_json
-    )
+    beers = queries.get_beers_for_shop(shop_id)
+    return render_template('pol_shop.html', json=shop, beers_json=beers)
