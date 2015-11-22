@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from flask import render_template, current_app, abort, json
-from sqlalchemy.sql import func
+from flask import render_template, abort, json
 
 from web import app
-from models import (PoletBeer, BeerStyle, RatebeerBeer, RatebeerBrewery,
-                    RbPolBeerMapping, RatebeerCountry, PolShop)
 import queries
 
 
@@ -22,9 +19,8 @@ def index():
 
 @app.route('/pol_beers/')
 def pol_beers():
-    pol_beers = current_app.db_session.query(PoletBeer).all()
-    pol_beers_json = json.dumps([b.get_list_response() for b in pol_beers])
-    return render_template('pol_beer_list.html', json=pol_beers_json)
+    pol_beers = queries.get_pol_beers_list()
+    return render_template('pol_beer_list.html', json=json.dumps(pol_beers))
 
 
 def fix_beer(pol_beer, rb_beer=None):
@@ -39,28 +35,13 @@ def fix_beer(pol_beer, rb_beer=None):
 
 @app.route('/pol_beers/unmatched/')
 def unmatched_beers():
-
-    unmatched = current_app.db_session.query(PoletBeer.id, PoletBeer.name, PoletBeer.producer, func.count(RbPolBeerMapping.id))\
-        .outerjoin(RbPolBeerMapping)\
-        .filter(PoletBeer.ratebeer_id == None)\
-        .group_by(PoletBeer.id, PoletBeer.name, PoletBeer.producer)\
-        .all()
-
-    unmatched = [{
-        'id': b[0],
-        'name': b[1],
-        'brewery': b[2],
-        'count': b[3]
-    } for b in unmatched]
+    unmatched = queries.get_unmatched_pol_beers()
     return render_template('unmatched.html', json=json.dumps(unmatched))
 
 
 @app.route('/pol_beers/match_suggestions/')
 def match_suggestions():
-    suggestions = current_app.db_session.query(RbPolBeerMapping)\
-        .filter(RbPolBeerMapping.resolved == False)\
-        .all()
-    suggestions = [s.serialize() for s in suggestions]
+    suggestions = queries.get_unresolved_pol_suggestions()
     return render_template(
         'match_suggestions.html',
         json=json.dumps(suggestions)
@@ -69,7 +50,7 @@ def match_suggestions():
 
 @app.route('/pol_beers/<int:id>')
 def pol_beer(id):
-    pol_beer = current_app.db_session.query(PoletBeer).get(id)
+    pol_beer = queries.get_pol_beer(id)
     if not pol_beer:
         abort(404)
     if pol_beer.ratebeer is None:
@@ -82,39 +63,28 @@ def pol_beer(id):
 
 @app.route('/pol_beers/<int:id>/report')
 def pol_beer_report(id):
-    pol_beer = current_app.db_session.query(PoletBeer).get(id)
+    pol_beer = queries.get_pol_beer(id)
+    if not pol_beer:
+        abort(404)
     return fix_beer(pol_beer, pol_beer.ratebeer)
 
 
 @app.route('/styles/')
 def style_list():
     # TODO limit to available styles at polet
-    styles = current_app.db_session.query(BeerStyle, func.count())\
-        .join(RatebeerBeer)\
-        .join(PoletBeer)\
-        .group_by(BeerStyle.id, BeerStyle.name)\
-        .all()
-    styles_json = json.dumps([{
-        'id': r[0].id,
-        'name': r[0].name,
-        'count': r[1]
-    } for r in styles])
-    return render_template('style_list.html', json=styles_json)
+    styles = queries.get_style_list()
+    return render_template('style_list.html', json=json.dumps(styles))
 
 
 @app.route('/styles/<int:id>')
 def style(id):
-    style = current_app.db_session.query(BeerStyle).get(id)
+    style = queries.get_style(id)
     if not style:
         abort(404)
-    beers = current_app.db_session.query(PoletBeer)\
-        .join(RatebeerBeer)\
-        .filter(RatebeerBeer.style_id == id)\
-        .all()
-    beers_json = json.dumps([b.get_list_response() for b in beers])
+    beers = queries.get_beers_for_style(id)
     return render_template(
         'style.html',
-        json=beers_json,
+        json=json.dumps(beers),
         style=style,
         num=len(beers)
     )
@@ -122,37 +92,19 @@ def style(id):
 
 @app.route('/breweries/')
 def brewery_list():
-    breweries = current_app.db_session.query(RatebeerBrewery.id, RatebeerBrewery.name, RatebeerCountry.id, RatebeerCountry.name, func.count())\
-        .join(RatebeerBeer)\
-        .join(PoletBeer)\
-        .join(RatebeerCountry)\
-        .group_by(RatebeerBrewery.id, RatebeerBrewery.name, RatebeerCountry.id, RatebeerCountry.name)\
-        .order_by(RatebeerBrewery.name)\
-        .all()
-
-    # TODO: incorporate in query
-    breweries = [{
-        'id': b[0],
-        'name': b[1],
-        'country': {'id': b[2], 'name': b[3]},
-        'num_beers_polet': b[4]
-    } for b in breweries]
+    breweries = queries.get_breweries_at_polet()
     return render_template('brewery_list.html', json=json.dumps(breweries))
 
 
 @app.route('/breweries/<int:brewery_id>')
 def brewery(brewery_id):
-    brewery = current_app.db_session.query(RatebeerBrewery).get(brewery_id)
+    brewery = queries.get_brewery(brewery_id)
     if not brewery:
         abort(404)
-    beers = current_app.db_session.query(PoletBeer)\
-        .join(RatebeerBeer)\
-        .filter(RatebeerBeer.brewery_id == brewery_id)\
-        .all()
-    beers_json = json.dumps([b.get_list_response() for b in beers])
+    beers = queries.get_pol_beers_for_brewery(brewery_id)
     return render_template(
         'brewery.html',
-        json=beers_json,
+        json=json.dumps(beers),
         brewery=brewery,
         num=len(beers)
     )
@@ -161,7 +113,6 @@ def brewery(brewery_id):
 @app.route('/pol_shops/')
 def pol_shops():
     shops = queries.get_pol_shops()
-    shops = json.loads(shops)
     return render_template('pol_shops.html', shops=shops)
 
 
@@ -171,4 +122,8 @@ def pol_shop(shop_id):
     if shop is None:
         abort(404)
     beers = queries.get_beers_for_shop(shop_id)
-    return render_template('pol_shop.html', json=shop, beers_json=beers)
+    return render_template(
+        'pol_shop.html',
+        json=json.dumps(shop),
+        beers_json=json.dumps(beers)
+    )
