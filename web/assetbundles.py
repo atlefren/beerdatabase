@@ -32,6 +32,7 @@ css_base = Bundle(
         'js/lib/skeleton/css/normalize.css',
         'js/lib/skeleton/css/skeleton.css',
         'css/base.css',
+        'css/auocomplete.css',
         filters=css_filters
     ),
     filters=['cssrewrite'],
