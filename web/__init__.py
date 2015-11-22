@@ -29,11 +29,11 @@ db = SQLAlchemy(app)
 # setup assetbundle
 
 assets = Environment(app)
-assets.debug = True if app.debug == 'True' else False
+assets.debug = False # app.debug # (debug=True fucks up jsx)
+
 bundles = PythonLoader('web.assetbundles').load_bundles()
 for name, bundle in bundles.iteritems():
     assets.register(name, bundle)
-
 
 # add various views
 from web import views
