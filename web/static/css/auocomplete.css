@@ -58,6 +58,11 @@
     margin-bottom: 0;
 }
 
+.dropdown-menu > li {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
 .dropdown-menu > li a.selected {
     background-color: #337ab7;
 }

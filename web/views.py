@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import render_template, abort, json
+from flask import render_template, abort, json, redirect, url_for
 
 from web import app
 import queries
@@ -46,6 +46,21 @@ def match_suggestions():
         'match_suggestions.html',
         json=json.dumps(suggestions)
     )
+
+
+@app.route('/beers/<int:id>')
+def beer(id):
+    beer = queries.get_beer(id)
+    if not beer:
+        abort(404)
+
+    if len(beer.pol_beers) == 0:
+        return u'Ikke på polet'
+
+    if len(beer.pol_beers) > 1:
+        return u'Flere på polet'
+
+    return redirect(url_for('pol_beer', id=beer.pol_beers[0].id))
 
 
 @app.route('/pol_beers/<int:id>')

@@ -42,8 +42,7 @@
                 -->
 
             </ul>
-            <div class="u-pull-right navbar-search">
-                <input type="text" placeholder="Søk"/> &nbsp;
+            <div class="u-pull-right navbar-search" id="find_beer">
             </div>
         </nav>
 
@@ -56,6 +55,18 @@
     </div>
 
     {% block js %}
+
+    {% assets "js_beer_list" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+    <script type="text/javascript">
+        (function () {
+            bd.setupSimpleBeerSearch(
+                document.getElementById('find_beer')
+            );
+        }());
+    </script>
 
     {% endblock %}
 </body>

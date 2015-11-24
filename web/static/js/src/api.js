@@ -30,4 +30,41 @@ bd.api = bd.api || {};
             });
     };
 
+    ns.searchBrewery = function (val, callback) {
+        atomic.get('/api/v1/search/brewery/?q=' + encodeURIComponent(val.q))
+            .success(function (data, xhr) {
+                callback(data);
+            })
+            .error(function (data, xhr) {
+                console.error(data);
+            });
+    };
+
+    ns.searchBeer = function (val, callback) {
+        var url = '/api/v1/search/beer/?q=' + encodeURIComponent(val.q);
+        if (_.has(val, 'brewery')) {
+            url += '&brewery=' + encodeURIComponent(val.brewery);
+        }
+        atomic.get(url)
+            .success(function (data, xhr) {
+                callback(data);
+            })
+            .error(function (data, xhr) {
+                console.error(data);
+            });
+    };
+
+    ns.postMatch = function (polId, rbId, comment, callback) {
+        var data = {
+            ratebeerId: rbId,
+            polId: polId,
+            comment: comment
+        };
+        atomic.post('/api/v1/suggestions/', data)
+            .success(callback)
+            .error(function (data, xhr) {
+                console.error(data);
+            });
+    }
+
 }(bd.api));

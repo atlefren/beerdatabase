@@ -2,45 +2,6 @@ var bd = this.bd || {};
 (function (ns) {
     'use strict';
 
-
-    var searchBrewery = function (val, callback) {
-        atomic.get('/api/v1/search/brewery/?q=' + encodeURIComponent(val.q))
-            .success(function (data, xhr) {
-                callback(data);
-            })
-            .error(function (data, xhr) {
-                console.error(data);
-            });
-    };
-
-    var searchBeer = function (val, callback) {
-        var url = '/api/v1/search/beer/?q=' + encodeURIComponent(val.q);
-        if (_.has(val, 'brewery')) {
-            url += '&brewery=' + encodeURIComponent(val.brewery);
-        }
-        atomic.get(url)
-            .success(function (data, xhr) {
-                callback(data);
-            })
-            .error(function (data, xhr) {
-                console.error(data);
-            });
-    };
-
-    var postMatch = function (polId, rbId, comment, callback) {
-        var data = {
-            ratebeerId: rbId,
-            polId: polId,
-            comment: comment
-        };
-        atomic.post('/api/v1/suggestions/', data)
-            .success(callback)
-            .error(function (data, xhr) {
-                console.error(data);
-            });
-    }
-
-
     var PolBeerOverview = React.createClass({
         render: function () {
             return (
@@ -150,7 +111,7 @@ var bd = this.bd || {};
                                         placeholder="Bryggeri"
                                         ref="brewery"
                                         initialVal={this.state.brewery.name}
-                                        autocompleteSearch={searchBrewery}
+                                        autocompleteSearch={ns.api.searchBrewery}
                                         select={this.selectBrewery} />
                                     </td>
                                 </tr>
@@ -163,7 +124,7 @@ var bd = this.bd || {};
                                         initialVal={this.state.beer.name}
                                         extraParams={beerSearchParams}
                                         disabled={beerDisabled}
-                                        autocompleteSearch={searchBeer}
+                                        autocompleteSearch={ns.api.searchBeer}
                                         select={this.selectBeer} />
                                     </td>
                                 </tr>
@@ -239,7 +200,7 @@ var bd = this.bd || {};
         },
 
         onClick: function (comment) {
-            postMatch(this.props.pol_beer.id, this.state.rbBeer.id, comment, this.sent);
+            ns.api.postMatch(this.props.pol_beer.id, this.state.rbBeer.id, comment, this.sent);
         },
 
         render: function () {
