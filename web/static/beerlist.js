@@ -20290,12 +20290,14 @@ var bd = this.bd || {};
             id: 'stock',
             name: 'Antall',
             formatter: function (beer) {
-                return beer.stock;
+                var updated = 'Oppdatert: ' + beer.updated;
+                return React.createElement("span", {title: updated}, beer.stock);
             },
             sortParams: 'stock',
             isSorted: false,
             sortDirection: 'asc'
     });
+
 
     var PolShopOverview = React.createClass({displayName: 'PolShopOverview',
 

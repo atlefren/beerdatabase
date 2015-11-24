@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from flask import current_app
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, text
+from sqlalchemy.sql.expression import bindparam
 
 from models import (PoletBeer, PolShop, PolStock, RatebeerBrewery,
                     RatebeerBeer, RatebeerCountry, BeerStyle, RbPolBeerMapping)
@@ -80,12 +81,23 @@ def get_pol_shop(shop_id):
 
 
 def get_beers_for_shop(shop_id):
-    beers = current_app.db_session.query(PoletBeer, PolStock.stock)\
+
+    subquery = text('''
+        SELECT DISTINCT ON (pol_beer_id) id
+        FROM pol_stock
+        WHERE shop_id = :shopId
+        ORDER BY pol_beer_id, updated DESC
+        ''', bindparams=[bindparam('shopId', shop_id)])
+
+    beers = current_app.db_session.query(PoletBeer, PolStock)\
         .join(PolStock)\
-        .filter(PolStock.shop_id == shop_id)\
+        .filter(PolStock.id.in_(subquery))\
         .order_by(PoletBeer.name)
 
-    return [b[0].get_list_response({'stock': b[1]}) for b in beers.all()]
+    return [b[0].get_list_response({
+        'stock': b[1].stock,
+        'updated': b[1].updated.isoformat()
+    }) for b in beers.all()]
 
 
 def get_unmatched_pol_beers():
@@ -101,6 +113,7 @@ def get_unmatched_pol_beers():
         'brewery': b[2],
         'count': b[3]
     } for b in unmatched]
+
 
 def get_unresolved_pol_suggestions():
     suggestions = current_app.db_session.query(RbPolBeerMapping)\
