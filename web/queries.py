@@ -21,6 +21,10 @@ def get_beer(beer_id):
     return current_app.db_session.query(RatebeerBeer).get(beer_id)
 
 
+def get_styles():
+    return current_app.db_session.query(BeerStyle).all()
+
+
 def get_style_list():
     styles = current_app.db_session.query(BeerStyle, func.count())\
         .join(RatebeerBeer)\

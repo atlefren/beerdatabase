@@ -63,6 +63,26 @@ class RatebeerBeer(Base):
             'brewery': self.brewery,
         }
 
+    def get_list_response(self, extra_data=None):
+        pol_beer = self.pol_beers[0] if len(self.pol_beers) > 0 else None
+        res = {
+            'name': self.name,
+            'brewery': self.brewery.name,
+            'brewery_id': self.brewery.id,
+            'style': self.style.name,
+            'style_id': self.style.id,
+            'abv': self.abv,
+            'price': pol_beer.price if pol_beer else None,
+            'score_overall': self.score_overall,
+            'score_style': self.score_style,
+            'has_rb': True,
+            'id': self.id,
+            'pol_id': pol_beer.id if pol_beer else None,
+        }
+        if isinstance(extra_data, dict):
+            res.update(extra_data)
+        return res
+
 
 class RatebeerBrewery(Base):
     __tablename__ = 'rb_brewery'

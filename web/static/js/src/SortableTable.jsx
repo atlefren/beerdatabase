@@ -89,9 +89,8 @@ var bd = this.bd || {};
         },
 
         render: function () {
-
             var rows = _.map(this.state.items, function (item, i) {
-                return (<DataRow item={item} key={i} columns={this.state.columns} />);
+                return (<DataRow item={item} key={item.id} columns={this.state.columns} />);
             }, this);
 
 

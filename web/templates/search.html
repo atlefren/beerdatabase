@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+
+{% block main %}
+<h1>Søk</h1>
+<div id="search_page"></div>
+
+{%endblock %}
+
+
+{% block js %}
+{{ super() }}
+
+    <script type="text/javascript">
+        (function () {
+
+            var searchParams = {{ search_params | safe }};
+            var searchValues = {{ search_values | safe }};
+
+            bd.renderSearchPage(searchParams, searchValues, document.getElementById('search_page'));
+        }());
+    </script>
+
+{% endblock %}

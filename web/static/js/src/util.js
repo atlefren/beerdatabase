@@ -3,6 +3,22 @@ bd.Util = {};
 (function (ns) {
     'use strict';
 
+    ns.createQueryParameterString = function (params) {
+        return _.map(params, function (value, key) {
+            if (_.isArray(value)) {
+                value = value.join(',');
+            }
+            return encodeURIComponent(key) + '=' + encodeURIComponent(value);
+        }).join('&');
+    };
+
+    ns.setQueryParams = function (params) {
+        if (history.pushState) {
+            var newurl = window.location.protocol + '//' + window.location.host + window.location.pathname + '?' + ns.createQueryParameterString(params);
+            window.history.pushState({path: newurl}, '', newurl);
+        }
+    };
+
     ns.valueOrNa = function (value, naValue) {
         naValue = naValue || '-';
         if (value === null) {
@@ -36,7 +52,7 @@ bd.Util = {};
             var valB = getVal(b);
             if (valA === null) {
                 return 1;
-            } 
+            }
             if (valB === null) {
                 return 0;
             }

@@ -31,7 +31,7 @@ bd.api = bd.api || {};
     };
 
     ns.searchBrewery = function (val, callback) {
-        atomic.get('/api/v1/search/brewery/?q=' + encodeURIComponent(val.q))
+        atomic.get(API_BASE + 'search/brewery/?q=' + encodeURIComponent(val.q))
             .success(function (data, xhr) {
                 callback(data);
             })
@@ -41,7 +41,7 @@ bd.api = bd.api || {};
     };
 
     ns.searchBeer = function (val, callback) {
-        var url = '/api/v1/search/beer/?q=' + encodeURIComponent(val.q);
+        var url = API_BASE + 'search/beer/?q=' + encodeURIComponent(val.q);
         if (_.has(val, 'brewery')) {
             url += '&brewery=' + encodeURIComponent(val.brewery);
         }
@@ -60,11 +60,22 @@ bd.api = bd.api || {};
             polId: polId,
             comment: comment
         };
-        atomic.post('/api/v1/suggestions/', data)
+        atomic.post(API_BASE + 'suggestions/', data)
             .success(callback)
             .error(function (data, xhr) {
                 console.error(data);
             });
-    }
+    };
+
+    ns.fullsearchBeer = function (params, success, error) {
+        atomic.get(API_BASE + 'search/full/?' + bd.Util.createQueryParameterString(params))
+            .success(function (data, xhr) {
+                success(data);
+            })
+            .error(function (data, xhr) {
+                console.error(data);
+                error(data);
+            });
+    };
 
 }(bd.api));

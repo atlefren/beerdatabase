@@ -31,6 +31,7 @@ css_base = Bundle(
     Bundle(
         'js/lib/skeleton/css/normalize.css',
         'js/lib/skeleton/css/skeleton.css',
+        'js/lib/nouislider/distribute/nouislider.min.css',
         'css/base.css',
         'css/auocomplete.css',
         filters=css_filters
@@ -46,6 +47,7 @@ js_beer_list = Bundle(
     react_dom,
     Bundle(
         'js/lib/atomic-fixed.js',
+        'js/lib/nouislider/distribute/nouislider.min.js',
         'js/src/util.js',
         'js/src/api.js',
         'js/src/SimpleBeerSearch.jsx',
@@ -57,6 +59,7 @@ js_beer_list = Bundle(
         'js/src/StyleList.jsx',
         'js/src/BeerFixer.jsx',
         'js/src/PolShopOverview.jsx',
+        'js/src/SearchPage.jsx',
         filters=js_filters
     ),
     filters=[react_filter],
