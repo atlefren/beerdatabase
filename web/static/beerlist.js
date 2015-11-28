@@ -20823,7 +20823,6 @@ var bd = this.bd || {};
                         items: this.state.beers, 
                         columns: resultColumns})
                 );
-                //results = (<p>{this.state.beers[0].name}</p>);
             }
 
             return (
