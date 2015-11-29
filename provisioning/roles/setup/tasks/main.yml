@@ -1,0 +1,6 @@
+---
+  - name: ensure apt cache is up to date
+    apt: update_cache=yes
+
+  - name: install nb language-pack
+    apt: pkg=language-pack-nb state=latest

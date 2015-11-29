@@ -1,0 +1,12 @@
+server {
+    listen 80;
+    client_max_body_size 20M;
+    
+    location / {
+        include uwsgi_params;
+        uwsgi_param UWSGI_SCHEME $scheme;
+        uwsgi_buffering off;
+        uwsgi_pass unix:/run/uwsgi/app/{{app.name}}/socket;
+    }
+
+}

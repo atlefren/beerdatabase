@@ -1,0 +1,32 @@
+---
+  - name: install nginx
+    apt: pkg=nginx state=latest
+
+  - name: copy nginx sites
+    template: src={{ item }}.j2
+            dest=/etc/nginx/sites-available/{{ item }}
+            owner=root
+            group=root
+            mode=0644
+    with_items: nginx_sites
+    notify:
+      - restart nginx
+
+  - name: enable nginx sites
+    file: src=/etc/nginx/sites-available/{{ item }}
+            dest=/etc/nginx/sites-enabled/{{ item }}
+            owner=root
+            group=root
+            state=link
+    with_items: nginx_sites
+    notify:
+      - restart nginx
+
+  - name: disable default site
+    file: path=/etc/nginx/sites-enabled/default
+          state=absent
+    notify:
+      - restart nginx
+
+  - name: make sure nginx is running
+    service: name=nginx state=running enabled=yes

@@ -1,0 +1,33 @@
+---
+  - name: add postgres 9.5 repo
+    apt_repository: repo='deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main 9.5' state=present
+
+  - name: add key for postgresql repo
+    apt_key: url=https://www.postgresql.org/media/keys/ACCC4CF8.asc state=present
+
+  - name: apt update
+    apt: update_cache=yes
+
+  - name: ensure packages are installed
+    apt: name={{item}}
+    with_items:
+        - postgresql-9.5
+        - python-psycopg2
+    environment:
+      LC_ALL: en_US.UTF-8
+
+  - name: create postgresql databases
+    sudo: yes
+    sudo_user: postgres
+    postgresql_db: name={{ database.name }} encoding='UTF-8'
+
+  - name: create postgresql users
+    sudo: yes
+    sudo_user: postgres
+    postgresql_user: name={{ database.username }}
+                     password={{ database.password }}
+                     db={{ database.name }}
+                     role_attr_flags=NOCREATEROLE,NOSUPERUSER,NOCREATEDB
+
+  - name: restart postgres
+    service: name=postgresql state=restarted

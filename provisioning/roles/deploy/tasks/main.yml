@@ -1,0 +1,50 @@
+---
+- name: install packages
+  apt: pkg={{ item }} state=latest update_cache=yes cache_valid_time=3600
+  with_items:
+    - git
+
+- name: ensure app root exists
+  file: path={{ app.root }}
+        state=directory
+        mode=0755
+        owner=root
+        group=root
+
+- name: clone repos from github
+  git: repo=https://github.com/atlefren/beerdatabase.git
+       dest={{ app.root }}
+       version={{ app.version }}
+       accept_hostkey=True
+  notify:
+    - restart uwsgi
+
+- name: install pip requirements
+  pip: requirements={{ app.root }}/requirements.txt
+       virtualenv={{ app.root }}/venv
+  notify:
+    - restart uwsgi
+
+#- name: install bower packages
+#  command: bower install --allow-root chdir={{ app.root }}
+
+- name: ensure that www-data can write webassets cache
+  file: >
+        path={{ app.root }}/{{ app.name }}/static/.webassets-cache
+        owner=www-data
+        group=www-data
+        mode=0755
+        state=directory
+
+- name: ensure that www-data can write webassets gen folder
+  file: >
+        path={{ app.root }}/{{ app.name }}/static/gen
+        owner=www-data
+        group=www-data
+        mode=0755
+        state=directory
+
+- name: run migrations
+  command: venv/bin/python manage.py db upgrade chdir={{app.root}}
+  environment:
+        SQLALCHEMY_DATABASE_URI: postgresql://{{database.username}}:{{database.password}}@localhost:5432/{{database.name}}

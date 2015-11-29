@@ -1,0 +1,38 @@
+---
+#  - name: install heroku toolbelt
+#    shell: wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
+#           creates=/usr/local/heroku
+
+  - name: install pip requirements
+    pip: requirements=/vagrant/requirements.txt virtualenv=/vagrant/venv
+
+#  - name: install bower packages
+#    command: bower install chdir=/vagrant
+#    sudo: false
+
+  - name: hide login message
+    copy: dest=/home/vagrant/.hushlogin
+          content=
+          owner=vagrant
+          group=vagrant
+          mode=0644
+
+  - name: install bash_profile
+    copy: src=dot.bash_profile
+          dest=/home/vagrant/.bash_profile
+          owner=vagrant
+          group=vagrant
+          mode=0644
+
+  - name: create .env file for foreman
+    # Since /vagrant is mounted over NFS, we don't know the exact uid and gid
+    # of the actual user on the host machine. Need to use sudo_user
+    sudo_user: vagrant
+    template: src=dot.env.j2
+              dest=/vagrant/.env
+              mode=0600
+
+  - name: run migrations
+    command: /vagrant/venv/bin/python /vagrant/manage.py db upgrade chdir=/vagrant
+    environment:
+        SQLALCHEMY_DATABASE_URI: postgresql://{{database.username}}:{{database.password}}@localhost:5432/{{database.name}}

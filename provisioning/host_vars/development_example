@@ -1,0 +1,18 @@
+---
+  database:
+    name: beer
+    username: beer
+    password: beer
+  
+  login_settings:
+    google_client_id: clinet_id
+    google_client_secret: client_secret
+    login_redirect_uri: http://localhost:9080/oauth2callback
+
+  flask_settings:
+    debug: True
+    secret_key: your_secret_key
+
+  app:
+    root: /vagrant
+    name: newbeercellar

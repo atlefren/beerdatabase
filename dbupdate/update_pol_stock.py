@@ -2,7 +2,7 @@
 
 from beertools.polchecker import check_beer
 
-from db import get_pol_beers, get_pol_shops, run_upserts
+from db import Database
 
 
 def find_in_list(dicts, key, value):
@@ -12,16 +12,17 @@ def find_in_list(dicts, key, value):
         return None
 
 
-def save_stock(stock_by_pol):
+def save_stock(stock_by_pol, db):
     sql = '''
         INSERT INTO pol_stock (shop_id, pol_beer_id, stock, updated)
         VALUES (%(shop_id)s, %(pol_beer_id)s, %(stock)s, %(updated)s)
     '''
-    run_upserts(sql, stock_by_pol)
+    db.run_upserts(sql, stock_by_pol)
 
 
-def update_pol_stock():
-    beers = get_pol_beers()
+def update_pol_stock(conn_str=None):
+    db = Database(conn_str)
+    beers = db.get_pol_beers()
 
     stock_by_pol = []
     for beer in beers:
@@ -35,7 +36,7 @@ def update_pol_stock():
                 'stock': num,
                 'updated': updated
             })
-    save_stock(stock_by_pol)
+    save_stock(stock_by_pol, db)
 
 if __name__ == '__main__':
     update_pol_stock()

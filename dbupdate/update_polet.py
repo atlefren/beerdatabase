@@ -3,8 +3,7 @@ from collections import defaultdict
 
 from beertools import read_pol_beers, BreweryNameMatcher, BeerNameMatcher
 
-from db import (get_rb_beers_for_brewery, get_rb_breweries, run_upserts,
-                get_pol_brewery)
+from db import Database
 
 
 def find_in_list(dicts, key, value):
@@ -20,7 +19,7 @@ def get_breweries_polet(beers_polet):
     return sorted(breweries)
 
 
-def save_pol_beers(beers):
+def save_pol_beers(beers, db):
     sql = '''
         INSERT INTO pol_beer (id, name, store_category, produktutvalg, producer, distributor, varenummer, abv, volume, color, smell, taste, method, cork_type, packaging_type, price, country, district, subdistrict, url, vintage, ingredients, pairs_with_1, pairs_with_2, pairs_with_3, storage_notes, sweetness, freshness, bitterness, richness, ratebeer_id)
         VALUES (%(Varenummer)s, %(Varenavn)s, %(Butikkategori)s, %(Produktutvalg)s, %(Produsent)s, %(Distributor)s, %(Varenummer)s, %(Alkohol)s, %(Volum)s, %(Farge)s, %(Lukt)s, %(Smak)s, %(Metode)s, %(Korktype)s, %(Emballasjetype)s, %(Pris)s, %(Land)s, %(Distrikt)s, %(Underdistrikt)s, %(Vareurl)s, %(Argang)s, %(Rastoff)s, %(Passertil01)s, %(Passertil02)s, %(Passertil03)s, %(Lagringsgrad)s, %(Sodme)s, %(Friskhet)s, %(Bitterhet)s, %(Fylde)s, %(ratebeer_id)s)
@@ -28,7 +27,7 @@ def save_pol_beers(beers):
         SET (id, name, store_category, produktutvalg, producer, distributor, varenummer, abv, volume, color, smell, taste, method, cork_type, packaging_type, price, country, district, subdistrict, url, vintage, ingredients, pairs_with_1, pairs_with_2, pairs_with_3, storage_notes, sweetness, freshness, bitterness, richness, ratebeer_id) = 
         (%(Varenummer)s, %(Varenavn)s, %(Butikkategori)s, %(Produktutvalg)s, %(Produsent)s, %(Distributor)s, %(Varenummer)s, %(Alkohol)s, %(Volum)s, %(Farge)s, %(Lukt)s, %(Smak)s, %(Metode)s, %(Korktype)s, %(Emballasjetype)s, %(Pris)s, %(Land)s, %(Distrikt)s, %(Underdistrikt)s, %(Vareurl)s, %(Argang)s, %(Rastoff)s, %(Passertil01)s, %(Passertil02)s, %(Passertil03)s, %(Lagringsgrad)s, %(Sodme)s, %(Friskhet)s, %(Bitterhet)s, %(Fylde)s, %(ratebeer_id)s);
     '''
-    run_upserts(sql, beers)
+    db.run_upserts(sql, beers)
 
 
 def match_pol_breweries(breweries_pol, breweries_rb):
@@ -42,9 +41,9 @@ def match_pol_breweries(breweries_pol, breweries_rb):
     return grouped
 
 
-def match_pol_beer(pol_beer, beer_matcher):
+def match_pol_beer(pol_beer, beer_matcher, db):
 
-    from_db = get_pol_brewery(pol_beer['Varenummer'])
+    from_db = db.get_pol_brewery(pol_beer['Varenummer'])
     if from_db is not None:
         print 'Aleready matched'
         pol_beer['ratebeer_id'] = from_db['ratebeer_id']
@@ -60,7 +59,7 @@ def match_pol_beer(pol_beer, beer_matcher):
     return pol_beer
 
 
-def match_pol_beers(rb_brewery, rb_beers_for_brewery, pol_breweries, beers_polet):
+def match_pol_beers(rb_brewery, rb_beers_for_brewery, pol_breweries, beers_polet, db):
     beer_matcher = BeerNameMatcher(
         rb_brewery,
         rb_beers_for_brewery,
@@ -70,14 +69,15 @@ def match_pol_beers(rb_brewery, rb_beers_for_brewery, pol_breweries, beers_polet
     for pol_brewery in pol_breweries:
         pol_beers = findall_in_list(beers_polet, 'Produsent', pol_brewery)
         for pol_beer in pol_beers:
-            matched_beers.append(match_pol_beer(pol_beer, beer_matcher))
+            matched_beers.append(match_pol_beer(pol_beer, beer_matcher, db))
     return matched_beers
 
 
-def update_pol_beers():
+def update_pol_beers(conn_str=None):
+    db = Database(conn_str)
     beers_polet = read_pol_beers()
 
-    breweries_rb = get_rb_breweries()
+    breweries_rb = db.get_rb_breweries()
     breweries_pol = get_breweries_polet(beers_polet)
 
     matched_pol_rb = match_pol_breweries(breweries_pol, breweries_rb)
@@ -85,15 +85,16 @@ def update_pol_beers():
     matched_beers = []
     for rb_beer_id, pol_breweries in matched_pol_rb.iteritems():
         rb_brewery = find_in_list(breweries_rb, 'id', rb_beer_id)['name']
-        rb_beers_for_brewery = get_rb_beers_for_brewery(rb_beer_id)
+        rb_beers_for_brewery = db.get_rb_beers_for_brewery(rb_beer_id)
         matched_beers += match_pol_beers(
             rb_brewery,
             rb_beers_for_brewery,
             pol_breweries,
-            beers_polet
+            beers_polet,
+            db
         )
     print len(matched_beers)
-    save_pol_beers(matched_beers)
+    save_pol_beers(matched_beers, db)
 
 
 if __name__ == '__main__':

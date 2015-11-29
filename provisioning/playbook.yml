@@ -1,0 +1,30 @@
+---
+- hosts: development
+  sudo: yes
+  roles:
+    #- role: setup
+    #  tags: setup
+    - role: database
+      tags: database
+    - role: nginx
+      tags: nginx
+    - role: packages
+      tags: packages
+    - role: vagrant
+      tags: vagrant
+
+- hosts: production
+  sudo: yes
+  roles:
+    - role: setup
+      tags: setup
+    - role: database
+      tags: database
+    - role: nginx
+      tags: nginx
+    - role: packages
+      tags: packages
+    - role: deploy
+      tags: deploy
+    - role: uwsgi
+      tags: uwsgi

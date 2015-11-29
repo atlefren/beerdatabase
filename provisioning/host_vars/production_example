@@ -1,0 +1,20 @@
+---
+  database:
+    name: beer
+    username: beer
+    password: beer
+  
+  login_settings:
+    google_client_id: 
+    google_client_secret: 
+    login_redirect_uri: 
+
+  flask_settings:
+    debug: False
+    secret_key: 
+
+  app:
+    root: /opt/beercellar/app
+    version: master
+    repo: ssh://git@github.com/atlefren/newbeercellar.git
+    name: newbeercellar

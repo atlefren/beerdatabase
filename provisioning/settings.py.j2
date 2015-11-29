@@ -1,0 +1,11 @@
+# -*- coding: utf-8 -*-
+
+SECRET_KEY = '{{flask_settings.secret_key}}'
+
+GOOGLE_LOGIN_CLIENT_ID = '{{login_settings.google_client_id}}'
+GOOGLE_LOGIN_CLIENT_SECRET = '{{login_settings.google_client_secret}}'
+GOOGLE_LOGIN_REDIRECT_URI = '{{login_settings.login_redirect_uri}}' 
+
+DEBUG = {{flask_settings.debug}}
+
+SQLALCHEMY_DATABASE_URI = 'postgresql://{{database.username}}:{{database.password}}@localhost:5432/{{database.name}}'

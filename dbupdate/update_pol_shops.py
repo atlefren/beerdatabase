@@ -4,7 +4,7 @@ import re
 import requests
 from beertools.util import get_line_parser, parsers
 
-from db import run_upserts
+from db import Database
 
 URL = 'http://www.vinmonopolet.no/api/butikker'
 
@@ -63,7 +63,7 @@ def parse_line(line, parser):
     return parser(line)
 
 
-def save_shops(shops):
+def save_shops(shops, db):
     sql = '''
         INSERT INTO pol_shop (id, name, street_address, street_zipcode, street_place, post_address, post_zipcode, post_place, phone, category, lon, lat, weeknum, open_monday, open_tuesday, open_wednesday, open_thursday, open_friday, open_saturday, weeknum_next, open_monday_next, open_tuesday_next, open_wednesday_next, open_thursday_next, open_friday_next, open_saturday_next)
         VALUES (%(id)s, %(Butikknavn)s, %(Gateadresse)s, %(Gate_postnummer)s, %(Gate_poststed)s, %(Postadresse)s, %(Post_postnummer)s, %(Post_poststed)s, %(Telefonnummer)s, %(Kategori)s, %(GPS_lengdegrad)s, %(GPS_breddegrad)s, %(Ukenummer)s, %(Apn_mandag)s, %(Apn_tirsdag)s, %(Apn_onsdag)s, %(Apn_torsdag)s, %(Apn_fredag)s, %(Apn_lordag)s, %(Ukenummer_neste)s, %(Apn_neste_mandag)s, %(Apn_neste_tirsdag)s, %(Apn_neste_onsdag)s, %(Apn_neste_torsdag)s, %(Apn_neste_fredag)s, %(Apn_neste_lordag)s)
@@ -71,10 +71,11 @@ def save_shops(shops):
         SET (id, name, street_address, street_zipcode, street_place, post_address, post_zipcode, post_place, phone, category, lon, lat, weeknum, open_monday, open_tuesday, open_wednesday, open_thursday, open_friday, open_saturday, weeknum_next, open_monday_next, open_tuesday_next, open_wednesday_next, open_thursday_next, open_friday_next, open_saturday_next) = 
         (%(id)s, %(Butikknavn)s, %(Gateadresse)s, %(Gate_postnummer)s, %(Gate_poststed)s, %(Postadresse)s, %(Post_postnummer)s, %(Post_poststed)s, %(Telefonnummer)s, %(Kategori)s, %(GPS_lengdegrad)s, %(GPS_breddegrad)s, %(Ukenummer)s, %(Apn_mandag)s, %(Apn_tirsdag)s, %(Apn_onsdag)s, %(Apn_torsdag)s, %(Apn_fredag)s, %(Apn_lordag)s, %(Ukenummer_neste)s, %(Apn_neste_mandag)s, %(Apn_neste_tirsdag)s, %(Apn_neste_onsdag)s, %(Apn_neste_torsdag)s, %(Apn_neste_fredag)s, %(Apn_neste_lordag)s);
     '''
-    run_upserts(sql, shops)
+    db.run_upserts(sql, shops)
 
 
-def read():
+def read(conn_str=None):
+    db = Database(conn_str)
     r = requests.get(URL)
     r.encoding = 'ISO-8859-1'
     lines = r.text.splitlines()
@@ -84,7 +85,7 @@ def read():
     for shop in shops:
         shop['Kategori'] = int(shop['Kategori'].replace('Kategori ', ''))
         shop['id'] = shop_ids.get(shop['Butikknavn'], None)
-    save_shops(shops)
+    save_shops(shops, db)
 
 
 if __name__ == '__main__':

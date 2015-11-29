@@ -1,0 +1,24 @@
+---
+  - name: install packages
+    apt: pkg={{ item }} state=latest update_cache=no
+    with_items:
+      - python-dev
+      - libffi-dev
+      - python-pip
+      - libpq-dev
+      - libxml2
+      - libxml2-dev
+      - libxslt1-dev
+      - python-virtualenv
+      - virtualenvwrapper
+      - nodejs
+#      - npm
+
+  - name: Create symlink for nodejs
+    file: src=/usr/bin/nodejs dest=/usr/bin/node state=link
+
+#  - name: install global npm packages
+#    npm: name={{ item }} global=yes state=present
+#    with_items:
+#      - bower
+#      - react-tools
