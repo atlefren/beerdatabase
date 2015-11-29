@@ -30,7 +30,7 @@
 
 - name: ensure that www-data can write webassets cache
   file: >
-        path={{ app.root }}/{{ app.name }}/static/.webassets-cache
+        path={{ app.root }}/web/static/.webassets-cache
         owner=www-data
         group=www-data
         mode=0755
@@ -38,7 +38,7 @@
 
 - name: ensure that www-data can write webassets gen folder
   file: >
-        path={{ app.root }}/{{ app.name }}/static/gen
+        path={{ app.root }}/web/static/gen
         owner=www-data
         group=www-data
         mode=0755
