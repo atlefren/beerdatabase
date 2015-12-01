@@ -2,16 +2,18 @@
 - hosts: development
   sudo: yes
   roles:
-    #- role: setup
-    #  tags: setup
-    - role: database
-      tags: database
-    - role: nginx
-      tags: nginx
-    - role: packages
-      tags: packages
-    - role: vagrant
-      tags: vagrant
+   #" - role: setup
+   #"   tags: setup
+   #" - role: database
+   #"   tags: database
+   #" - role: nginx
+   #"   tags: nginx
+   #" - role: packages
+   #"   tags: packages
+   #" - role: vagrant
+   #"   tags: vagrant
+    - role: updates
+      tags: updates
 
 - hosts: production
   sudo: yes

@@ -1,0 +1,5 @@
+#! /bin/bash
+cd {{ app.root }}
+export SQLALCHEMY_DATABASE_URI=postgresql://{{database.username}}:{{database.password}}@localhost:5432/{{database.name}}
+source {{ app.root }}/venv/bin/activate
+python manage.py update_ratebeer_cron

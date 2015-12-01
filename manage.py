@@ -1,4 +1,6 @@
 import os
+from datetime import datetime
+
 from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
 
@@ -34,6 +36,20 @@ def update_pol():
 
     print 'Import stock'
     update_pol_stock(conn_str)
+
+
+@manager.command
+def update_ratebeer_cron():
+    update_ratebeer()
+    with open('log.txt', 'a') as logfile:
+        logfile.write('%s Updated RB\n' % datetime.now())
+
+
+@manager.command
+def update_pol_cron():
+    update_pol()
+    with open('log.txt', 'a') as logfile:
+        logfile.write('%s Updated POL\n' % datetime.now())
 
 
 if __name__ == "__main__":

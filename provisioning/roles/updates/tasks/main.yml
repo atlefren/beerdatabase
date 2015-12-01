@@ -1,0 +1,20 @@
+---
+- name: copy rb update script
+  template: src=update_rb.sh.j2
+            dest={{app.root}}/update_rb.sh
+            mode=0700
+            #owner=root
+            #group=root
+
+- name: setup crontab for ratebeer
+  cron: name="update rb" weekday="1" hour="7" minute="8" job="{{app.root}}/update_rb.sh" state=present
+
+- name: copy polet update script
+  template: src=update_pol.sh.j2
+            dest={{app.root}}/update_pol.sh
+            mode=0700
+            #owner=root
+            #group=root
+
+- name: setup crontab for pol
+  cron: name="update pol" hour="6" minute="37" job="{{app.root}}/update_pol.sh" state=present
