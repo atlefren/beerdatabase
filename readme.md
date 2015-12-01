@@ -12,8 +12,16 @@ Setup
 
 4. run python manage.py update_ratebeer to load ratebeer data
 
-5. run python manage.py update_ratebeer to load pol data
+5. run python manage.py update_pol to load pol data
 
-5. run foreman start to launch app
+5. run python runapp.py to launch app
 
 6. app is now available at localhost:8090
+
+
+
+Deploy to prod
+--------------
+1. create an ssh config for beerdatabase_do
+2. copy provisioning/host_vars/production_example to provisioning/host_vars/beerdatabase_do, and fill the missing parts
+3. run ```ansible-playbook -K -i provisioning/inventory provisioning/playbook.yml```
