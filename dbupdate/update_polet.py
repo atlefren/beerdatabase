@@ -45,7 +45,6 @@ def match_pol_beer(pol_beer, beer_matcher, db):
 
     from_db = db.get_pol_brewery(pol_beer['Varenummer'])
     if from_db is not None:
-        print 'Aleready matched'
         pol_beer['ratebeer_id'] = from_db['ratebeer_id']
         return pol_beer
 
@@ -93,7 +92,6 @@ def update_pol_beers(conn_str=None):
             beers_polet,
             db
         )
-    print len(matched_beers)
     save_pol_beers(matched_beers, db)
 
 

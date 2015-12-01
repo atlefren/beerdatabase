@@ -45,6 +45,3 @@
   command: venv/bin/python manage.py db upgrade chdir={{app.root}}
   environment:
         SQLALCHEMY_DATABASE_URI: postgresql://{{database.username}}:{{database.password}}@localhost:5432/{{database.name}}
-
-- name: setup crontab for ratebeer
-  cron: name="update rb" minute="0-59" job="{{app.root}}/test.sh"
