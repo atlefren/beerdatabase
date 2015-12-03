@@ -5,7 +5,6 @@ var bd = this.bd || {};
     var SimpleBeerSearch = React.createClass({
 
         selectBeer: function (beer) {
-            console.log(beer);
             window.location.href = '/beers/' + beer.id;
         },
 
@@ -20,6 +19,6 @@ var bd = this.bd || {};
     });
 
     ns.setupSimpleBeerSearch = function (container) {
-        ReactDOM.render(<SimpleBeerSearch />, container);
+        //ReactDOM.render(<SimpleBeerSearch />, container);
     };
 }(bd));

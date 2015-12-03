@@ -13,6 +13,7 @@ Vagrant.configure("2") do |config|
     # nginx
     config.vm.network :forwarded_port, guest: 80, host: 9080
     config.vm.network :forwarded_port, guest: 5000, host: 5001
+    config.vm.network :forwarded_port, guest: 5432, host: 5433
     config.vm.provision "ansible" do |ansible|
       ansible.host_key_checking = false
       ansible.extra_vars = { ansible_ssh_user: 'vagrant' }

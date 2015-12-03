@@ -78,4 +78,15 @@ bd.api = bd.api || {};
             });
     };
 
+    ns.getPolStoresWithBeer = function (beerId, success, error) {
+        atomic.get(API_BASE + 'pol_beer/' + beerId +'/stock/')
+            .success(function (data, xhr) {
+                success(data);
+            })
+            .error(function (data, xhr) {
+                console.error(data);
+                error(data);
+            });
+    };
+
 }(bd.api));

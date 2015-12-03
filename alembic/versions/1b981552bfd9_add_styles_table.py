@@ -28,7 +28,6 @@ def upgrade():
     )
     path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
     style_file = os.path.join(path, 'data', 'beer_styles.json')
-    print style_file
     with open(style_file, 'r') as styles_data:
         styles = json.loads(styles_data.read())
         op.bulk_insert(style_table, styles)

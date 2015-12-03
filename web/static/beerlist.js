@@ -19106,6 +19106,17 @@ bd.api = bd.api || {};
             });
     };
 
+    ns.getPolStoresWithBeer = function (beerId, success, error) {
+        atomic.get(API_BASE + 'pol_beer/' + beerId +'/stock/')
+            .success(function (data, xhr) {
+                success(data);
+            })
+            .error(function (data, xhr) {
+                console.error(data);
+                error(data);
+            });
+    };
+
 }(bd.api));
 var bd = this.bd || {};
 (function (ns) {
@@ -19114,7 +19125,6 @@ var bd = this.bd || {};
     var SimpleBeerSearch = React.createClass({displayName: 'SimpleBeerSearch',
 
         selectBeer: function (beer) {
-            console.log(beer);
             window.location.href = '/beers/' + beer.id;
         },
 
@@ -19129,7 +19139,7 @@ var bd = this.bd || {};
     });
 
     ns.setupSimpleBeerSearch = function (container) {
-        ReactDOM.render(React.createElement(SimpleBeerSearch, null), container);
+        //ReactDOM.render(<SimpleBeerSearch />, container);
     };
 }(bd));
 
@@ -19359,6 +19369,10 @@ var bd = this.bd || {};
 
     ns.SortableTable = React.createClass({displayName: 'SortableTable',
 
+        getDefaultProps: function () {
+            return {idProperty: 'id'};
+        },
+
         getInitialState: function () {
             return {
                 columns: this.props.columns,
@@ -19392,7 +19406,12 @@ var bd = this.bd || {};
 
         render: function () {
             var rows = _.map(this.state.items, function (item, i) {
-                return (React.createElement(DataRow, {item: item, key: item.id, columns: this.state.columns}));
+                return (
+                    React.createElement(DataRow, {
+                        item: item, 
+                        key: item[this.props.idProperty], 
+                        columns: this.state.columns})
+                );
             }, this);
 
 
@@ -19590,6 +19609,91 @@ var bd = this.bd || {};
 (function (ns) {
     'use strict';
 
+    var columns = [
+        {
+            id: 'name',
+            name: 'Navn',
+            formatter: function (stock) {
+                return (React.createElement("a", {href: '/pol_shops/' + stock.pol_id}, stock.name));
+            },
+            sortParams: 'name',
+            isSorted: true,
+            sortDirection: 'asc'
+        },
+        {
+            id: 'amount',
+            name: 'Antall',
+            formatter: function (stock) {
+                var updated = 'Oppdatert: ' + stock.updated;
+                return React.createElement("span", {title: updated}, stock.amount);
+            },
+            sortParams: ['amount'],
+            isSorted: false,
+            sortDirection: 'asc'
+        }
+    ];
+
+    ns.PolWithBeerList = React.createClass({displayName: 'PolWithBeerList',
+
+        getInitialState: function () {
+            return {expanded: false, data: null, searching: false};
+        },
+
+        gotStores: function (data) {
+            this.setState({data: data, searching: false});
+        },
+
+        toggle: function () {
+            var expanded = !this.state.expanded;
+            this.setState({expanded: expanded});
+            if (expanded && !this.state.data) {
+                this.setState({searching: true});
+                bd.api.getPolStoresWithBeer(this.props.beerId, this.gotStores);
+            }
+        },
+
+        render: function () {
+            var bodyClass = 'panel-collapse collapse';
+            if (this.state.expanded) {
+                bodyClass += ' in';
+            }
+
+            var content;
+            if (this.state.searching) {
+                content = (React.createElement("i", {className: "fa fa-spinner fa-spin fa-3x"}));
+            } else if (this.state.data) {
+                content = (
+                    React.createElement(ns.SortableTable, {
+                        idProperty: "pol_id", 
+                        items: this.state.data, 
+                        columns: columns})
+                );
+            }
+
+            return (
+                React.createElement("div", {className: "panel panel-default"}, 
+                    React.createElement("div", {className: "panel-heading"}, 
+                        React.createElement("h4", {className: "panel-title"}, 
+                            React.createElement("a", {role: "button", onClick: this.toggle}, 
+                              "Pol som har dette ølet"
+                            )
+                        )
+                    ), 
+                    React.createElement("div", {className: bodyClass}, 
+                        React.createElement("div", {className: "panel-body"}, 
+                            content
+                        )
+                    )
+                )
+            );
+        }
+    });
+
+}(bd));
+var bd = this.bd || {};
+(function (ns) {
+    'use strict';
+
     var pairings = [
         'Skalldyr',
         'Lyst kjøtt',
@@ -19618,8 +19722,9 @@ var bd = this.bd || {};
                 )
             );
         }
-
     });
+
+   
 
 
     var ExternalLink = React.createClass({displayName: 'ExternalLink',
@@ -19853,11 +19958,11 @@ var bd = this.bd || {};
                             )
                         )
                     ), 
+                    React.createElement(ns.PolWithBeerList, {beerId: this.props.beer.id}), 
                     this.getHelpMsg()
                 )
             );
         }
-
     });
 
 
@@ -20434,7 +20539,6 @@ var bd = this.bd || {};
         },
 
         componentDidMount: function () {
-
             var element = ReactDOM.findDOMNode(this);
             noUiSlider.create(element, {
                 start: [this.props.initMin, this.props.initMax],

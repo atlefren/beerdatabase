@@ -2,10 +2,10 @@
 
 from flask import current_app, json, request, Response
 from sqlalchemy.sql.expression import and_
-from sqlalchemy import and_
 
 from web import app
-from models import (RatebeerBeer, RatebeerBrewery, RbPolBeerMapping, PoletBeer)
+from models import (RatebeerBeer, RatebeerBrewery, RbPolBeerMapping, PoletBeer,
+                    PolStock, PolShop)
 
 
 api_prefix = '/api/v1'
@@ -165,6 +165,28 @@ def confirm_suggestion(id):
 
     return Response(
         json.dumps(suggestions),
+        content_type='application/json',
+        status=200
+    )
+
+
+@app.route(api_prefix + '/pol_beer/<int:beer_id>/stock/', methods=['GET'])
+def get_stock_for_beer(beer_id):
+    shops = current_app.db_session.query(PolShop, PolStock)\
+        .filter(PolStock.shop_id == PolShop.id)\
+        .filter(PolStock.pol_beer_id == beer_id)
+
+    print shops.all()
+
+    data = [{
+        'pol_id': s[0].id,
+        'name': s[0].name,
+        'amount': s[1].stock,
+        'updated': s[1].updated.isoformat(),
+    } for s in shops.all()]
+
+    return Response(
+        json.dumps(data),
         content_type='application/json',
         status=200
     )

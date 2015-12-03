@@ -12,7 +12,6 @@ var bd = this.bd || {};
         },
 
         componentDidMount: function () {
-
             var element = ReactDOM.findDOMNode(this);
             noUiSlider.create(element, {
                 start: [this.props.initMin, this.props.initMax],

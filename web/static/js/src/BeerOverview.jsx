@@ -30,8 +30,9 @@ var bd = this.bd || {};
                 </div>
             );
         }
-
     });
+
+   
 
 
     var ExternalLink = React.createClass({
@@ -265,11 +266,11 @@ var bd = this.bd || {};
                             </tr>
                         </tbody>
                     </table>
+                    <ns.PolWithBeerList beerId={this.props.beer.id}/>
                     {this.getHelpMsg()}
                 </div>
             );
         }
-
     });
 
 

@@ -241,9 +241,20 @@ class PolShop(Base):
 
 
 class PolStock(Base):
-    __tablename__ = 'pol_stock'
-    id = sa.Column('id', sa.Integer, primary_key=True)
+    __tablename__ = 'pol_stock_latest'
     stock = sa.Column('stock', sa.Integer)
     updated = sa.Column('updated', sa.DateTime)
-    shop_id = sa.Column('shop_id', sa.Integer, sa.ForeignKey('pol_shop.id'), nullable=False)
-    pol_beer_id = sa.Column('pol_beer_id', sa.Integer, sa.ForeignKey('pol_beer.id'), nullable=False)
+    shop_id = sa.Column(
+        'shop_id',
+        sa.Integer,
+        sa.ForeignKey('pol_shop.id'),
+        nullable=False,
+        primary_key=True
+    )
+    pol_beer_id = sa.Column(
+        'pol_beer_id',
+        sa.Integer,
+        sa.ForeignKey('pol_beer.id'),
+        nullable=False,
+        primary_key=True
+    )

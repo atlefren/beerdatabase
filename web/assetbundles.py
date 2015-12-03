@@ -60,6 +60,7 @@ js_beer_list = Bundle(
         'js/src/SortableTable.jsx',
         'js/src/BreweryTable.jsx',
         'js/src/PolBeerTable.jsx',
+        'js/src/PolWithBeer.jsx',
         'js/src/BeerOverview.jsx',
         'js/src/StyleList.jsx',
         'js/src/BeerFixer.jsx',

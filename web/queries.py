@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import current_app
-from sqlalchemy.sql import func, text
-from sqlalchemy.sql.expression import bindparam
+from sqlalchemy.sql import func
 
 from models import (PoletBeer, PolShop, PolStock, RatebeerBrewery,
                     RatebeerBeer, RatebeerCountry, BeerStyle, RbPolBeerMapping)
@@ -90,17 +89,9 @@ def get_pol_shop(shop_id):
 
 def get_beers_for_shop(shop_id):
 
-    subquery = text('''
-        SELECT DISTINCT ON (pol_beer_id) id
-        FROM pol_stock
-        WHERE shop_id = :shopId
-        ORDER BY pol_beer_id, updated DESC
-        ''', bindparams=[bindparam('shopId', shop_id)])
-
     beers = current_app.db_session.query(PoletBeer, PolStock)\
         .join(PolStock)\
-        .filter(PolStock.id.in_(subquery))\
-        .order_by(PoletBeer.name)
+        .filter(PolStock.shop_id == shop_id)
 
     return [b[0].get_list_response({
         'stock': b[1].stock,

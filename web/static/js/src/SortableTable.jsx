@@ -57,6 +57,10 @@ var bd = this.bd || {};
 
     ns.SortableTable = React.createClass({
 
+        getDefaultProps: function () {
+            return {idProperty: 'id'};
+        },
+
         getInitialState: function () {
             return {
                 columns: this.props.columns,
@@ -90,7 +94,12 @@ var bd = this.bd || {};
 
         render: function () {
             var rows = _.map(this.state.items, function (item, i) {
-                return (<DataRow item={item} key={item.id} columns={this.state.columns} />);
+                return (
+                    <DataRow
+                        item={item}
+                        key={item[this.props.idProperty]}
+                        columns={this.state.columns} />
+                );
             }, this);
 
 
