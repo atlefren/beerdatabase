@@ -60,12 +60,14 @@ var bd = this.bd || {};
         render: function () {
             return (
                 <fieldset>
-                    <label>Navn</label>
-                    <input
-                        type="text"
-                        onChange={this.onChange}
-                        className="u-full-width"
-                        value={this.state.value} />
+                    <div className="form-group">
+                        <label>Navn</label>
+                        <input
+                            type="text"
+                            onChange={this.onChange}
+                            className="form-control"
+                            value={this.state.value} />
+                    </div>
                 </fieldset>
             );
         }
@@ -128,18 +130,22 @@ var bd = this.bd || {};
 
             return (
                 <fieldset>
-                    <label>Stil</label>
-                    <select
-                        className="u-full-width multiple"
-                        value={this.state.selected}
-                        onChange={this.onChange}
-                        multiple={true}>
-                        {styles}
-                    </select>
-                    <label>
-                        <input onChange={this.toggleAll} checked={this.state.allSelected} type="checkbox" />
-                        <span className="label-body">Velg alle</span>
-                    </label>
+                    <div className="form-group">
+                        <label>Stil</label>
+                        <select
+                            className="form-control"
+                            value={this.state.selected}
+                            onChange={this.onChange}
+                            multiple={true}>
+                            {styles}
+                        </select>
+                        <div className="checkbox">
+                            <label>
+                                <input onChange={this.toggleAll} checked={this.state.allSelected} type="checkbox" />
+                                Velg alle
+                            </label>
+                        </div>
+                    </div>
                 </fieldset>
             );
         }
@@ -195,7 +201,8 @@ var bd = this.bd || {};
 
             return (
                 <fieldset>
-                    <label>{this.props.label}</label>
+                    <div className="form-group">
+                        <label>{this.props.label}</label>
                         <div>
                             <div>{min}{this.props.displayPostfix} til {max}{this.props.displayPostfix}</div>
                             <Slider
@@ -203,6 +210,7 @@ var bd = this.bd || {};
                                 initMin={getFromArr(this.props.value, 0, this.props.min)}
                                 initMax={getFromArr(this.props.value, 1, this.props.max)}
                                 change={this.sliderChanged} />
+                        </div>
                     </div>
                 </fieldset>
             );
@@ -224,13 +232,15 @@ var bd = this.bd || {};
 
         render: function () {
             return (
-                <label>
-                    <input
-                        type="checkbox"
-                        onChange={this.toggle}
-                        checked={this.state.checked} />
-                    <span className="label-body">{this.props.name}</span>
-                </label>
+                <div className="checkbox">
+                    <label>
+                        <input
+                            type="checkbox"
+                            onChange={this.toggle}
+                            checked={this.state.checked} />
+                        {this.props.name}
+                    </label>
+                </div>
             );
         }
     });
@@ -413,7 +423,7 @@ var bd = this.bd || {};
 
             var results;
             if (this.state.isSearching) {
-                results = (<p>Søker..</p>);
+                results = (<p><i className="fa fa-spinner fa-spin"></i> Søker..</p>);
             } else if (this.state.beers === null) {
                 results = (<p>Gjør et søk</p>);
             } else if (this.state.beers.length === 0) {
@@ -428,13 +438,13 @@ var bd = this.bd || {};
 
             return (
                 <div className="row">
-                    <div id="search_field" className="three columns">
+                    <div id="search_field" className="col-md-3">
                         <SearchField
                             onSearch={this.doSearch}
                             searchParams={this.props.searchParams}
                             initValues={this.props.initValues} />
                     </div>
-                    <div id="search_resuts" className="nine columns">
+                    <div id="search_resuts" className="col-md-9">
                         {results}
                     </div>
                 </div>

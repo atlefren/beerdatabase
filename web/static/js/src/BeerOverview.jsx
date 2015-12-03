@@ -21,7 +21,7 @@ var bd = this.bd || {};
 
         render: function () {
             return (
-                <div className='one column score-box'>
+                <div className='col-md-1 score-box'>
                     <strong>Score</strong>
                     <div className='styleHeader'>Overall</div>
                     <div className='overallScore'>{ns.Util.valueOrNa(this.props.beer.score_overall)}</div>
@@ -37,8 +37,8 @@ var bd = this.bd || {};
     var ExternalLink = React.createClass({
         render: function () {
             return (
-                <li className='navbar-item'>
-                    <a href={this.props.link.url} className='navbar-link'>
+                <li>
+                    <a href={this.props.link.url}>
                         <i className='fa fa-external-link-square'></i>{' '}
                         Mer hos {' '}{this.props.link.name}
                     </a>
@@ -55,7 +55,7 @@ var bd = this.bd || {};
             });
 
             return (
-                <ul className='navbar-list'>
+                <ul className='list-inline'>
                     {links}
                 </ul>
             );
@@ -124,7 +124,7 @@ var bd = this.bd || {};
             }
             return (
                 <div className="pie">
-                    <span className="label"> {this.props.name}</span>
+                    <span> {this.props.name}</span>
                     {this.getSvg()}
                 </div>
             );
@@ -170,8 +170,8 @@ var bd = this.bd || {};
 
                     <div className='row'>
                         <ScoreDisplay beer={rbbeer} />
-                        <div className='four columns'>
-                            <table className='u-full-width'>
+                        <div className='col-md-4'>
+                            <table className='table'>
                                 <tbody>
                                     <tr>
                                         <th>Stil</th>
@@ -194,8 +194,8 @@ var bd = this.bd || {};
                                 </tbody>
                             </table>
                          </div>
-                         <div className='four columns'>
-                            <table className='u-full-width'>
+                         <div className='col-md-4'>
+                            <table className='table'>
                                 <tbody>
                                     <tr>
                                         <th>Pris</th>
@@ -216,21 +216,31 @@ var bd = this.bd || {};
                                 </tbody>
                             </table>
                          </div>
-                         <div className='four columns'>
+                         <div className='col-md-4'>
                          </div>
                     </div>
 
                     <ExternalLinks links={this.getExternalLinks()}/>
 
-                    <table className='u-full-width'>
+                    <table className='table'>
                         <tbody>
                             <tr>
                                 <th>Karakteristikk</th>
                                 <td>
-                                    <Pie name="Sødme" value={beer.sweetness} />
-                                    <Pie name="Friskhet" value={beer.freshness} />
-                                    <Pie name="Bitterhet" value={beer.bitterness} />
-                                    <Pie name="Fylde" value={beer.richness} />
+                                    <ul className="list-inline pies">
+                                        <li>
+                                            <Pie name="Sødme" value={beer.sweetness} />
+                                        </li>
+                                        <li>
+                                            <Pie name="Friskhet" value={beer.freshness} />
+                                        </li>
+                                        <li>
+                                            <Pie name="Bitterhet" value={beer.bitterness} />
+                                        </li>
+                                        <li>
+                                            <Pie name="Fylde" value={beer.richness} />
+                                        </li>
+                                    </ul>
                                 </td>
                             </tr>
                             <tr>

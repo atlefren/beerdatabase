@@ -2,56 +2,74 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %} {% endblock %}</title>
     {% block css %}
         {% assets "css_base" %}
         <link type="text/css" rel="stylesheet" href="{{ ASSET_URL }}">
         {% endassets %}
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
     {% endblock %}
 </head>
 <body>
-    <div class="container">
-        <nav class="navbar">
-
-            <h1>Øldatabasen</h1>
-
-            <ul class="navbar-list">
-                <li class="navbar-item">
-                    <a class="navbar-link" href="{{ url_for('index')}}">Hjem</a>
-                </li>
-                <li class="navbar-item">
-                    <a class="navbar-link" href="{{ url_for('search')}}">Søk</a>
-                </li>
-                <li class="navbar-item">
-                    <a class="navbar-link" href="{{ url_for('brewery_list')}}">Bryggerier</a>
-                </li>
-                <li class="navbar-item">
-                    <a class="navbar-link" href="{{ url_for('style_list')}}">Øltyper</a>
-                </li>
-                <li class="navbar-item">
-                    <a class="navbar-link" href="{{ url_for('pol_shops')}}">Polutsalg</a>
-                </li>
-                <li class="navbar-item">
-                    <a class="navbar-link" href="{{ url_for('unmatched_beers')}}">Umatcha øl</a>
-                </li>
-                <!--  TODO: only show for admins
-                <li class="navbar-item">
-                    <a class="navbar-link" href="{{ url_for('match_suggestions')}}">Matcheforslag</a>
-                </li>
-                -->
-
-            </ul>
-            <div class="u-pull-right navbar-search" id="find_beer">
-            </div>
-        </nav>
-
-
-
-        <div class="content">
-        {% block main %}
-        {% endblock %}
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{{ url_for('index')}}">Øldatabasen</a>
         </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li {% if request.url_rule.endpoint == 'index' %}class="active"{% endif %} >
+                <a href="{{ url_for('index')}}">Hjem</a>
+            </li>
+            <li {% if request.url_rule.endpoint == 'search' %}class="active"{% endif %} >
+                <a href="{{ url_for('search')}}">Søk</a>
+            </li>
+            <li {% if request.url_rule.endpoint == 'brewery_list' %}class="active"{% endif %} >
+                <a href="{{ url_for('brewery_list')}}">Bryggerier</a>
+            </li>
+            <li {% if request.url_rule.endpoint == 'style_list' %}class="active"{% endif %}>
+                <a href="{{ url_for('style_list')}}">Øltyper</a>
+            </li>
+            <li {% if request.url_rule.endpoint == 'pol_shops' %}class="active"{% endif %}>
+                <a href="{{ url_for('pol_shops')}}">Polutsalg</a>
+            </li>
+            <li {% if request.url_rule.endpoint == 'unmatched_beers' %}class="active"{% endif %}>
+                <a href="{{ url_for('unmatched_beers')}}">Umatcha øl</a>
+            </li>
+            <!--
+            <li {% if request.url_rule.endpoint == 'match_suggestions' %}class="active"{% endif %}>
+                <a href="{{ url_for('match_suggestions')}}">Matcheforslag</a>
+            </li>
+            -->
+          </ul>
+          <!--
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+                <form class="navbar-form navbar-left" role="search">
+                    <div class="form-group" id="find_beer">
+                    </div>
+                </form>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    {% block main %}
+    {% endblock %}
     </div>
 
     {% block js %}

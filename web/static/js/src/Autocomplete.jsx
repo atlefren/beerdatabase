@@ -122,7 +122,7 @@ var bd = this.bd || {};
         render: function () {
             var resultsStyle = {display: "block"};
             var itemNodes = [];
-            var inputClass = 'u-full-width';
+            var inputClass = 'form-control';
 
             if (!this.state.results.length || this.state.selectedItem !== null) {
                 //there are no results or we have a selected item

@@ -6,9 +6,9 @@ var bd = this.bd || {};
         render: function () {
             return (
                 <div className="row">
-                    <div className='six columns'>
+                    <div className='col-md-6'>
                         <h3>Øl fra polet</h3>
-                        <table className='u-full-width'>
+                        <table className='table'>
                             <tbody>
                                 <tr>
                                     <th>Bryggeri</th>
@@ -24,7 +24,7 @@ var bd = this.bd || {};
                                 </tr>
                             </tbody>
                         </table>
-                        <table  className='u-full-width'>
+                        <table className='table'>
                             <tbody>
                                 <tr>
                                     <th>Abv</th>
@@ -75,7 +75,7 @@ var bd = this.bd || {};
             var details;
             if (this.state.beer.id) {
                 details = (
-                     <table className='u-full-width'>
+                     <table className='table'>
                         <tbody>
                             <tr>
                                 <th>Ølstil</th>
@@ -100,9 +100,9 @@ var bd = this.bd || {};
             }
             return (
                 <div className="row">
-                    <div className='six columns'>
+                    <div className='col-md-6'>
                         <h3>Øl fra Ratebeer</h3>
-                        <table className='u-full-width'>
+                        <table className='table'>
                             <tbody>
                                 <tr>
                                     <th>Bryggeri</th>
@@ -154,18 +154,18 @@ var bd = this.bd || {};
         render: function () {
             return (
                 <div className="row">
-                    <div className='six columns'>
+                    <div className='col-md-6'>
                         <div>
                             Kommentar:
                             <textarea
                                 value={this.state.comment}
                                 onChange={this.changeComment}
-                                className='u-full-width' />
+                                className='form-control' />
                         </div>
                         <div>
                             <button
                                 type="button"
-                                className="button-primary"
+                                className="btn btn-primary"
                                 onClick={this.onClick}
                                 disabled={!this.props.enabled}>
                                 Send
@@ -292,7 +292,7 @@ var bd = this.bd || {};
             }, this);
 
             return (
-                <table className="u-full-width">
+                <table className="table">
                     <thead>
                         <tr>
                             <th>Bryggeri Polet</th>
@@ -361,7 +361,7 @@ var bd = this.bd || {};
             }, this);
 
             return (
-                <table className="u-full-width">
+                <table className="table">
                     <thead>
                         <tr>
                             <th>Bryggeri Polet</th>

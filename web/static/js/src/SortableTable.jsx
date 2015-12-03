@@ -106,7 +106,7 @@ var bd = this.bd || {};
             }, this);
 
             return (
-                <table className="u-full-width table-sortable">
+                <table className="table table-striped table-sortable">
                     <thead>
                         <tr>
                            {header}

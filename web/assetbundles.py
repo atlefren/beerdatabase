@@ -29,11 +29,14 @@ if minify:
 css_base = Bundle(
     'js/lib/fontawesome/css/font-awesome.css',
     Bundle(
-        'js/lib/skeleton/css/normalize.css',
-        'js/lib/skeleton/css/skeleton.css',
+        # 'js/lib/skeleton/css/normalize.css',
+        # 'js/lib/skeleton/css/skeleton.css',
+        'js/lib/bootstrap/dist/css/bootstrap.min.css',
         'js/lib/nouislider/distribute/nouislider.min.css',
-        'css/base.css',
-        'css/auocomplete.css',
+        'css/base_bs.css',
+        'css/auocomplete_bs.css',
+        # 'css/base.css',
+        # 'css/auocomplete.css',
         filters=css_filters
     ),
     filters=['cssrewrite'],
@@ -46,6 +49,8 @@ js_beer_list = Bundle(
     react,
     react_dom,
     Bundle(
+        'js/lib/jquery/dist/jquery.min.js',
+        'js/lib/bootstrap/dist/js/bootstrap.min.js',
         'js/lib/atomic-fixed.js',
         'js/lib/nouislider/distribute/nouislider.min.js',
         'js/src/util.js',

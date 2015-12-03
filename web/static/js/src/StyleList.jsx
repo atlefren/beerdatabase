@@ -3,18 +3,19 @@ var bd = this.bd || {};
     'use strict';
 
     var columnNames = [
-        'one column',
-        'two columns',
-        'three columns',
-        'four columns',
-        'five columns',
-        'six columns',
-        'seven columns',
-        'eight columns',
-        'nine columns',
-        'ten columns',
-        'eleven columns',
-        'twelve columns'
+        'col-md-1',
+        'col-md-2',
+        'col-md-3',
+        'col-md-4',
+        'col-md-5',
+        'col-md-6',
+        'col-md-7',
+        'col-md-8',
+        'col-md-9',
+        'col-md-8',
+        'col-md-10',
+        'col-md-11',
+        'col-md-12'
     ];
 
     var StyleList = React.createClass({

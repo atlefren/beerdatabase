@@ -1,0 +1,73 @@
+body {
+  min-height: 2000px;
+  padding-top: 70px;
+}
+
+.list-inline.pies {
+    margin-bottom: 0;
+}
+
+.table-sortable th.sortable {
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+
+/* score */
+
+.score-box {
+    padding-top: 12px;
+}
+
+.score-box .overallScore {
+    font-size: 250%;
+    font-weight: bold;
+    margin-top: -15px;
+}
+
+.score-box .styleScore {
+    font-size: 150%;
+    font-weight: bold;
+    margin-top: -10px;
+}
+
+.score-box .styleHeader {
+    font-size: 80%;
+}
+
+/* SLIDER */
+
+.slider {
+    margin-top: 10px;
+}
+
+.slider .noUi-connect {
+    background: #ddd;
+}
+
+.noUi-horizontal.noUi-extended {
+    padding-right: 32px;
+}
+.noUi-horizontal.noUi-extended .noUi-handle {
+    left: -1px;
+}
+.noUi-horizontal.noUi-extended .noUi-origin  {
+    right: -32px;
+}
+
+
+/*!
+ * IE10 viewport hack for Surface/desktop Windows 8 bug
+ * Copyright 2014-2015 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ */
+
+/*
+ * See the Getting Started docs for more information:
+ * http://getbootstrap.com/getting-started/#support-ie10-width
+ */
+@-webkit-viewport { width: device-width; }
+@-moz-viewport    { width: device-width; }
+@-ms-viewport     { width: device-width; }
+@-o-viewport      { width: device-width; }
+@viewport         { width: device-width; }
