@@ -25,18 +25,18 @@ var bd = this.bd || {};
                 <div>
                     <h1>{this.props.shop.name}</h1>
                     <div className='row'>
-                        <div className='four columns'>
+                        <div className='col-md-4'>
                             <strong>Kategori</strong><br />
                             {this.props.shop.category}
                         </div>
-                        <div className='four columns'>
+                        <div className='col-md-4'>
                             <strong>Gateadresse</strong>
                             <address>
                               {this.props.shop.street_address}<br/>
                               {this.props.shop.street_zipcode}{' '}{this.props.shop.street_place}<br />
                             </address>
                         </div>
-                        <div className='four columns'>
+                        <div className='col-md-4'>
                             <strong>Postadresse</strong>
                             <address>
                               {this.props.shop.post_address}<br/>

@@ -20526,18 +20526,18 @@ var bd = this.bd || {};
                 React.createElement("div", null, 
                     React.createElement("h1", null, this.props.shop.name), 
                     React.createElement("div", {className: "row"}, 
-                        React.createElement("div", {className: "four columns"}, 
+                        React.createElement("div", {className: "col-md-4"}, 
                             React.createElement("strong", null, "Kategori"), React.createElement("br", null), 
                             this.props.shop.category
                         ), 
-                        React.createElement("div", {className: "four columns"}, 
+                        React.createElement("div", {className: "col-md-4"}, 
                             React.createElement("strong", null, "Gateadresse"), 
                             React.createElement("address", null, 
                               this.props.shop.street_address, React.createElement("br", null), 
                               this.props.shop.street_zipcode, ' ', this.props.shop.street_place, React.createElement("br", null)
                             )
                         ), 
-                        React.createElement("div", {className: "four columns"}, 
+                        React.createElement("div", {className: "col-md-4"}, 
                             React.createElement("strong", null, "Postadresse"), 
                             React.createElement("address", null, 
                               this.props.shop.post_address, React.createElement("br", null), 
