@@ -19636,11 +19636,15 @@ var bd = this.bd || {};
     ns.PolWithBeerList = React.createClass({displayName: 'PolWithBeerList',
 
         getInitialState: function () {
-            return {expanded: false, data: null, searching: false};
+            return {expanded: false, data: null, searching: false, numPol: null};
         },
 
         gotStores: function (data) {
-            this.setState({data: data, searching: false});
+            this.setState({
+                data: data,
+                searching: false,
+                numPol: data.length
+            });
         },
 
         toggle: function () {
@@ -19666,13 +19670,20 @@ var bd = this.bd || {};
                         "Laster"
                     )
                 );
-            } else if (this.state.data) {
+            } else if (this.state.data && this.state.data.length) {
                 content = (
                     React.createElement(ns.SortableTable, {
                         idProperty: "pol_id", 
                         items: this.state.data, 
                         columns: columns})
                 );
+            } else {
+                content = 'Ingen pol har dette ølet (dog: det kan finnes i bestillingsutvalget. Sjekk polets sider).';
+            }
+
+            var heading = 'Pol som har dette ølet';
+            if (this.state.numPol !== null) {
+                heading += ' (' + this.state.numPol + ')';
             }
 
             return (
@@ -19680,7 +19691,7 @@ var bd = this.bd || {};
                     React.createElement("div", {className: "panel-heading"}, 
                         React.createElement("h4", {className: "panel-title"}, 
                             React.createElement("a", {role: "button", onClick: this.toggle}, 
-                              "Pol som har dette ølet"
+                              heading
                             )
                         )
                     ), 
