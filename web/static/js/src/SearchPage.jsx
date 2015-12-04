@@ -422,7 +422,7 @@ var bd = this.bd || {};
 
             var results;
             if (this.state.isSearching) {
-                results = (<p><i className="fa fa-spinner fa-spin"></i> Søker..</p>);
+                results = (<p><i className="fa fa-spinner fa-spin  fa-3x"></i> Søker..</p>);
             } else if (this.state.beers === null) {
                 results = (<p>Gjør et søk</p>);
             } else if (this.state.beers.length === 0) {

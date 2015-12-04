@@ -53,7 +53,12 @@ var bd = this.bd || {};
 
             var content;
             if (this.state.searching) {
-                content = (<i className="fa fa-spinner fa-spin fa-3x"></i>);
+                content = (
+                    <span>
+                        <i className="fa fa-spinner fa-spin fa-3x"></i>
+                        Laster
+                    </span>
+                );
             } else if (this.state.data) {
                 content = (
                     <ns.SortableTable

@@ -19660,7 +19660,12 @@ var bd = this.bd || {};
 
             var content;
             if (this.state.searching) {
-                content = (React.createElement("i", {className: "fa fa-spinner fa-spin fa-3x"}));
+                content = (
+                    React.createElement("span", null, 
+                        React.createElement("i", {className: "fa fa-spinner fa-spin fa-3x"}), 
+                        "Laster"
+                    )
+                );
             } else if (this.state.data) {
                 content = (
                     React.createElement(ns.SortableTable, {
@@ -19694,67 +19699,6 @@ var bd = this.bd || {};
 (function (ns) {
     'use strict';
 
-    var pairings = [
-        'Skalldyr',
-        'Lyst kjøtt',
-        'Dessert, kake, frukt',
-        'Fisk',
-        'Aperitiff/avec',
-        'Lam og sau',
-        'Ost',
-        'Småvilt og fugl',
-        'Svinekjøtt',
-        'Grønnsaker',
-        'Storfe',
-        'Storvilt'
-    ];
-
-    var ScoreDisplay = React.createClass({displayName: 'ScoreDisplay',
-
-        render: function () {
-            return (
-                React.createElement("div", {className: "col-md-1 score-box"}, 
-                    React.createElement("strong", null, "Score"), 
-                    React.createElement("div", {className: "styleHeader"}, "Overall"), 
-                    React.createElement("div", {className: "overallScore"}, ns.Util.valueOrNa(this.props.beer.score_overall)), 
-                    React.createElement("div", {className: "styleHeader"}, "Style"), 
-                    React.createElement("div", {className: "styleScore"}, ns.Util.valueOrNa(this.props.beer.score_style))
-                )
-            );
-        }
-    });
-
-   
-
-
-    var ExternalLink = React.createClass({displayName: 'ExternalLink',
-        render: function () {
-            return (
-                React.createElement("li", null, 
-                    React.createElement("a", {href: this.props.link.url}, 
-                        React.createElement("i", {className: "fa fa-external-link-square"}), ' ', 
-                        "Mer hos ", ' ', this.props.link.name
-                    )
-                )
-            );
-        }
-    });
-
-    var ExternalLinks = React.createClass({displayName: 'ExternalLinks',
-
-        render: function () {
-            var links = _.map(this.props.links, function (link, i) {
-                return (React.createElement(ExternalLink, {link: link, key: i}));
-            });
-
-            return (
-                React.createElement("ul", {className: "list-inline"}, 
-                    links
-                )
-            );
-        }
-    });
-
     var SVGComponent = React.createClass({displayName: 'SVGComponent',
         render: function() {
             return (
@@ -19768,7 +19712,7 @@ var bd = this.bd || {};
         }
     });
 
-    var Pie = React.createClass({displayName: 'Pie',
+    ns.Pie = React.createClass({displayName: 'Pie',
 
         getDefaultProps: function () {
             return {size: 20};
@@ -19822,8 +19766,113 @@ var bd = this.bd || {};
                 )
             );
         }
+    });
 
+}(bd));
+
+var bd = this.bd || {};
+(function (ns) {
+    'use strict';
+
+    var pairings = [
+        'Skalldyr',
+        'Lyst kjøtt',
+        'Dessert, kake, frukt',
+        'Fisk',
+        'Aperitiff/avec',
+        'Lam og sau',
+        'Ost',
+        'Småvilt og fugl',
+        'Svinekjøtt',
+        'Grønnsaker',
+        'Storfe',
+        'Storvilt'
+    ];
+
+    var Characteristics = React.createClass({displayName: 'Characteristics',
+
+        characteristics: [
+            {key: 'sweetness', 'name': 'Sødme'},
+            {key: 'freshness', 'name': 'Friskhet'},
+            {key: 'bitterness', 'name': 'Bitterhet'},
+            {key: 'richness', 'name': 'Fylde'}
+        ],
+
+        render: function () {
+
+            var characteristics = _.chain(this.characteristics)
+                .filter(function (characteristic) {
+                    return !!this.props.beer[characteristic.key];
+                }, this)
+                .map(function (characteristic) {
+                    var c = this.props.beer[characteristic.key];
+                    return (
+                        React.createElement("li", {key: characteristic.key}, 
+                            React.createElement(ns.Pie, {
+                                name: characteristic.name, 
+                                value: c})
+                        )
+                    );
+                }, this)
+                .value();
+
+
+            return (
+                 React.createElement("tr", null, 
+                    React.createElement("th", null, "Karakteristikk"), 
+                    React.createElement("td", null, 
+                        React.createElement("ul", {className: "list-inline pies"}, 
+                            characteristics
+                        )
+                    )
+                )
+            );
+        }
     })
+
+    var ScoreDisplay = React.createClass({displayName: 'ScoreDisplay',
+
+        render: function () {
+            return (
+                React.createElement("div", {className: "col-md-1 score-box"}, 
+                    React.createElement("strong", null, "Score"), 
+                    React.createElement("div", {className: "styleHeader"}, "Overall"), 
+                    React.createElement("div", {className: "overallScore"}, ns.Util.valueOrNa(this.props.beer.score_overall)), 
+                    React.createElement("div", {className: "styleHeader"}, "Style"), 
+                    React.createElement("div", {className: "styleScore"}, ns.Util.valueOrNa(this.props.beer.score_style))
+                )
+            );
+        }
+    });
+
+    var ExternalLink = React.createClass({displayName: 'ExternalLink',
+        render: function () {
+            return (
+                React.createElement("li", null, 
+                    React.createElement("a", {href: this.props.link.url}, 
+                        React.createElement("i", {className: "fa fa-external-link-square"}), ' ', 
+                        "Mer hos ", ' ', this.props.link.name
+                    )
+                )
+            );
+        }
+    });
+
+    var ExternalLinks = React.createClass({displayName: 'ExternalLinks',
+
+        render: function () {
+            var links = _.map(this.props.links, function (link, i) {
+                return (React.createElement(ExternalLink, {link: link, key: i}));
+            });
+
+            return (
+                React.createElement("ul", {className: "list-inline externalLinks"}, 
+                    links
+                )
+            );
+        }
+    });
+
 
     var BeerOverview = React.createClass({displayName: 'BeerOverview',
 
@@ -19917,25 +19966,7 @@ var bd = this.bd || {};
 
                     React.createElement("table", {className: "table"}, 
                         React.createElement("tbody", null, 
-                            React.createElement("tr", null, 
-                                React.createElement("th", null, "Karakteristikk"), 
-                                React.createElement("td", null, 
-                                    React.createElement("ul", {className: "list-inline pies"}, 
-                                        React.createElement("li", null, 
-                                            React.createElement(Pie, {name: "Sødme", value: beer.sweetness})
-                                        ), 
-                                        React.createElement("li", null, 
-                                            React.createElement(Pie, {name: "Friskhet", value: beer.freshness})
-                                        ), 
-                                        React.createElement("li", null, 
-                                            React.createElement(Pie, {name: "Bitterhet", value: beer.bitterness})
-                                        ), 
-                                        React.createElement("li", null, 
-                                            React.createElement(Pie, {name: "Fylde", value: beer.richness})
-                                        )
-                                    )
-                                )
-                            ), 
+                           React.createElement(Characteristics, {beer: this.props.beer}), 
                             React.createElement("tr", null, 
                                 React.createElement("th", null, "Passer til"), 
                                 React.createElement("td", null, [beer.pairs_with_1, beer.pairs_with_2, beer.pairs_with_3].join(' '), " ")
@@ -20949,7 +20980,7 @@ var bd = this.bd || {};
 
             var results;
             if (this.state.isSearching) {
-                results = (React.createElement("p", null, React.createElement("i", {className: "fa fa-spinner fa-spin"}), " Søker.."));
+                results = (React.createElement("p", null, React.createElement("i", {className: "fa fa-spinner fa-spin  fa-3x"}), " Søker.."));
             } else if (this.state.beers === null) {
                 results = (React.createElement("p", null, "Gjør et søk"));
             } else if (this.state.beers.length === 0) {

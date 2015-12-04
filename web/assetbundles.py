@@ -29,14 +29,10 @@ if minify:
 css_base = Bundle(
     'js/lib/fontawesome/css/font-awesome.css',
     Bundle(
-        # 'js/lib/skeleton/css/normalize.css',
-        # 'js/lib/skeleton/css/skeleton.css',
         'js/lib/bootstrap/dist/css/bootstrap.min.css',
         'js/lib/nouislider/distribute/nouislider.min.css',
         'css/base_bs.css',
         'css/auocomplete_bs.css',
-        # 'css/base.css',
-        # 'css/auocomplete.css',
         filters=css_filters
     ),
     filters=['cssrewrite'],
@@ -61,6 +57,7 @@ js_beer_list = Bundle(
         'js/src/BreweryTable.jsx',
         'js/src/PolBeerTable.jsx',
         'js/src/PolWithBeer.jsx',
+        'js/src/Pie.jsx',
         'js/src/BeerOverview.jsx',
         'js/src/StyleList.jsx',
         'js/src/BeerFixer.jsx',

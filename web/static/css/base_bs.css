@@ -13,6 +13,10 @@ body {
 }
 
 
+.externalLinks a {
+    color: #000;
+}
+
 /* score */
 
 .score-box {
@@ -22,13 +26,11 @@ body {
 .score-box .overallScore {
     font-size: 250%;
     font-weight: bold;
-    margin-top: -15px;
 }
 
 .score-box .styleScore {
     font-size: 150%;
     font-weight: bold;
-    margin-top: -10px;
 }
 
 .score-box .styleHeader {
@@ -54,6 +56,17 @@ body {
 .noUi-horizontal.noUi-extended .noUi-origin  {
     right: -32px;
 }
+
+/* pie */
+.pie {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.pie svg {
+    margin-left: 5px;
+}
+
 
 
 /*!

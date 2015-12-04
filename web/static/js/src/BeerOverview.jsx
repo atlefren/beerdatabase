@@ -17,6 +17,47 @@ var bd = this.bd || {};
         'Storvilt'
     ];
 
+    var Characteristics = React.createClass({
+
+        characteristics: [
+            {key: 'sweetness', 'name': 'Sødme'},
+            {key: 'freshness', 'name': 'Friskhet'},
+            {key: 'bitterness', 'name': 'Bitterhet'},
+            {key: 'richness', 'name': 'Fylde'}
+        ],
+
+        render: function () {
+
+            var characteristics = _.chain(this.characteristics)
+                .filter(function (characteristic) {
+                    return !!this.props.beer[characteristic.key];
+                }, this)
+                .map(function (characteristic) {
+                    var c = this.props.beer[characteristic.key];
+                    return (
+                        <li key={characteristic.key}>
+                            <ns.Pie
+                                name={characteristic.name}
+                                value={c} />
+                        </li>
+                    );
+                }, this)
+                .value();
+
+
+            return (
+                 <tr>
+                    <th>Karakteristikk</th>
+                    <td>
+                        <ul className="list-inline pies">
+                            {characteristics}
+                        </ul>
+                    </td>
+                </tr>
+            );
+        }
+    })
+
     var ScoreDisplay = React.createClass({
 
         render: function () {
@@ -31,9 +72,6 @@ var bd = this.bd || {};
             );
         }
     });
-
-   
-
 
     var ExternalLink = React.createClass({
         render: function () {
@@ -56,82 +94,13 @@ var bd = this.bd || {};
             });
 
             return (
-                <ul className='list-inline'>
+                <ul className='list-inline externalLinks'>
                     {links}
                 </ul>
             );
         }
     });
 
-    var SVGComponent = React.createClass({
-        render: function() {
-            return (
-                <svg
-                    version='1.1'
-                    xmlns='http://www.w3.org/2000/svg'
-                    {...this.props}>
-                    {this.props.children}
-                </svg>
-            );
-        }
-    });
-
-    var Pie = React.createClass({
-
-        getDefaultProps: function () {
-            return {size: 20};
-        },
-
-        getSvg: function () {
-            var size = 20;
-            var value = this.props.value * 10;
-            var radius  = this.props.size / 2
-
-            if (value >= 100) {
-                return (
-                    <SVGComponent height={size} width={size} >
-                        <circle r={radius} cx={radius} cy={radius} />
-                    </SVGComponent> 
-                );
-            }
-
-            var x = Math.cos((2 * Math.PI) / (100 / value));
-            var y = Math.sin((2 * Math.PI) / (100 / value));
-
-            //should the arc go the long way round?
-            var longArc = (value <= 50) ? 0 : 1;
-
-            var d = [
-                'M' + radius + ' ' + radius,
-                'L' + radius + ' ' + 0,
-                'A' + radius + ' ' + radius,
-                '0 ' + longArc,
-                '1 ' + (radius + y * radius),
-                (radius - x*radius),
-                'z'
-            ];
-
-            d = d.join(' ');
-            return (
-                <SVGComponent height={size} width={size}>
-                    <path d={d} />
-                </SVGComponent>
-            );
-        },
-
-        render: function () {
-            if (!this.props.value) {
-                return null;
-            }
-            return (
-                <div className="pie">
-                    <span> {this.props.name}</span>
-                    {this.getSvg()}
-                </div>
-            );
-        }
-
-    })
 
     var BeerOverview = React.createClass({
 
@@ -221,29 +190,11 @@ var bd = this.bd || {};
                          </div>
                     </div>
 
-                    <ExternalLinks links={this.getExternalLinks()}/>
+                    <ExternalLinks links={this.getExternalLinks()} />
 
                     <table className='table'>
                         <tbody>
-                            <tr>
-                                <th>Karakteristikk</th>
-                                <td>
-                                    <ul className="list-inline pies">
-                                        <li>
-                                            <Pie name="Sødme" value={beer.sweetness} />
-                                        </li>
-                                        <li>
-                                            <Pie name="Friskhet" value={beer.freshness} />
-                                        </li>
-                                        <li>
-                                            <Pie name="Bitterhet" value={beer.bitterness} />
-                                        </li>
-                                        <li>
-                                            <Pie name="Fylde" value={beer.richness} />
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
+                           <Characteristics beer={this.props.beer} />
                             <tr>
                                 <th>Passer til</th>
                                 <td>{[beer.pairs_with_1, beer.pairs_with_2, beer.pairs_with_3].join(' ')} </td>
