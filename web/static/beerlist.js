@@ -19903,8 +19903,8 @@ var bd = this.bd || {};
         getExternalLinks: function () {
             return [
                 {name: 'Ratebeer', url: this.props.beer.ratebeer.url},
-                {name: 'Vinmonopolet', url: this.props.beer.url},
-                {name: 'Apéritif.no', url: '#'}
+                {name: 'Vinmonopolet', url: this.props.beer.url}//,
+                //{name: 'Apéritif.no', url: '#'}
             ];
         },
 
