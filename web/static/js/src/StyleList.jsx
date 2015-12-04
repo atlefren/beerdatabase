@@ -24,12 +24,20 @@ var bd = this.bd || {};
             var styles = _.map(this.props.styles, function (style) {
                 var url = '/styles/' + style.id;
                 return (
-                    <li key={style.id}>
-                        <a href={url}>{style.name}</a> ({style.count})
-                    </li>
+                    <a
+                        key={style.id}
+                        className="list-group-item"
+                        href={url}>
+                        <span className="badge">{style.count}</span>
+                        {style.name}
+                    </a>
                 );
             })
-            return (<ul>{styles}</ul>);
+            return (
+                <div className="list-group">
+                    {styles}
+                </div>
+            );
         }
     })
 

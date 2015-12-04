@@ -20028,12 +20028,20 @@ var bd = this.bd || {};
             var styles = _.map(this.props.styles, function (style) {
                 var url = '/styles/' + style.id;
                 return (
-                    React.createElement("li", {key: style.id}, 
-                        React.createElement("a", {href: url}, style.name), " (", style.count, ")"
+                    React.createElement("a", {
+                        key: style.id, 
+                        className: "list-group-item", 
+                        href: url}, 
+                        React.createElement("span", {className: "badge"}, style.count), 
+                        style.name
                     )
                 );
             })
-            return (React.createElement("ul", null, styles));
+            return (
+                React.createElement("div", {className: "list-group"}, 
+                    styles
+                )
+            );
         }
     })
 
