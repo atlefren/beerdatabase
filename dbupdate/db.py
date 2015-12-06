@@ -28,6 +28,14 @@ class Database(object):
             host=hostname
         )
 
+    def execute_sql(self, sql):
+        conn = self.get_connection()
+        cur = conn.cursor()
+        conn.commit()
+        cur.execute(sql)
+        cur.close()
+        conn.close()
+
     def run_upserts(self, sql, items):
         conn = self.get_connection()
         cur = conn.cursor()

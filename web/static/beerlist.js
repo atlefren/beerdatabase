@@ -20632,7 +20632,7 @@ var bd = this.bd || {};
                 return shop.category;
             },
             sortParams: 'category',
-            isSorted: true,
+            isSorted: false,
             sortDirection: 'asc'
         },
         {
@@ -20642,7 +20642,7 @@ var bd = this.bd || {};
                 return shop.komm_name;
             },
             sortParams: 'komm_name',
-            isSorted: true,
+            isSorted: false,
             sortDirection: 'asc'
         },
         {

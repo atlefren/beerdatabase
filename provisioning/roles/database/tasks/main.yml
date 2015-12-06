@@ -26,7 +26,11 @@
   - name: create postgresql databases
     sudo: yes
     sudo_user: postgres
-    postgresql_db: name={{ database.name }} encoding='UTF-8'
+    postgresql_db: name={{ database.name }}
+                   encoding='UTF-8'
+                   lc_collate='nb_NO.utf8'
+                   lc_ctype='nb_NO.utf8'
+                   template='template0'
     register: create_databases
 
   - name: create postgresql users

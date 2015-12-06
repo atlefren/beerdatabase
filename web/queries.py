@@ -80,7 +80,10 @@ def get_brewery(brewery_id):
 
 
 def get_pol_shops():
-    return current_app.db_session.query(PolShop).all()
+    return current_app.db_session\
+        .query(PolShop)\
+        .order_by(PolShop.name)\
+        .all()
 
 
 def get_pol_shop(shop_id):

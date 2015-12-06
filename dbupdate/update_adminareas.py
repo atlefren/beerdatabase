@@ -72,8 +72,9 @@ def insert_kommune(db):
 
 def update_adminareas(conn_str=None):
     db = Database(conn_str)
-    insert_fylke(db)
-    insert_kommune(db)
+    #insert_fylke(db)
+    #insert_kommune(db)
+    db.execute_sql('REFRESH MATERIALIZED VIEW komm_fylke;')
 
 
 if __name__ == '__main__':
