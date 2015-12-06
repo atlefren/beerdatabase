@@ -27,6 +27,8 @@ def full_search():
         if 'polet' in available_at:
             at_polet = True
             query = query.join(PoletBeer)
+        else:
+            return Response(json.dumps([]), content_type='application/json')
 
     name = request.args.get('name', None)
     if name is not None:

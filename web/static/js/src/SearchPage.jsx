@@ -248,8 +248,8 @@ var bd = this.bd || {};
 
         getDefaultProps: function () {
             var options = [
-                {name: 'Polet', key: 'polet'},
-                {name: 'Gulating', key: 'gulating'}
+                {name: 'Polet', key: 'polet'}/*,
+                {name: 'Gulating', key: 'gulating'}*/
             ];
             return {options: options, value: []};
         },
