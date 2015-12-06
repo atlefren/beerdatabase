@@ -26,7 +26,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="{{ url_for('index')}}">Øldatabasen</a>
+          <a class="navbar-brand" href="{{ url_for('index')}}">Ølmonopolet</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
@@ -71,6 +71,13 @@
     {% block main %}
     {% endblock %}
     </div>
+
+    <footer class="footer">
+      <div class="container">
+        <p class="text-muted">Ølmonopolet.no er et <a href="https://github.com/atlefren/beerdatabase" target="_blank">hobbyprosjekt</a> laget av Atle Frenvik Sveen og har ingenting med hverken 
+            Vinmopolet eller Ratebeer å gjøre. Feil kan forekomme. Siden er for tiden i tidlig beta.</p>
+      </div>
+    </footer>
 
     {% block js %}
 
