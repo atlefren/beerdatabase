@@ -68,6 +68,23 @@ body {
 }
 
 
+/*search */
+
+@media (max-width: 992px) {
+  .mobile-search {
+    float: right;
+    padding: 10px;
+    background: #fff;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+    border-right: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+  }
+}
+
 
 /*!
  * IE10 viewport hack for Surface/desktop Windows 8 bug

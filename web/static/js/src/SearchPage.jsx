@@ -308,7 +308,9 @@ var bd = this.bd || {};
     var SearchField = React.createClass({
 
         getInitialState: function () {
-            return _.clone(this.props.initValues);
+            var state = _.clone(this.props.initValues);
+            state.showMobileSearch = false;
+            return state;
         },
 
         valueChanged: function (key, value) {
@@ -318,57 +320,89 @@ var bd = this.bd || {};
             this.props.onSearch(data);
         },
 
+        showSearch: function () {
+            this.setState({showMobileSearch: true});
+        },
+
+        hideSearch: function () {
+            this.setState({showMobileSearch: false});
+        },
+
         render: function () {
+
+            var searchClass = 'hidden-xs hidden-sm';
+            if (this.state.showMobileSearch) {
+                searchClass = 'mobile-search';
+            }
+
             return (
-                <form>
-                    <NameSearcher
-                        type="name"
-                        value={this.props.initValues.name}
-                        changed={this.valueChanged} />
-                    <StyleChooser 
-                        type="style"
-                        value={this.props.initValues.style}
-                        changed={this.valueChanged}
-                        styles={this.props.searchParams.styles} />
-                    <fieldset>
-                        <legend>Score</legend>
-                        <SliderFieldSet
-                            type="overallScore"
-                            label="Overall"
-                            value={this.props.initValues.overallScore}
-                            min={0}
-                            max={100}
-                            changed={this.valueChanged} />
-                        <SliderFieldSet
-                            type="styleScore"
-                            label="Style"
-                            value={this.props.initValues.styleScore}
-                            min={0}
-                            max={100}
-                            changed={this.valueChanged} />
-                    </fieldset>
-                    <SliderFieldSet
-                        type="price"
-                        value={this.props.initValues.price}
-                        label="Pris"
-                        min={10}
-                        max={200}
-                        displayPostfix=" kr"
-                        changed={this.valueChanged} />
-                    <SliderFieldSet
-                        type="abv"
-                        value={this.props.initValues.abv}
-                        label="Alkohol"
-                        min={0}
-                        max={50}
-                        displayPostfix="%"
-                        step={0.5}
-                        changed={this.valueChanged} />
-                    <AvailableAtChooser
-                        type="availableAt"
-                        value={this.props.initValues.availableAt}
-                        changed={this.valueChanged} />
-                </form>
+                <div>
+                    <button
+                        className="btn btn-default hidden-lg hidden-md"
+                        onClick={this.showSearch}
+                        type="button">
+                        <span className="glyphicon glyphicon-search" aria-hidden="true"></span>
+                        {' '}
+                        Søk
+                    </button>
+                    <div className={searchClass}>
+                        <button
+                            className="btn btn-default hidden-lg hidden-md"
+                            onClick={this.hideSearch}
+                            type="button">
+                            Lukk
+                        </button>
+                        <form>
+                            <NameSearcher
+                                type="name"
+                                value={this.props.initValues.name}
+                                changed={this.valueChanged} />
+                            <StyleChooser 
+                                type="style"
+                                value={this.props.initValues.style}
+                                changed={this.valueChanged}
+                                styles={this.props.searchParams.styles} />
+                            <fieldset>
+                                <legend>Score</legend>
+                                <SliderFieldSet
+                                    type="overallScore"
+                                    label="Overall"
+                                    value={this.props.initValues.overallScore}
+                                    min={0}
+                                    max={100}
+                                    changed={this.valueChanged} />
+                                <SliderFieldSet
+                                    type="styleScore"
+                                    label="Style"
+                                    value={this.props.initValues.styleScore}
+                                    min={0}
+                                    max={100}
+                                    changed={this.valueChanged} />
+                            </fieldset>
+                            <SliderFieldSet
+                                type="price"
+                                value={this.props.initValues.price}
+                                label="Pris"
+                                min={10}
+                                max={200}
+                                displayPostfix=" kr"
+                                changed={this.valueChanged} />
+                            <SliderFieldSet
+                                type="abv"
+                                value={this.props.initValues.abv}
+                                label="Alkohol"
+                                min={0}
+                                max={50}
+                                displayPostfix="%"
+                                step={0.5}
+                                changed={this.valueChanged} />
+                            <AvailableAtChooser
+                                type="availableAt"
+                                value={this.props.initValues.availableAt}
+                                changed={this.valueChanged} />
+                        </form>
+                    </div>
+                </div>
             );
         }
     });
@@ -422,7 +456,7 @@ var bd = this.bd || {};
 
             var results;
             if (this.state.isSearching) {
-                results = (<p><i className="fa fa-spinner fa-spin  fa-3x"></i> Søker..</p>);
+                results = (<p><i className="fa fa-spinner fa-spin fa-3x"></i> Søker..</p>);
             } else if (this.state.beers === null) {
                 results = (<p>Gjør et søk</p>);
             } else if (this.state.beers.length === 0) {
@@ -443,7 +477,7 @@ var bd = this.bd || {};
                             searchParams={this.props.searchParams}
                             initValues={this.props.initValues} />
                     </div>
-                    <div id="search_resuts" className="col-md-9">
+                    <div id="search_results" className="col-md-9">
                         {results}
                     </div>
                 </div>

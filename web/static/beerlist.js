@@ -20885,7 +20885,9 @@ var bd = this.bd || {};
     var SearchField = React.createClass({displayName: 'SearchField',
 
         getInitialState: function () {
-            return _.clone(this.props.initValues);
+            var state = _.clone(this.props.initValues);
+            state.showMobileSearch = false;
+            return state;
         },
 
         valueChanged: function (key, value) {
@@ -20895,56 +20897,88 @@ var bd = this.bd || {};
             this.props.onSearch(data);
         },
 
+        showSearch: function () {
+            this.setState({showMobileSearch: true});
+        },
+
+        hideSearch: function () {
+            this.setState({showMobileSearch: false});
+        },
+
         render: function () {
+
+            var searchClass = 'hidden-xs hidden-sm';
+            if (this.state.showMobileSearch) {
+                searchClass = 'mobile-search';
+            }
+
             return (
-                React.createElement("form", null, 
-                    React.createElement(NameSearcher, {
-                        type: "name", 
-                        value: this.props.initValues.name, 
-                        changed: this.valueChanged}), 
-                    React.createElement(StyleChooser, {
-                        type: "style", 
-                        value: this.props.initValues.style, 
-                        changed: this.valueChanged, 
-                        styles: this.props.searchParams.styles}), 
-                    React.createElement("fieldset", null, 
-                        React.createElement("legend", null, "Score"), 
-                        React.createElement(SliderFieldSet, {
-                            type: "overallScore", 
-                            label: "Overall", 
-                            value: this.props.initValues.overallScore, 
-                            min: 0, 
-                            max: 100, 
-                            changed: this.valueChanged}), 
-                        React.createElement(SliderFieldSet, {
-                            type: "styleScore", 
-                            label: "Style", 
-                            value: this.props.initValues.styleScore, 
-                            min: 0, 
-                            max: 100, 
-                            changed: this.valueChanged})
+                React.createElement("div", null, 
+                    React.createElement("button", {
+                        className: "btn btn-default hidden-lg hidden-md", 
+                        onClick: this.showSearch, 
+                        type: "button"}, 
+                        React.createElement("span", {className: "glyphicon glyphicon-search", 'aria-hidden': "true"}), 
+                        ' ', 
+                        "Søk"
                     ), 
-                    React.createElement(SliderFieldSet, {
-                        type: "price", 
-                        value: this.props.initValues.price, 
-                        label: "Pris", 
-                        min: 10, 
-                        max: 200, 
-                        displayPostfix: " kr", 
-                        changed: this.valueChanged}), 
-                    React.createElement(SliderFieldSet, {
-                        type: "abv", 
-                        value: this.props.initValues.abv, 
-                        label: "Alkohol", 
-                        min: 0, 
-                        max: 50, 
-                        displayPostfix: "%", 
-                        step: 0.5, 
-                        changed: this.valueChanged}), 
-                    React.createElement(AvailableAtChooser, {
-                        type: "availableAt", 
-                        value: this.props.initValues.availableAt, 
-                        changed: this.valueChanged} )
+                    React.createElement("div", {className: searchClass}, 
+                        React.createElement("button", {
+                            className: "btn btn-default hidden-lg hidden-md", 
+                            onClick: this.hideSearch, 
+                            type: "button"}, 
+                            "Lukk"
+                        ), 
+                        React.createElement("form", null, 
+                            React.createElement(NameSearcher, {
+                                type: "name", 
+                                value: this.props.initValues.name, 
+                                changed: this.valueChanged}), 
+                            React.createElement(StyleChooser, {
+                                type: "style", 
+                                value: this.props.initValues.style, 
+                                changed: this.valueChanged, 
+                                styles: this.props.searchParams.styles}), 
+                            React.createElement("fieldset", null, 
+                                React.createElement("legend", null, "Score"), 
+                                React.createElement(SliderFieldSet, {
+                                    type: "overallScore", 
+                                    label: "Overall", 
+                                    value: this.props.initValues.overallScore, 
+                                    min: 0, 
+                                    max: 100, 
+                                    changed: this.valueChanged}), 
+                                React.createElement(SliderFieldSet, {
+                                    type: "styleScore", 
+                                    label: "Style", 
+                                    value: this.props.initValues.styleScore, 
+                                    min: 0, 
+                                    max: 100, 
+                                    changed: this.valueChanged})
+                            ), 
+                            React.createElement(SliderFieldSet, {
+                                type: "price", 
+                                value: this.props.initValues.price, 
+                                label: "Pris", 
+                                min: 10, 
+                                max: 200, 
+                                displayPostfix: " kr", 
+                                changed: this.valueChanged}), 
+                            React.createElement(SliderFieldSet, {
+                                type: "abv", 
+                                value: this.props.initValues.abv, 
+                                label: "Alkohol", 
+                                min: 0, 
+                                max: 50, 
+                                displayPostfix: "%", 
+                                step: 0.5, 
+                                changed: this.valueChanged}), 
+                            React.createElement(AvailableAtChooser, {
+                                type: "availableAt", 
+                                value: this.props.initValues.availableAt, 
+                                changed: this.valueChanged} )
+                        )
+                    )
                 )
             );
         }
@@ -20999,7 +21033,7 @@ var bd = this.bd || {};
 
             var results;
             if (this.state.isSearching) {
-                results = (React.createElement("p", null, React.createElement("i", {className: "fa fa-spinner fa-spin  fa-3x"}), " Søker.."));
+                results = (React.createElement("p", null, React.createElement("i", {className: "fa fa-spinner fa-spin fa-3x"}), " Søker.."));
             } else if (this.state.beers === null) {
                 results = (React.createElement("p", null, "Gjør et søk"));
             } else if (this.state.beers.length === 0) {
@@ -21020,7 +21054,7 @@ var bd = this.bd || {};
                             searchParams: this.props.searchParams, 
                             initValues: this.props.initValues})
                     ), 
-                    React.createElement("div", {id: "search_resuts", className: "col-md-9"}, 
+                    React.createElement("div", {id: "search_results", className: "col-md-9"}, 
                         results
                     )
                 )
