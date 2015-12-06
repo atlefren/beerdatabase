@@ -108,7 +108,6 @@ def search_beer():
 @app.route(api_prefix + '/suggestions/', methods=['POST'])
 def add_suggestion():
     data = request.json
-    print data
     mapping = RbPolBeerMapping(
         pol_id=data.get('polId', None),
         rb_id=data.get('ratebeerId', None),
@@ -177,8 +176,6 @@ def get_stock_for_beer(beer_id):
     shops = current_app.db_session.query(PolShop, PolStock)\
         .filter(PolStock.shop_id == PolShop.id)\
         .filter(PolStock.pol_beer_id == beer_id)
-
-    print shops.all()
 
     data = [{
         'pol_id': s[0].id,
