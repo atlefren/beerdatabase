@@ -57,12 +57,7 @@ var bd = this.bd || {};
 
             var content;
             if (this.state.searching) {
-                content = (
-                    <span>
-                        <i className="fa fa-spinner fa-spin fa-3x"></i>
-                        Laster
-                    </span>
-                );
+                content = (<ns.LoadIndicator text="Laster" />);
             } else if (this.state.data && this.state.data.length) {
                 content = (
                     <ns.SortableTable

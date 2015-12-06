@@ -19117,7 +19117,43 @@ bd.api = bd.api || {};
             });
     };
 
+    ns.getNearbyPolShops = function (lat, lon, success, error) {
+        console.log(lat, lon);
+        atomic.get(API_BASE + 'pol_shops/?lat=' + lat + '&lon=' + lon)
+            .success(function (data, xhr) {
+                console.log(data);
+                success(data);
+            })
+            .error(function (data, xhr) {
+                console.error(data);
+                error(data);
+            });
+    };
+
 }(bd.api));
+var bd = this.bd || {};
+(function (ns) {
+    'use strict';
+
+    ns.LoadIndicator = React.createClass({displayName: 'LoadIndicator',
+
+        getDefaultProps: function () {
+            return {text: 'Søker'}
+        },
+
+        render: function () {
+            return (
+                React.createElement("p", null, 
+                    React.createElement("i", {className: "fa fa-spinner fa-spin fa-3x"}), 
+                    ' ', 
+                    this.props.text, "..."
+                )
+            );
+        }
+    });
+
+}(bd));
+
 var bd = this.bd || {};
 (function (ns) {
     'use strict';
@@ -19664,12 +19700,7 @@ var bd = this.bd || {};
 
             var content;
             if (this.state.searching) {
-                content = (
-                    React.createElement("span", null, 
-                        React.createElement("i", {className: "fa fa-spinner fa-spin fa-3x"}), 
-                        "Laster"
-                    )
-                );
+                content = (React.createElement(ns.LoadIndicator, {text: "Laster"}));
             } else if (this.state.data && this.state.data.length) {
                 content = (
                     React.createElement(ns.SortableTable, {
@@ -20579,6 +20610,136 @@ var bd = this.bd || {};
 (function (ns) {
     'use strict';
 
+    var columns = [
+        {
+            id: 'name',
+            name: 'Navn',
+            formatter: function (shop) {
+                return (
+                    React.createElement("a", {href: '/pol_shops/' + shop.id}, 
+                        shop.name
+                    )
+                );
+            },
+            sortParams: 'name',
+            isSorted: true,
+            sortDirection: 'asc'
+        },
+        {
+            id: 'category',
+            name: 'Butikkkategori',
+            formatter: function (shop) {
+                return shop.category;
+            },
+            sortParams: 'category',
+            isSorted: true,
+            sortDirection: 'asc'
+        },
+        {
+            id: 'komm_name',
+            name: 'Kommune',
+            formatter: function (shop) {
+                return shop.komm_name;
+            },
+            sortParams: 'komm_name',
+            isSorted: true,
+            sortDirection: 'asc'
+        },
+        {
+            id: 'fylke_name',
+            name: 'Fylke',
+            formatter: function (shop) {
+                return shop.fylke_name;
+            },
+            sortParams: 'fylke_name',
+            isSorted: true,
+            sortDirection: 'asc'
+        }
+    ];
+
+    var PolShopList = React.createClass({displayName: 'PolShopList',
+
+        getInitialState: function () {
+            return {
+                shops: this.props.shops,
+                loading: false,
+                timestamp: new Date().getTime()
+            };
+        },
+
+        showAll: function () {
+            this.resetShops(this.props.shops);
+        },
+
+        showNearby: function () {
+            this.setState({loading: true});
+            navigator.geolocation.getCurrentPosition(this.gotUserPosition, console.log);
+        },
+
+        resetShops: function (shops) {
+            this.setState({
+                shops: shops,
+                loading: false,
+                timestamp: new Date().getTime()
+            });
+        },
+
+        gotUserPosition: function (e) {
+            var lat = e.coords.latitude;
+            var lon = e.coords.longitude;
+            bd.api.getNearbyPolShops(lat, lon, this.resetShops);
+        },
+
+        render: function () {
+            var supportsGeoloc = !!navigator.geolocation;
+            var nearbyBtn;
+            if (supportsGeoloc) {
+                nearbyBtn = (
+                    React.createElement("button", {
+                        onClick: this.showNearby, 
+                        className: "btn btn-default", 
+                        type: "button"}, 
+                        "Pol nær meg"
+                    )
+                );
+            }
+
+            var content;
+            if (this.state.loading) {
+                content = (React.createElement(ns.LoadIndicator, {text: "Laster"}));
+            } else {
+                content = (
+                    React.createElement(ns.SortableTable, {
+                        key: this.state.timestamp, 
+                        items: this.state.shops, 
+                        columns: columns})
+                );
+            }
+
+            return (
+                React.createElement("div", null, 
+                    React.createElement("div", {className: "btn-group"}, 
+                        React.createElement("button", {onClick: this.showAll, className: "btn btn-default", type: "button"}, "Alle Pol"), 
+                        nearbyBtn
+                    ), 
+                    content
+                )
+            )
+        }
+    });
+
+
+    ns.renderPolShopList = function (shops, component) {
+        ReactDOM.render(React.createElement(PolShopList, {shops: shops}), component);
+    };
+
+
+}(bd));
+
+var bd = this.bd || {};
+(function (ns) {
+    'use strict';
+
     var Slider = React.createClass({displayName: 'Slider',
 
         getInitialState: function () {
@@ -21033,7 +21194,7 @@ var bd = this.bd || {};
 
             var results;
             if (this.state.isSearching) {
-                results = (React.createElement("p", null, React.createElement("i", {className: "fa fa-spinner fa-spin fa-3x"}), " Søker.."));
+                results = (React.createElement(ns.LoadIndicator, {text: "Søker"}));
             } else if (this.state.beers === null) {
                 results = (React.createElement("p", null, "Gjør et søk"));
             } else if (this.state.beers.length === 0) {

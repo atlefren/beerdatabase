@@ -6,7 +6,7 @@ from flask.ext.migrate import Migrate, MigrateCommand
 
 from web import app, db
 from dbupdate import (update_ratebeer as rb_update, update_pol_beers,
-                      update_pol_shops, update_pol_stock)
+                      update_pol_shops, update_pol_stock, update_adminareas)
 
 manager = Manager(app)
 
@@ -51,6 +51,11 @@ def update_pol_cron():
     with open('log.txt', 'a') as logfile:
         logfile.write('%s Updated POL\n' % datetime.now())
 
+
+@manager.command
+def update_admin():
+    conn_str = app.config.get('SQLALCHEMY_DATABASE_URI', None)
+    update_adminareas(conn_str)
 
 if __name__ == "__main__":
     manager.run()

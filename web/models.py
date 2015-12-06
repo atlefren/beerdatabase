@@ -225,7 +225,7 @@ class RbPolBeerMapping(Base):
 
 
 class PolShop(Base):
-    __tablename__ = 'pol_shop'
+    __tablename__ = 'pol_shop_komm_fylke'
     id = sa.Column('id', sa.Integer, primary_key=True)
     name = sa.Column('name', sa.Unicode(100))
     street_address = sa.Column('street_address', sa.Unicode(100))
@@ -236,8 +236,10 @@ class PolShop(Base):
     post_place = sa.Column('post_place', sa.Unicode(100))
     phone = sa.Column('phone', sa.Unicode(30))
     category = sa.Column('category', sa.Integer)
-    lon = sa.Column('lon', sa.Float)
-    lat = sa.Column('lat', sa.Float)
+    komm_name = sa.Column('komm_name', sa.Unicode(255))
+    kommnr = sa.Column('kommnr', sa.Integer)
+    fylke_name = sa.Column('fylke_name', sa.Unicode(255))
+    fylkesnr = sa.Column('fylkesnr', sa.Integer)
 
 
 class PolStock(Base):

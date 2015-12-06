@@ -192,3 +192,28 @@ def get_stock_for_beer(beer_id):
         content_type='application/json',
         status=200
     )
+
+
+@app.route(api_prefix + '/pol_shops/', methods=['GET'])
+def get_pol_shops():
+
+    lat = request.args.get('lat', None)
+    lon = request.args.get('lon', None)
+
+    if lat and lon:
+        lat = float(lat)
+        lon = float(lon)
+
+    shops = current_app.db_session.query(PolShop).\
+        from_statement('''
+            SELECT * FROM pol_shop_komm_fylke
+            ORDER BY geog <-> ST_GeographyFromText('SRID=4326;POINT(:lon :lat)') LIMIT 10;
+        ''')\
+        .params(lat=lat, lon=lon)\
+        .all()
+
+    return Response(
+        json.dumps(shops),
+        content_type='application/json',
+        status=200
+    )

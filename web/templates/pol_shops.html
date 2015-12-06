@@ -7,9 +7,17 @@
 
 {% block main %}
 <h1>Polutsalg</h1>
-<ul>
-{% for shop in shops%}
-    <li><a href="{{url_for('pol_shop', shop_id=shop.id)}}">{{shop.name}}</a></li>
-{% endfor %}
-</ul>
+<div id="shops_page"></div>
+{% endblock %}
+
+{% block js %}
+{{ super() }}
+
+    <script type="text/javascript">
+        (function () {
+            var shops = {{ json | safe }};
+            bd.renderPolShopList(shops, document.getElementById('shops_page'));
+        }());
+    </script>
+
 {% endblock %}

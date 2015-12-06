@@ -89,4 +89,17 @@ bd.api = bd.api || {};
             });
     };
 
+    ns.getNearbyPolShops = function (lat, lon, success, error) {
+        console.log(lat, lon);
+        atomic.get(API_BASE + 'pol_shops/?lat=' + lat + '&lon=' + lon)
+            .success(function (data, xhr) {
+                console.log(data);
+                success(data);
+            })
+            .error(function (data, xhr) {
+                console.error(data);
+                error(data);
+            });
+    };
+
 }(bd.api));

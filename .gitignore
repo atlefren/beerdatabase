@@ -7,3 +7,4 @@ provisioning/host_vars/beerdatabase_do
 update_pol.sh
 update_rb.sh
 log.txt
+.vagrant

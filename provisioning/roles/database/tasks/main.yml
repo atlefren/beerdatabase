@@ -13,6 +13,13 @@
     with_items:
         - postgresql-9.5
         - python-psycopg2
+        - postgresql-server-dev-9.5
+        - libgeos-dev
+        - libgdal-dev
+        - libproj-dev
+        - libxml2
+        - libjson0
+        - libjson0-dev
     environment:
       LC_ALL: en_US.UTF-8
 
@@ -20,6 +27,7 @@
     sudo: yes
     sudo_user: postgres
     postgresql_db: name={{ database.name }} encoding='UTF-8'
+    register: create_databases
 
   - name: create postgresql users
     sudo: yes
@@ -28,6 +36,17 @@
                      password={{ database.password }}
                      db={{ database.name }}
                      role_attr_flags=NOCREATEROLE,NOSUPERUSER,NOCREATEDB
+
+  - name: download postgis 2.2
+    shell: creates=/tmp/postgis-2.2.0 wget -O - http://download.osgeo.org/postgis/source/postgis-2.2.0.tar.gz | tar -xz -C /tmp
+
+  - name: Install postgis 2.2
+    command: creates=/usr/share/postgresql/9.5/contrib/postgis-2.2 chdir=/tmp/postgis-2.2.0 make install
+    sudo: yes
+
+  - name: create postgis extensions
+    sudo_user: postgres
+    command: psql -d {{ database.name }} -c 'CREATE EXTENSION IF NOT EXISTS POSTGIS;'
 
   - name: restart postgres
     service: name=postgresql state=restarted

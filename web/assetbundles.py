@@ -51,6 +51,7 @@ js_beer_list = Bundle(
         'js/lib/nouislider/distribute/nouislider.min.js',
         'js/src/util.js',
         'js/src/api.js',
+        'js/src/CommonComponents.jsx',
         'js/src/SimpleBeerSearch.jsx',
         'js/src/Autocomplete.jsx',
         'js/src/SortableTable.jsx',
@@ -62,6 +63,7 @@ js_beer_list = Bundle(
         'js/src/StyleList.jsx',
         'js/src/BeerFixer.jsx',
         'js/src/PolShopOverview.jsx',
+        'js/src/PolShopList.jsx',
         'js/src/SearchPage.jsx',
         filters=js_filters
     ),
