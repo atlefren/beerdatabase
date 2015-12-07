@@ -72,6 +72,11 @@ body {
     margin-left: 5px;
 }
 
+.navbar-form label {
+    margin-left: 20px;
+    margin-right: 5px;
+}
+
 
 /*search */
 

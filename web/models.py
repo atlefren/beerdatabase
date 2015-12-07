@@ -260,3 +260,11 @@ class PolStock(Base):
         nullable=False,
         primary_key=True
     )
+
+
+class Municipality(Base):
+    __tablename__ = 'komm_fylke'
+    kommnr = sa.Column('kommnr', sa.Integer, primary_key=True)
+    name = sa.Column('name', sa.Unicode(255))
+    fylkesnr = sa.Column('fylkesnr', sa.Integer)
+    fylke_name = sa.Column('fylke_name', sa.Unicode(255))

@@ -19118,10 +19118,8 @@ bd.api = bd.api || {};
     };
 
     ns.getNearbyPolShops = function (lat, lon, success, error) {
-        console.log(lat, lon);
         atomic.get(API_BASE + 'pol_shops/?lat=' + lat + '&lon=' + lon)
             .success(function (data, xhr) {
-                console.log(data);
                 success(data);
             })
             .error(function (data, xhr) {
@@ -20657,28 +20655,79 @@ var bd = this.bd || {};
         }
     ];
 
+    var FilterSelect = React.createClass({displayName: 'FilterSelect',
+
+        getDefaultProps: function () {
+            return {idAttribute: 'id'};
+        },
+
+        handleChange: function (e) {
+            var value = parseInt(e.target.value, 10);
+            if (value === -1) {
+                value = null;
+            }
+            this.props.setFilter(this.props.filterKey, value);
+        },
+
+        render: function () {
+            var options = _.map(this.props.options, function (option) {
+                var id = option[this.props.idAttribute];
+                return (React.createElement("option", {key: id, value: id}, option.name));
+            }, this);
+            options.unshift((React.createElement("option", {key: "-1", value: "-1"}, "---")));
+            var id = 'filter_' + this.props.filterKey;
+            var selected = this.props.selected || -1;
+            return (
+                React.createElement("div", {className: "form-group"}, 
+                    React.createElement("label", {htmlFor: id}, this.props.label), 
+                    React.createElement("select", {
+                        value: selected, 
+                        onChange: this.handleChange, 
+                        id: id, 
+                        className: "form-control"}, 
+                        options
+                    )
+                )
+            );
+        }
+    });
+
     var PolShopList = React.createClass({displayName: 'PolShopList',
 
         getInitialState: function () {
             return {
                 shops: this.props.shops,
+                filteredShops: this.props.shops,
                 loading: false,
-                timestamp: new Date().getTime()
+                showing: 'all',
+                timestamp: new Date().getTime(),
+                municipalities: this.props.municipalities,
+                filters: {},
+                type: 'table'
             };
         },
 
         showAll: function () {
+            this.setState({showing: 'all'});
             this.resetShops(this.props.shops);
         },
 
         showNearby: function () {
-            this.setState({loading: true});
+            if (this.state.showing === 'nearby') {
+                return;
+            }
+            var filters = _.clone(this.state.filters);
+            filters.fylkesnr = null;
+            filters.kommnr = null;
+            this.setState({loading: true, showing: 'nearby', filters: filters});
             navigator.geolocation.getCurrentPosition(this.gotUserPosition, console.log);
         },
 
         resetShops: function (shops) {
+            var filteredShops = this.filter(shops, this.state.filters);
             this.setState({
                 shops: shops,
+                filteredShops: filteredShops,
                 loading: false,
                 timestamp: new Date().getTime()
             });
@@ -20690,14 +20739,66 @@ var bd = this.bd || {};
             bd.api.getNearbyPolShops(lat, lon, this.resetShops);
         },
 
+        setFilter: function (key, value) {
+            var filters = _.clone(this.state.filters);
+            if (key === 'fylkesnr') {
+                filters.kommnr = null;
+                var municipalities = _.chain(this.props.municipalities)
+                    .filter(function (municipality) {
+                        return municipality.fylkesnr === value;
+                    })
+                    .sortBy(function (municipality) {
+                        return municipality.name;
+                    })
+                    .value();
+                this.setState({municipalities: municipalities});
+            }
+
+            filters[key] = value;
+            var shops = this.filter(this.state.shops, filters);
+            this.setState({
+                filters: filters,
+                filteredShops: shops,
+                timestamp: new Date().getTime()
+            });
+        },
+
+        filter: function (shops, filters) {
+            if (_.isEmpty(filters)) {
+                return shops;
+            }
+            return _.filter(shops, function (shop) {
+                var filtered = _.map(filters, function (value, key) {
+                    if (value === null) {
+                        return true;
+                    }
+                    return shop[key] === value;
+                });
+                var include = filtered.indexOf(false) === -1;
+                return include;
+            });
+        },
+
+        showTable: function () {
+            this.setState({type: 'table'});
+        },
+
+        showMap: function () {
+            this.setState({type: 'map'});
+        },
+
         render: function () {
             var supportsGeoloc = !!navigator.geolocation;
             var nearbyBtn;
             if (supportsGeoloc) {
+                var nearbyClass = 'btn btn-default';
+                if (this.state.showing === 'nearby') {
+                    nearbyClass += ' active';
+                }
                 nearbyBtn = (
                     React.createElement("button", {
                         onClick: this.showNearby, 
-                        className: "btn btn-default", 
+                        className: nearbyClass, 
                         type: "button"}, 
                         "Pol nær meg"
                     )
@@ -20708,29 +20809,124 @@ var bd = this.bd || {};
             if (this.state.loading) {
                 content = (React.createElement(ns.LoadIndicator, {text: "Laster"}));
             } else {
-                content = (
-                    React.createElement(ns.SortableTable, {
-                        key: this.state.timestamp, 
-                        items: this.state.shops, 
-                        columns: columns})
-                );
+                if (this.state.filteredShops.length === 0) {
+                    content = React.createElement("div", null, "Ingen funnet")
+                } else if (this.state.type === 'table') {
+                    content = (
+                        React.createElement(ns.SortableTable, {
+                            key: this.state.timestamp, 
+                            items: this.state.filteredShops, 
+                            columns: columns})
+                    );
+                } else if (this.state.type === 'map') {
+                    content = (React.createElement("div", null, "Kart kommer snart!"));
+                }
             }
 
+            var tableClass = 'btn btn-default';
+            if (this.state.type === 'table') {
+                tableClass += ' active';
+            }
+            var mapClass = 'btn btn-default';
+            if (this.state.type === 'map') {
+                mapClass += ' active';
+            }
+
+
+            var allClass = 'btn btn-default';
+            if (this.state.showing === 'all') {
+                allClass += ' active';
+            }
             return (
                 React.createElement("div", null, 
-                    React.createElement("div", {className: "btn-group"}, 
-                        React.createElement("button", {onClick: this.showAll, className: "btn btn-default", type: "button"}, "Alle Pol"), 
-                        nearbyBtn
+                    React.createElement("nav", {className: "navbar navbar-default"}, 
+                        React.createElement("div", {className: "container-fluid"}, 
+                            React.createElement("form", {className: "navbar-form navbar-left"}, 
+                                React.createElement("div", {className: "form-group"}, 
+                                    React.createElement("div", {className: "btn-group navbar-btn"}, 
+                                        React.createElement("button", {
+                                            onClick: this.showAll, 
+                                            className: allClass, 
+                                            type: "button"}, 
+                                            "Alle Pol"
+                                        ), 
+                                        nearbyBtn
+                                    )
+                                ), 
+                                React.createElement(FilterSelect, {
+                                    setFilter: this.setFilter, 
+                                    label: "Butikkkategori", 
+                                    selected: this.state.filters.category, 
+                                    filterKey: "category", 
+                                    options: this.props.categories}), 
+                                React.createElement(FilterSelect, {
+                                    setFilter: this.setFilter, 
+                                    label: "Fylke", 
+                                    selected: this.state.filters.fylkesnr, 
+                                    filterKey: "fylkesnr", 
+                                    options: this.props.counties}), 
+                                React.createElement(FilterSelect, {
+                                    setFilter: this.setFilter, 
+                                    label: "Kommune", 
+                                    filterKey: "kommnr", 
+                                    selected: this.state.filters.kommnr, 
+                                    idAttribute: "kommnr", 
+                                    options: this.state.municipalities})
+                            ), 
+                            React.createElement("form", {className: "navbar-form navbar-right"}, 
+                                React.createElement("div", {className: "form-group"}, 
+                                    React.createElement("div", {className: "btn-group navbar-btn"}, 
+                                        React.createElement("button", {
+                                            onClick: this.showTable, 
+                                            className: tableClass, 
+                                            type: "button"}, 
+                                            "Tabell"
+                                        ), 
+                                        React.createElement("button", {
+                                            onClick: this.showMap, 
+                                            className: mapClass, 
+                                            type: "button"}, 
+                                            "Kart"
+                                        )
+                                    )
+                                )
+                            )
+                        )
                     ), 
                     content
                 )
-            )
+            );
         }
     });
 
 
-    ns.renderPolShopList = function (shops, component) {
-        ReactDOM.render(React.createElement(PolShopList, {shops: shops}), component);
+    ns.renderPolShopList = function (shops, municipalities, component) {
+
+        var categories = _.chain(shops)
+            .pluck('category')
+            .uniq()
+            .map(function (category) {
+                return {name: category, id: category};
+            })
+            .sortBy('id')
+            .value();
+
+        var counties = _.chain(municipalities)
+            .map(function (municipality) {
+                return {id: municipality.fylkesnr, name: municipality.fylke_name};
+            })
+            .uniq(false, function (county) {
+                return county.id;
+            })
+            .value();
+        ReactDOM.render(
+            React.createElement(PolShopList, {
+                shops: shops, 
+                categories: categories, 
+                counties: counties, 
+                municipalities: municipalities}),
+            component
+        );
     };
 
 

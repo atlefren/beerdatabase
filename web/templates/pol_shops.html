@@ -16,7 +16,8 @@
     <script type="text/javascript">
         (function () {
             var shops = {{ json | safe }};
-            bd.renderPolShopList(shops, document.getElementById('shops_page'));
+            var municipalities = {{ municipalities_json | safe }};
+            bd.renderPolShopList(shops, municipalities, document.getElementById('shops_page'));
         }());
     </script>
 

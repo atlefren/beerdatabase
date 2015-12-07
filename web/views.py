@@ -187,7 +187,12 @@ def brewery(brewery_id):
 @app.route('/pol_shops/')
 def pol_shops():
     shops = queries.get_pol_shops()
-    return render_template('pol_shops.html', json=json.dumps(shops))
+    municipalities = queries.get_all_municipalities()
+    return render_template(
+        'pol_shops.html',
+        json=json.dumps(shops),
+        municipalities_json=json.dumps(municipalities)
+    )
 
 
 @app.route('/pol_shops/<int:shop_id>')

@@ -4,7 +4,8 @@ from flask import current_app
 from sqlalchemy.sql import func
 
 from models import (PoletBeer, PolShop, PolStock, RatebeerBrewery,
-                    RatebeerBeer, RatebeerCountry, BeerStyle, RbPolBeerMapping)
+                    RatebeerBeer, RatebeerCountry, BeerStyle, RbPolBeerMapping,
+                    Municipality)
 
 
 def get_pol_beers_list():
@@ -122,3 +123,9 @@ def get_unresolved_pol_suggestions():
         .filter(RbPolBeerMapping.resolved == False)\
         .all()
     return [s.serialize() for s in suggestions]
+
+
+def get_all_municipalities():
+    return current_app.db_session.query(Municipality)\
+        .order_by(Municipality.kommnr)\
+        .all()
