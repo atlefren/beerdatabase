@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+import json
 
 import sqlalchemy as sa
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.types import UserDefinedType
 from flask.ext.jsontools import JsonSerializableBase
 
 from util import ratebeer_url
@@ -35,9 +37,18 @@ class RatebeerBeer(Base):
     score_style = sa.Column('score_style', sa.Float)
     abv = sa.Column('abv', sa.Float)
     ibu = sa.Column('ibu', sa.Float)
-    brewery_id = sa.Column('brewery_id', sa.Integer, sa.ForeignKey('rb_brewery.id'), nullable=False)
+    brewery_id = sa.Column(
+        'brewery_id',
+        sa.Integer,
+        sa.ForeignKey('rb_brewery.id'),
+        nullable=False
+    )
     brewery = relationship('RatebeerBrewery', lazy=False)
-    pol_beers = relationship('PoletBeer', lazy=False, back_populates='ratebeer')
+    pol_beers = relationship(
+        'PoletBeer',
+        lazy=False,
+        back_populates='ratebeer'
+    )
 
     def __init__(self):
         pass
@@ -88,7 +99,11 @@ class RatebeerBrewery(Base):
     __tablename__ = 'rb_brewery'
     id = sa.Column('id', sa.Integer, primary_key=True)
     name = sa.Column('name', sa.Unicode(255))
-    country_id = sa.Column('country', sa.Integer, sa.ForeignKey('rb_countries.id'))
+    country_id = sa.Column(
+        'country',
+        sa.Integer,
+        sa.ForeignKey('rb_countries.id')
+    )
     country = relationship('RatebeerCountry', lazy=False)
     subregion = sa.Column('subregion', sa.Integer)
     city = sa.Column('city', sa.Unicode(255))
@@ -137,8 +152,17 @@ class PoletBeer(Base):
     freshness = sa.Column('freshness', sa.Integer)
     bitterness = sa.Column('bitterness', sa.Integer)
     richness = sa.Column('richness', sa.Integer)
-    ratebeer_id = sa.Column('ratebeer_id', sa.Integer, sa.ForeignKey('rb_beer.id'), nullable=True)
-    ratebeer = relationship('RatebeerBeer', lazy=False, back_populates='pol_beers')
+    ratebeer_id = sa.Column(
+        'ratebeer_id',
+        sa.Integer,
+        sa.ForeignKey('rb_beer.id'),
+        nullable=True
+    )
+    ratebeer = relationship(
+        'RatebeerBeer',
+        lazy=False,
+        back_populates='pol_beers'
+    )
 
     def __init__(self):
         pass
@@ -194,7 +218,8 @@ class PoletBeer(Base):
             'freshness': self.freshness,
             'bitterness': self.bitterness,
             'richness': self.richness,
-            'ratebeer': self.ratebeer.serialize() if self.ratebeer is not None else None,
+            'ratebeer': self.ratebeer.serialize() if self.ratebeer is not None
+            else None,
         }
 
 
@@ -203,9 +228,19 @@ class RbPolBeerMapping(Base):
     id = sa.Column('id', sa.Integer, primary_key=True)
     comment = sa.Column('comment', sa.Unicode(255))
     resolved = sa.Column('resolved', sa.Boolean, default=False)
-    rb_beer_id = sa.Column('rb_beer_id', sa.Integer, sa.ForeignKey('rb_beer.id'), nullable=False)
+    rb_beer_id = sa.Column(
+        'rb_beer_id',
+        sa.Integer,
+        sa.ForeignKey('rb_beer.id'),
+        nullable=False
+    )
     rb_beer = relationship('RatebeerBeer', lazy=False)
-    pol_beer_id = sa.Column('pol_beer_id', sa.Integer, sa.ForeignKey('pol_beer.id'), nullable=False)
+    pol_beer_id = sa.Column(
+        'pol_beer_id',
+        sa.Integer,
+        sa.ForeignKey('pol_beer.id'),
+        nullable=False
+    )
     pol_beer = relationship('PoletBeer', lazy=False)
 
     def __init__(self, pol_id=None, rb_id=None, comment=None):
@@ -220,8 +255,34 @@ class RbPolBeerMapping(Base):
             'rb_beer_id': self.rb_beer_id,
             'pol_beer_id': self.pol_beer_id,
             'pol_beer': self.pol_beer.serialize(),
-            'rb_beer': self.rb_beer.serialize() if self.rb_beer is not None else None
+            'rb_beer': self.rb_beer.serialize() if self.rb_beer is not None
+            else None
         }
+
+
+class Geometry(UserDefinedType):
+    def get_col_spec(self):
+        return "GEOMETRY"
+
+    def bind_expression(self, bindvalue):
+        return sa.func.ST_GeomFromGeoJSON(json.dumps(bindvalue), type_=self)
+
+    def column_expression(self, col):
+        return sa.func.ST_AsGeoJSON(col, type_=self)
+
+    def result_processor(self, dialect, coltype):
+        def process(value):
+            if value is not None:
+                return json.loads(value)
+            return None
+        return process
+
+    def bind_processor(self, dialect):
+        def process(value):
+            if value is not None:
+                return json.dumps(value)
+            return None
+        return process
 
 
 class PolShop(Base):
@@ -240,6 +301,7 @@ class PolShop(Base):
     kommnr = sa.Column('kommnr', sa.Integer)
     fylke_name = sa.Column('fylke_name', sa.Unicode(255))
     fylkesnr = sa.Column('fylkesnr', sa.Integer)
+    geom = sa.Column('geog', Geometry)
 
 
 class PolStock(Base):

@@ -2,6 +2,7 @@
 
 from flask import current_app, json, request, Response
 from sqlalchemy.sql.expression import and_
+from sqlalchemy.sql import text
 
 from web import app
 from models import (RatebeerBeer, RatebeerBrewery, RbPolBeerMapping, PoletBeer,
@@ -201,12 +202,11 @@ def get_pol_shops():
         lat = float(lat)
         lon = float(lon)
 
-    shops = current_app.db_session.query(PolShop).\
-        from_statement('''
-            SELECT * FROM pol_shop_komm_fylke
-            ORDER BY geog <-> ST_GeographyFromText('SRID=4326;POINT(:lon :lat)') LIMIT 10;
-        ''')\
-        .params(lat=lat, lon=lon)\
+    order = "geog <-> ST_GeographyFromText('SRID=4326;POINT(%s %s)')" % (lon, lat)
+
+    shops = current_app.db_session.query(PolShop)\
+        .order_by(order)\
+        .limit(10)\
         .all()
 
     return Response(
