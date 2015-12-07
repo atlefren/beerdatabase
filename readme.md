@@ -10,13 +10,15 @@ Setup
 
 3. run vagrant ssh dev
 
-4. run python manage.py update_ratebeer to load ratebeer data
+4. run python manage.py update_admin to load admin data
 
-5. run python manage.py update_pol to load pol data
+5. run python manage.py update_ratebeer to load ratebeer data
 
-5. run python runapp.py to launch app
+6. run python manage.py update_pol to load pol data
 
-6. app is now available at localhost:8090
+7. run python runapp.py to launch app
+
+8. app is now available at localhost:8090
 
 
 
