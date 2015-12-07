@@ -44,7 +44,7 @@ var bd = this.bd || {};
                 return shop.fylke_name;
             },
             sortParams: 'fylke_name',
-            isSorted: true,
+            isSorted: false,
             sortDirection: 'asc'
         }
     ];
