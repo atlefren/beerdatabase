@@ -68,5 +68,5 @@ js_beer_list = Bundle(
         filters=js_filters
     ),
     filters=[react_filter],
-    output='beerlist.js'
+    output='gen/beerlist.js'
 )
