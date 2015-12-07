@@ -2,17 +2,17 @@
 
 {% block css %}
 {{ super() }}
-
+<link rel="stylesheet" href="http://www.webatlas.no/sh/3/v/101014/webatlas.css" />
 {% endblock %}
 
 {% block main %}
 <h1>Polutsalg</h1>
-<div id="shops_page"></div>
+<div id="shops_page"  class="fill"></div>
 {% endblock %}
 
 {% block js %}
 {{ super() }}
-
+    <script src="http://www.webatlas.no/sh/3/v/101014/webatlas.js" type="text/javascript"></script>
     <script type="text/javascript">
         (function () {
             var shops = {{ json | safe }};

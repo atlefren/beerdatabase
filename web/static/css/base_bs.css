@@ -78,6 +78,13 @@ body {
 }
 
 
+/*map*/
+.map {
+    width: 100%;
+    background: red;
+    height: 600px;
+}
+
 /*search */
 
 @media (max-width: 992px) {

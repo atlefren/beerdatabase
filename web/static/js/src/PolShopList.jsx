@@ -86,6 +86,59 @@ var bd = this.bd || {};
         }
     });
 
+
+    var Map = React.createClass({
+
+        shopLayer: null,
+
+        map: null,
+
+        componentDidMount: function () {
+            var element = ReactDOM.findDOMNode(this);
+            this.map = new WebatlasMap(element, {customer: 'atlefren_olmonopolet'});
+            var markerClicked = this.markerClicked;
+            this.shopLayer = L.geoJson([], {
+                pointToLayer: function(featureData, latlng) {
+                    return L.marker(latlng, {
+                        title: featureData.properties.title
+                    }).on('click', markerClicked);
+                }
+            }).addTo(this.map);
+            this.setGeometries(this.props.items);
+        },
+
+        markerClicked: function (e) {
+            window.location.href = '/pol_shops/' + e.target.feature.properties.id;
+        },
+
+        componentWillReceiveProps: function(nextProps) {
+            if (_.has(nextProps, 'items')) {
+                this.setGeometries(nextProps.items);
+            }
+        },
+
+        setGeometries: function (items) {
+            var features = _.map(items, function (item) {
+                return {
+                    type: 'Feature',
+                    properties: {
+                        title: item.name,
+                        id: item.id
+                    },
+                    geometry: item.geom
+                };
+            });
+            var fc = {type: 'FeatureCollection', features: features};
+            this.shopLayer.clearLayers().addData(fc);
+            this.map.fitBounds(this.shopLayer.getBounds(), {padding: [25, 25]});
+        },
+
+        render: function () {
+            return (<div className="map"></div>);
+        }
+    });
+
+
     var PolShopList = React.createClass({
 
         getInitialState: function () {
@@ -213,7 +266,7 @@ var bd = this.bd || {};
                             columns={columns} />
                     );
                 } else if (this.state.type === 'map') {
-                    content = (<div>Kart kommer snart!</div>);
+                    content = (<Map items={this.state.filteredShops} />);
                 }
             }
 
