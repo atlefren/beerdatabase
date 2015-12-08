@@ -139,6 +139,7 @@ pol_shop_list_bundle = react_bundle(
 pol_shop_bundle = react_bundle(
     Bundle(
         'js/src/SortableTable.jsx',
+        'js/src/PolBeerTable.jsx',
         'js/src/PolShopOverview.jsx',
         filters=js_filters
     ),
