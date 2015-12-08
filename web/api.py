@@ -2,6 +2,7 @@
 
 from flask import current_app, json, request, Response
 from sqlalchemy.sql.expression import and_
+from sqlalchemy.sql import text
 
 from web import app
 from models import (RatebeerBeer, RatebeerBrewery, RbPolBeerMapping, PoletBeer,
@@ -211,6 +212,21 @@ def get_pol_shops():
 
     return Response(
         json.dumps(shops),
+        content_type='application/json',
+        status=200
+    )
+
+
+@app.route(api_prefix + '/pol_beer/<int:beer_id>/stockhistory/', methods=['GET'])
+def get_pol_stock_history(beer_id):
+    connection = current_app.db_session.connection()
+    history = connection.execute(
+        text('SELECT sum(stock), updated::date from pol_stock where pol_beer_id = :beer_id group by updated::date order by updated'),
+        beer_id=beer_id
+    )
+
+    return Response(
+        json.dumps([{'stock': s[0], 'updated': s[1].isoformat()} for s in history]),
         content_type='application/json',
         status=200
     )

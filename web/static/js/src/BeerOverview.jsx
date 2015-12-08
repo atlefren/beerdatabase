@@ -102,7 +102,30 @@ var bd = this.bd || {};
     });
 
 
+    var StockHistory = React.createClass({
+
+        render: function () {
+
+            var history = _.map(this.props.history, function (h) {
+                return (<li key={h.updated}>{h.updated}: {h.stock}</li>);
+            });
+
+            return (
+                <div>
+                    <h5>Beholdningshistorikk</h5>
+                    <ul>{history}</ul>
+                </div>
+            );
+        }
+
+    });
+
+
     var BeerOverview = React.createClass({
+
+        getInitialState: function () {
+            return {showStockHistory: false};
+        },
 
         getHelpMsg: function () {
             var err_url = '/pol_beers/' + this.props.beer.id + '/report';
@@ -125,10 +148,36 @@ var bd = this.bd || {};
             ];
         },
 
+        gotStockHistory: function (history) {
+            this.setState({
+                showStockHistory: true,
+                stockHistory: history
+            });
+        },
+
+        toggleStockHistory: function () {
+
+            if (this.state.showStockHistory) {
+                this.setState({showStockHistory: false});
+                return;
+            }
+
+            if (this.state.stockHistory) {
+                this.gotStockHistory(this.state.stockHistory);
+            } else {
+                bd.api.getStockHistory(this.props.beer.id, this.gotStockHistory);
+            }
+        },
+
         render: function () {
             var beer = this.props.beer;
             var rbbeer = this.props.beer.ratebeer;
             var report_link = '/pol_beers/' + beer.id + '/report';
+
+            var stockHistory;
+            if (this.state.showStockHistory) {
+                stockHistory = <StockHistory history={this.state.stockHistory} />
+            }
 
             return (
                 <div>
@@ -217,10 +266,16 @@ var bd = this.bd || {};
                             </tr>
                             <tr>
                                 <th>Totalt antall på polet</th>
-                                <td>{beer.stock.toLocaleString()} flasker/bokser</td>
+                                <td>
+                                    {beer.stock.toLocaleString()} flasker/bokser
+                                    {' '}<button type="button" className="btn btn-default btn-xs" onClick={this.toggleStockHistory}><i className="fa fa-area-chart"></i> Historikk</button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
+
+                    {stockHistory}
+
                     <ns.PolWithBeerList beerId={this.props.beer.id}/>
                     {this.getHelpMsg()}
                 </div>
