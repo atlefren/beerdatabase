@@ -11,12 +11,10 @@
 
 {%endblock %}
 
-
 {% block js %}
 {{ super() }}
 
     <script type="text/javascript">
-        //console.log({{ json | safe }});
         (function () {
             var beerList = {{ json | safe }};
             bd.renderPolBeerTable(
@@ -25,7 +23,7 @@
                 document.getElementById('beer_list')
             );
         }());
-        
+
     </script>
 
 {% endblock %}

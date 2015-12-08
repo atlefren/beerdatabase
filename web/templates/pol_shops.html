@@ -11,8 +11,15 @@
 {% endblock %}
 
 {% block js %}
-{{ super() }}
+
+    
+    {% assets "pol_shop_list_bundle" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
     <script src="http://www.webatlas.no/sh/3/v/101014/webatlas.js" type="text/javascript"></script>
+    {{ super() }}
+
+
     <script type="text/javascript">
         (function () {
             var shops = {{ json | safe }};

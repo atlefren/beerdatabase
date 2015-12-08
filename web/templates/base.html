@@ -89,16 +89,10 @@
         </script>
         {% endif %}
 
-
       </div>
     </footer>
 
     {% block js %}
-
-    {% assets "js_beer_list" %}
-    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-    {% endassets %}
-
     <script type="text/javascript">
         (function () {
             bd.setupSimpleBeerSearch(
@@ -106,7 +100,6 @@
             );
         }());
     </script>
-
     {% endblock %}
 </body>
 </html>

@@ -13,13 +13,16 @@
 {%endblock %}
 
 {% block js %}
-{{ super() }}
+
+    {% assets "match_suggestions_bundle" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+    {{ super() }}
 
     <script type="text/javascript">
-        //console.log({{ json | safe }});
         (function () {
             var unmatched = {{ json | safe }};
-            console.log(unmatched)
             bd.renderBeerFixSuggestions(unmatched, document.getElementById('beer_list'));
         }());
     </script>

@@ -170,6 +170,12 @@ def style(id):
     )
 
 
+@app.route('/countries/')
+def country_list():
+    countries = queries.get_countries()
+    return render_template('country_list.html', json=json.dumps(countries))
+
+
 @app.route('/breweries/')
 def brewery_list():
     breweries = queries.get_breweries_at_polet()

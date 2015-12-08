@@ -10,12 +10,11 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.jsontools import DynamicJSONEncoder
 
 app = Flask(__name__)
-
 app.json_encoder = DynamicJSONEncoder
 
 # load config
 app.config.update(
-    DEBUG=False,
+    DEBUG=os.environ.get('DEBUG', False),
     SECRET_KEY=os.environ.get('SECRET_KEY', ''),
     # GOOGLE_LOGIN_CLIENT_ID=os.environ.get('GOOGLE_LOGIN_CLIENT_ID', ''),
     # GOOGLE_LOGIN_CLIENT_SECRET=os.environ.get('GOOGLE_LOGIN_CLIENT_SECRET', ''),

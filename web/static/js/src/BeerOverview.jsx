@@ -277,7 +277,7 @@ var bd = this.bd || {};
                             <tr>
                                 <th>Totalt antall på polet</th>
                                 <td>
-                                    {beer.stock.toLocaleString()} flasker/bokser
+                                    {(beer.stock || 0).toLocaleString()} flasker/bokser
                                     {' '}<button type="button" className="btn btn-default btn-xs" onClick={this.toggleStockHistory}><i className="fa fa-area-chart"></i> Historikk</button>
                                 </td>
                             </tr>

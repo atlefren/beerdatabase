@@ -16,6 +16,16 @@
 
       </div>
 
+{% endblock %}
 
+
+{% block js %}
+
+    {% assets "index_bundle" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+    {{ super() }}
 
 {% endblock %}
+

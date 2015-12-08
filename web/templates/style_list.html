@@ -13,10 +13,14 @@
 
 
 {% block js %}
-{{ super() }}
+
+    {% assets "style_list_bundle" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+    {{ super() }}
 
     <script type="text/javascript">
-        //console.log({{ json | safe }});
         (function () {
             var styles = {{ json | safe }};
             bd.renderStyleList(styles, document.getElementById('style_list'));

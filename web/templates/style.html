@@ -18,7 +18,12 @@
 
 
 {% block js %}
-{{ super() }}
+
+    {% assets "style_bundle" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+    {{ super() }}
 
     <script type="text/javascript">
         (function () {
@@ -31,7 +36,7 @@
                 );
             }
         }());
-        
+
     </script>
 
 {% endblock %}
