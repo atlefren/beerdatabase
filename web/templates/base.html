@@ -76,6 +76,20 @@
       <div class="container">
         <p class="text-muted">Ølmonopolet.no er et <a href="https://github.com/atlefren/beerdatabase" target="_blank">hobbyprosjekt</a> laget av Atle Frenvik Sveen og har ingenting med hverken 
             Vinmopolet eller Ratebeer å gjøre. Feil kan forekomme. Siden er for tiden i tidlig beta.</p>
+
+        {% if not config.DEBUG %}
+        <script type="text/javascript">
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-71167159-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+        {% endif %}
+
+
       </div>
     </footer>
 
