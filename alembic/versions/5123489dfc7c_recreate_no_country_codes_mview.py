@@ -25,7 +25,7 @@ def upgrade():
         FROM
             country_codes_no i, rb_countries_mapped r
         WHERE
-            r.iso_code = r.iso_code);
+            r.iso_code = i.iso_code);
     ''')
 
 
