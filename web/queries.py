@@ -4,7 +4,7 @@ from flask import current_app
 from sqlalchemy.sql import func
 
 from models import (PoletBeer, PolShop, PolStock, RatebeerBrewery,
-                    RatebeerBeer, RatebeerCountry, BeerStyle, RbPolBeerMapping,
+                    RatebeerBeer, Country, BeerStyle, RbPolBeerMapping,
                     Municipality)
 
 
@@ -58,13 +58,14 @@ def get_beers_for_style(style_id):
 
 
 def get_breweries_at_polet():
-    breweries = current_app.db_session.query(RatebeerBrewery.id, RatebeerBrewery.name, RatebeerCountry.id, RatebeerCountry.name, func.count())\
+    breweries = current_app.db_session.query(RatebeerBrewery.id, RatebeerBrewery.name, Country.rb_id, Country.name, func.count())\
         .join(RatebeerBeer)\
         .join(PoletBeer)\
-        .join(RatebeerCountry)\
-        .group_by(RatebeerBrewery.id, RatebeerBrewery.name, RatebeerCountry.id, RatebeerCountry.name)\
-        .order_by(RatebeerBrewery.name)\
-        .all()
+        .join(Country)\
+        .group_by(RatebeerBrewery.id, RatebeerBrewery.name, Country.rb_id, Country.name)\
+        .order_by(RatebeerBrewery.name)
+    print breweries
+    breweries = breweries.all()
 
     # TODO: incorporate in query
     return [{

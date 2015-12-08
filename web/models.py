@@ -24,6 +24,13 @@ class RatebeerCountry(Base):
     name = sa.Column('name', sa.Unicode(255))
 
 
+class Country(Base):
+    __tablename__ = 'countries_no'
+    rb_id = sa.Column('rb_id', sa.Integer, primary_key=True)
+    name = sa.Column('name', sa.Unicode(255))
+    iso_code = sa.Column('iso_code', sa.Unicode(2))
+
+
 class RatebeerBeer(Base):
     __tablename__ = 'rb_beer'
     id = sa.Column('id', sa.Integer, primary_key=True)
@@ -102,9 +109,9 @@ class RatebeerBrewery(Base):
     country_id = sa.Column(
         'country',
         sa.Integer,
-        sa.ForeignKey('rb_countries.id')
+        sa.ForeignKey('countries_no.rb_id')
     )
-    country = relationship('RatebeerCountry', lazy=False)
+    country = relationship('Country', lazy=False)
     subregion = sa.Column('subregion', sa.Integer)
     city = sa.Column('city', sa.Unicode(255))
 
