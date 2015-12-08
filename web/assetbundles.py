@@ -46,6 +46,9 @@ js_beer_list = Bundle(
     react_dom,
     Bundle(
         'js/lib/jquery/dist/jquery.min.js',
+        'js/lib/Chart.js/src/Chart.Core.js',
+        'js/lib/Chart.js/src/Chart.Line.js',
+        'js/lib/react-chartjs/dist/react-chartjs.js',
         'js/lib/bootstrap/dist/js/bootstrap.min.js',
         'js/lib/atomic-fixed.js',
         'js/lib/nouislider/distribute/nouislider.min.js',

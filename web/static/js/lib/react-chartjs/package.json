@@ -1,0 +1,38 @@
+{
+  "name": "react-chartjs",
+  "version": "0.7.3",
+  "description": "react charting components using the chartjs lib",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "build": "webpack index.js dist/react-chartjs.js",
+    "dist": "COMPRESS=1 webpack index.js dist/react-chartjs.min.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jhudson8/react-chartjs"
+  },
+  "keywords": [
+    "react",
+    "react-component",
+    "chart",
+    "charts",
+    "graph",
+    "chartjs"
+  ],
+  "author": "Joe Hudson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jhudson8/react-chartjs/issues"
+  },
+  "homepage": "https://github.com/jhudson8/react-chartjs",
+  "peerDependencies": {
+    "react": "*",
+    "react-dom": "*",
+    "chart.js": "*"
+  },
+  "devDependencies": {
+    "uglify-js": "^2.4.16",
+    "webpack": "^1.4.14"
+  }
+}

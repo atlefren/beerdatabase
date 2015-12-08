@@ -1,0 +1,15 @@
+{
+  "name": "react-chartjs",
+  "homepage": "https://github.com/jhudson8/react-chartjs",
+  "version": "0.7.3",
+  "_release": "0.7.3",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.7.3",
+    "commit": "e090b90e2569e4a74f4c13228005db453b7cadea"
+  },
+  "_source": "https://github.com/jhudson8/react-chartjs.git",
+  "_target": "~0.7.3",
+  "_originalSource": "https://github.com/jhudson8/react-chartjs.git",
+  "_direct": true
+}

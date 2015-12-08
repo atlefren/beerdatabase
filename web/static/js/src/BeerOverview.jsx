@@ -101,25 +101,35 @@ var bd = this.bd || {};
         }
     });
 
+    var LineChart = window['react-chartjs'].Line;
 
     var StockHistory = React.createClass({
 
         render: function () {
 
-            var history = _.map(this.props.history, function (h) {
-                return (<li key={h.updated}>{h.updated}: {h.stock}</li>);
-            });
+            var data = _.pluck(this.props.history, 'stock');
+            var labels = _.pluck(this.props.history, 'updated');
 
+            var chartData = {
+                labels: labels,
+                datasets: [
+                    {
+                        data: data
+                    }
+                ]
+            };
             return (
                 <div>
-                    <h5>Beholdningshistorikk</h5>
-                    <ul>{history}</ul>
+                    <h4>Beholdningshistorikk</h4>
+                    <LineChart
+                        data={chartData}
+                        options={{animation: false}}
+                        width="600"
+                        height="200"/>
                 </div>
             );
         }
-
     });
-
 
     var BeerOverview = React.createClass({
 
