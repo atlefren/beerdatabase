@@ -24,7 +24,7 @@ if minify:
     js_filters.append('jsmin')
     css_filters.append('cssmin')
     react = 'js/lib/react/react.min.js'
-    react_dom = Bundle()
+    #react_dom = Bundle()
 
 css_base = Bundle(
     'js/lib/fontawesome/css/font-awesome.css',
