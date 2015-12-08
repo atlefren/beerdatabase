@@ -215,6 +215,10 @@ var bd = this.bd || {};
                                 <th>Lagringsgrad</th>
                                 <td>{beer.storage_notes}</td>
                             </tr>
+                            <tr>
+                                <th>Totalt antall på polet</th>
+                                <td>{beer.stock.toLocaleString()} flasker/bokser</td>
+                            </tr>
                         </tbody>
                     </table>
                     <ns.PolWithBeerList beerId={this.props.beer.id}/>

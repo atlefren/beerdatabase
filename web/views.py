@@ -129,9 +129,15 @@ def pol_beer(id):
         abort(404)
     if pol_beer.ratebeer is None:
         return fix_beer(pol_beer)
+
+    serialized = pol_beer.serialize()
+    stock = queries.get_total_pol_beer_stock(id)
+
+    serialized['stock'] = stock
+
     return render_template(
         'pol_beer.html',
-        json=json.dumps(pol_beer.serialize())
+        json=json.dumps(serialized)
     )
 
 

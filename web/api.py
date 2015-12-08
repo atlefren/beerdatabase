@@ -2,7 +2,6 @@
 
 from flask import current_app, json, request, Response
 from sqlalchemy.sql.expression import and_
-from sqlalchemy.sql import text
 
 from web import app
 from models import (RatebeerBeer, RatebeerBrewery, RbPolBeerMapping, PoletBeer,
@@ -176,7 +175,8 @@ def confirm_suggestion(id):
 def get_stock_for_beer(beer_id):
     shops = current_app.db_session.query(PolShop, PolStock)\
         .filter(PolStock.shop_id == PolShop.id)\
-        .filter(PolStock.pol_beer_id == beer_id)
+        .filter(PolStock.pol_beer_id == beer_id)\
+        .order_by(PolShop.name)
 
     data = [{
         'pol_id': s[0].id,

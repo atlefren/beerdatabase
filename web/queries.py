@@ -25,6 +25,13 @@ def get_styles():
     return current_app.db_session.query(BeerStyle).all()
 
 
+def get_total_pol_beer_stock(beer_id):
+    return current_app.db_session\
+        .query(func.sum(PolStock.stock).label('stock'))\
+        .filter(PolStock.pol_beer_id == beer_id)\
+        .scalar()
+
+
 def get_style_list():
     styles = current_app.db_session.query(BeerStyle, func.count())\
         .join(RatebeerBeer)\
