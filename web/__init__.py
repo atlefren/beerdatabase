@@ -12,9 +12,13 @@ from flask.ext.jsontools import DynamicJSONEncoder
 app = Flask(__name__)
 app.json_encoder = DynamicJSONEncoder
 
+debug = os.environ.get('DEBUG', False)
+show_ga = not debug
+
 # load config
 app.config.update(
-    DEBUG=os.environ.get('DEBUG', False),
+    DEBUG=debug,
+    SHOW_GA=show_ga,
     SECRET_KEY=os.environ.get('SECRET_KEY', ''),
     # GOOGLE_LOGIN_CLIENT_ID=os.environ.get('GOOGLE_LOGIN_CLIENT_ID', ''),
     # GOOGLE_LOGIN_CLIENT_SECRET=os.environ.get('GOOGLE_LOGIN_CLIENT_SECRET', ''),
