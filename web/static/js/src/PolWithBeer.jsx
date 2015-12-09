@@ -18,7 +18,7 @@ var bd = this.bd || {};
             name: 'Antall',
             formatter: function (stock) {
                 var updated = 'Oppdatert: ' + stock.updated;
-                return <span title={updated}>{stock.amount}</span>;
+                return (<span title={updated}>{stock.amount}</span>);
             },
             sortParams: ['amount'],
             isSorted: false,

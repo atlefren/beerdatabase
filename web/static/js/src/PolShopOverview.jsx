@@ -10,7 +10,7 @@ var bd = this.bd || {};
             name: 'Antall',
             formatter: function (beer) {
                 var updated = 'Oppdatert: ' + beer.updated;
-                return <span title={updated}>{beer.stock}</span>;
+                return (<span title={updated}>{beer.stock}</span>);
             },
             sortParams: 'stock',
             isSorted: false,
