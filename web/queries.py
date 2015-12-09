@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import current_app
+from flask import current_app, abort
 from sqlalchemy.sql import func
 from sqlalchemy import distinct
 
@@ -152,5 +152,21 @@ def get_countries():
         .order_by('c DESC')\
         .all()
 
-    #return [c[0].serialize().update({'count': c[1]}) for c in countries]
-    return [c[0].serialize(extra={'count': c[1]}) for c in countries]
+    return [c[0].serialize(extra_data={'count': c[1]}) for c in countries]
+
+
+def get_country(id):
+    country = current_app.db_session.query(Country).get(id)
+    if not country:
+        abort(404)
+    beers = current_app.db_session.query(PoletBeer)\
+        .join(RatebeerBeer)\
+        .join(RatebeerBrewery)\
+        .filter(RatebeerBrewery.country_id == id)\
+        .order_by(RatebeerBeer.name)\
+        .all()
+
+    return {
+        'country': country,
+        'beers': [b.get_list_response() for b in beers]
+    }

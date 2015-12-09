@@ -7,7 +7,7 @@ var bd = this.bd || {};
             id: 'name',
             name: 'Navn',
             formatter: function (country) {
-                return (<a href={'/countries/' + country.iso_code}>{country.name}</a>);
+                return (<a href={'/countries/' + country.rb_id}>{country.name}</a>);
             },
             sortParams: 'name',
             isSorted: false,
@@ -25,9 +25,15 @@ var bd = this.bd || {};
         }
     ];
 
-    bd.renderCountryList = function (countries, component) {
+    ns.renderCountryList = function (countries, componentId) {
+        var component = document.getElementById(componentId);
         ReactDOM.render(
-            <ns.SortableTable items={countries} columns={columns} idProperty="rb_id"/>,
+            <ns.Container
+                component={ns.SortableTable}
+                title="Land"
+                items={countries}
+                columns={columns}
+                idProperty="rb_id" />,
             component
         );
     };

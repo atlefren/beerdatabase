@@ -15,8 +15,6 @@ css_filters = []
 
 minify = not app.debug
 
-print app.debug
-
 react = 'js/lib/react/react.js'
 react_dom = 'js/lib/react/react-dom.js'
 
@@ -182,4 +180,14 @@ country_list_bundle = react_bundle(
         filters=js_filters
     ),
     'country_list.js'
+)
+
+country_bundle = react_bundle(
+    Bundle(
+        'js/src/SortableTable.jsx',
+        'js/src/PolBeerTable.jsx',
+        'js/src/BeersInCountryList.jsx',
+        filters=js_filters
+    ),
+    'country.js'
 )

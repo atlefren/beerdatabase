@@ -19,4 +19,18 @@ var bd = this.bd || {};
         }
     });
 
+    ns.Container = React.createClass({
+        render: function () {
+            var componentProps = _.omit(this.props, 'component', 'title');
+            var Component = this.props.component;
+
+            return (
+                <div>
+                    <h1>{this.props.title}</h1>
+                    <Component {...componentProps} />
+                </div>
+            );
+        }
+    });
+
 }(bd));

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block css %}
+{{ super() }}
+{% endblock %}
+
+{% block title %}{{ super() }} - {{title}}{% endblock %}
+
+{% block main %}
+<div id="{{div_name}}"></div>
+{%endblock %}
+
+{% block js %}
+    {% assets jsbundle %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+    {{ super() }}
+
+    <script type="text/javascript">
+        (function () {
+            {{init_func}}({{ json | safe }}, '{{div_name}}');
+        }());
+    </script>
+{% endblock %}

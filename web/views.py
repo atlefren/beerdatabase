@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import render_template, abort, json, redirect, url_for, request
+from flask.views import View
 
 from web import app
 import queries
@@ -170,12 +171,6 @@ def style(id):
     )
 
 
-@app.route('/countries/')
-def country_list():
-    countries = queries.get_countries()
-    return render_template('country_list.html', json=json.dumps(countries))
-
-
 @app.route('/breweries/')
 def brewery_list():
     breweries = queries.get_breweries_at_polet()
@@ -218,3 +213,55 @@ def pol_shop(shop_id):
         json=json.dumps(shop),
         beers_json=json.dumps(beers)
     )
+
+
+class GenericView(View):
+
+    def __init__(self, data_func, jsbundle, div_name, init_func, title):
+        self.data_func = data_func
+        self.jsbundle = jsbundle
+        self.div_name = div_name
+        self.init_func = init_func
+        self.title = title
+
+    def dispatch_request(self, id=None):
+
+        if id is not None:
+            data = self.data_func(id)
+        else:
+            data = self.data_func()
+
+        return render_template(
+            'generic_js_template.html',
+            json=json.dumps(data),
+            div_name=self.div_name,
+            jsbundle=self.jsbundle,
+            init_func=self.init_func,
+            title=self.title
+        )
+
+
+app.add_url_rule(
+    '/countries/<string:id>',
+    view_func=GenericView.as_view(
+        'country',
+        title='Land',
+        data_func=queries.get_country,
+        jsbundle='country_bundle',
+        div_name='country',
+        init_func='bd.renderBeersInCountryList'
+    )
+)
+
+
+app.add_url_rule(
+    '/countries/',
+    view_func=GenericView.as_view(
+        'country_list',
+        title='Land',
+        data_func=queries.get_countries,
+        jsbundle='country_list_bundle',
+        div_name='country_list',
+        init_func='bd.renderCountryList'
+    )
+)
