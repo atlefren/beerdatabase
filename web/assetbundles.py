@@ -71,13 +71,6 @@ index_bundle = react_bundle(
     'index.js'
 )
 
-country_list_bundle = react_bundle(
-    Bundle(
-        filters=js_filters
-    ),
-    'country_list.js'
-)
-
 brewery_list_bundle = react_bundle(
     Bundle(
         'js/src/SortableTable.jsx',
@@ -180,4 +173,13 @@ match_suggestions_bundle = react_bundle(
         filters=js_filters
     ),
     'match_suggestions.js'
+)
+
+country_list_bundle = react_bundle(
+    Bundle(
+        'js/src/SortableTable.jsx',
+        'js/src/CountryList.jsx',
+        filters=js_filters
+    ),
+    'country_list.js'
 )

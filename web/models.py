@@ -30,6 +30,16 @@ class Country(Base):
     name = sa.Column('name', sa.Unicode(255))
     iso_code = sa.Column('iso_code', sa.Unicode(2))
 
+    def serialize(self, extra=None):
+        serialized = {
+            'rb_id': self.rb_id,
+            'name': self.name,
+            'iso_code': self.iso_code
+        }
+        if extra is not None:
+            serialized.update(extra)
+        return serialized
+
 
 class RatebeerBeer(Base):
     __tablename__ = 'rb_beer'

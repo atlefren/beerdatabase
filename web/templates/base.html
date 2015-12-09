@@ -42,6 +42,9 @@
             <li {% if request.url_rule.endpoint == 'style_list' %}class="active"{% endif %}>
                 <a href="{{ url_for('style_list')}}">Øltyper</a>
             </li>
+            <li {% if request.url_rule.endpoint == 'country_list' %}class="active"{% endif %}>
+                <a href="{{ url_for('country_list')}}">Land</a>
+            </li>
             <li {% if request.url_rule.endpoint == 'pol_shops' %}class="active"{% endif %}>
                 <a href="{{ url_for('pol_shops')}}">Polutsalg</a>
             </li>

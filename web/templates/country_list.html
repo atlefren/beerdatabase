@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block css %}
+{{ super() }}
+{% endblock %}
+
+{% block main %}
+<h1>Land</h1>
+<div id="country_list"></div>
+
+{%endblock %}
+
+{% block js %}
+
+    {% assets "country_list_bundle" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+    {{ super() }}
+
+    <script type="text/javascript">
+        (function () {
+            var countries = {{ json | safe }};
+            bd.renderCountryList(countries, document.getElementById('country_list'));
+        }());
+    </script>
+{% endblock %}

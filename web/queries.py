@@ -2,6 +2,7 @@
 
 from flask import current_app
 from sqlalchemy.sql import func
+from sqlalchemy import distinct
 
 from models import (PoletBeer, PolShop, PolStock, RatebeerBrewery,
                     RatebeerBeer, Country, BeerStyle, RbPolBeerMapping,
@@ -137,3 +138,19 @@ def get_all_municipalities():
     return current_app.db_session.query(Municipality)\
         .order_by(Municipality.kommnr)\
         .all()
+
+
+def get_countries():
+    countries = current_app.db_session.query(
+        Country,
+        func.count(distinct(RatebeerBeer.id)).label('c')
+    )\
+        .join(RatebeerBrewery)\
+        .join(RatebeerBeer)\
+        .join(PoletBeer)\
+        .group_by(Country.rb_id, Country.name, Country.iso_code)\
+        .order_by('c DESC')\
+        .all()
+
+    #return [c[0].serialize().update({'count': c[1]}) for c in countries]
+    return [c[0].serialize(extra={'count': c[1]}) for c in countries]
