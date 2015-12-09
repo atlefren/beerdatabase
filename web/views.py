@@ -152,7 +152,6 @@ def pol_beer_report(id):
 
 @app.route('/styles/')
 def style_list():
-    # TODO limit to available styles at polet
     styles = queries.get_style_list()
     return render_template('style_list.html', json=json.dumps(styles))
 
