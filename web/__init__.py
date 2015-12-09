@@ -12,7 +12,8 @@ from flask.ext.jsontools import DynamicJSONEncoder
 app = Flask(__name__)
 app.json_encoder = DynamicJSONEncoder
 
-debug = os.environ.get('DEBUG', False)
+debug = os.environ.get('DEBUG', 'False') == 'True'
+
 show_ga = not debug
 
 # load config
