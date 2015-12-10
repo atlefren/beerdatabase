@@ -7,7 +7,7 @@
 
 {% block main %}
 <h1>{{brewery.name}}</h1>
-<p>Fra {{brewery.country.name}}</p>
+<p>Fra <a href="/countries/{{brewery.country.rb_id}}">{{brewery.country.name}}</a></p>
 {%if num > 0 %}
 <p>Det er pr nå registrert {{num}} øl fra {{brewery.name}} hos Vinmonopolet.</p>
 {% else %}
