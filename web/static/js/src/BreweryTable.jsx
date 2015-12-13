@@ -21,6 +21,7 @@ var bd = this.bd || {};
             },
             sortParams: ['country', 'name'],
             isSorted: false,
+            filterable: true,
             sortDirection: 'asc'
         },
         {
@@ -44,7 +45,13 @@ var bd = this.bd || {};
     ns.renderBreweyTable = function(breweryList, columnIds, component) {
         breweryList = breweryList.sort(ns.Util.getSorter(['name'], false));
         var columnsForTable = getColumnsForTable(columnIds);
-        ReactDOM.render(<ns.SortableTable items={breweryList} columns={columnsForTable} />, component);
+        ReactDOM.render(
+            <ns.SortableTable
+                items={breweryList}
+                filterable={true}
+                columns={columnsForTable} />,
+            component
+        );
     }
 
 }(bd));

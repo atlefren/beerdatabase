@@ -34,6 +34,7 @@ var bd = this.bd || {};
             },
             sortParams: 'brewery',
             isSorted: false,
+            filterable: true,
             sortDirection: 'asc'
         },
         {
@@ -51,6 +52,7 @@ var bd = this.bd || {};
             },
             sortParams: 'style',
             isSorted: false,
+            filterable: true,
             sortDirection: 'asc'
         },
         {

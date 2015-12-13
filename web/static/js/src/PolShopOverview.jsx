@@ -49,7 +49,10 @@ var bd = this.bd || {};
 
                         <div className='twelve columns'>
                             <h3>Tilgjengelige øl ({this.props.beers.length})</h3>
-                            <ns.SortableTable items={this.props.beers} columns={columns} />
+                            <ns.SortableTable
+                                items={this.props.beers}
+                                filterable={true}
+                                columns={columns} />
                         </div>
                     </div>
                 </div>
