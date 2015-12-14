@@ -78,8 +78,12 @@ bd.api = bd.api || {};
             });
     };
 
-    ns.getPolStoresWithBeer = function (beerId, success, error) {
-        atomic.get(API_BASE + 'pol_beer/' + beerId +'/stock/')
+    ns.getPolStoresWithBeer = function (beerId, lat, lon, success, error) {
+        var url = API_BASE + 'pol_beer/' + beerId +'/stock/';
+        if (lat && lon) {
+            url += '?lat=' + lat + '&lon=' + lon;
+        }
+        atomic.get(url)
             .success(function (data, xhr) {
                 success(data);
             })

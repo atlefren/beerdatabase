@@ -22,6 +22,17 @@ var bd = this.bd || {};
             },
             sortParams: ['amount'],
             isSorted: false,
+            sortDirection: 'desc'
+        },
+        {
+            id: 'komm',
+            name: 'Kommune',
+            formatter: function (stock) {
+                return stock.komm;
+            },
+            sortParams: ['komm'],
+            isSorted: false,
+            filterable: true,
             sortDirection: 'asc'
         }
     ];
@@ -45,8 +56,20 @@ var bd = this.bd || {};
             this.setState({expanded: expanded});
             if (expanded && !this.state.data) {
                 this.setState({searching: true});
-                bd.api.getPolStoresWithBeer(this.props.beerId, this.gotStores);
+                var supportsGeoloc = !!navigator.geolocation;
+                if (!supportsGeoloc) {
+                    bd.api.getPolStoresWithBeer(this.props.beerId, null, null, this.gotStores);
+                } else {
+                    navigator.geolocation.getCurrentPosition(this.gotUserPosition, console.log);
+                }
             }
+        },
+
+        gotUserPosition: function (e) {
+            var lat = e.coords.latitude;
+            var lon = e.coords.longitude;
+            columns[0].isSorted = false;
+            bd.api.getPolStoresWithBeer(this.props.beerId, lat, lon, this.gotStores);
         },
 
         render: function () {
@@ -61,6 +84,7 @@ var bd = this.bd || {};
             } else if (this.state.data && this.state.data.length) {
                 content = (
                     <ns.SortableTable
+                        filterable={true}
                         idProperty="pol_id"
                         items={this.state.data}
                         columns={columns} />

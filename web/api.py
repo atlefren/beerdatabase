@@ -174,16 +174,30 @@ def confirm_suggestion(id):
 
 @app.route(api_prefix + '/pol_beer/<int:beer_id>/stock/', methods=['GET'])
 def get_stock_for_beer(beer_id):
+    lat = request.args.get('lat', None)
+    lon = request.args.get('lon', None)
+
     shops = current_app.db_session.query(PolShop, PolStock)\
         .filter(PolStock.shop_id == PolShop.id)\
-        .filter(PolStock.pol_beer_id == beer_id)\
-        .order_by(PolShop.name)
+        .filter(PolStock.pol_beer_id == beer_id)
+
+    if lat and lon:
+        lat = float(lat)
+        lon = float(lon)
+
+        shops = shops.order_by(
+            "geog <-> ST_GeographyFromText('SRID=4326;POINT(%s %s)')" % (lon, lat)
+        )
+    else:
+        shops = shops.order_by(PolShop.name)
 
     data = [{
         'pol_id': s[0].id,
         'name': s[0].name,
         'amount': s[1].stock,
         'updated': s[1].updated.isoformat(),
+        'komm': s[0].komm_name,
+        'fylke': s[0].fylke_name,
     } for s in shops.all()]
 
     return Response(
