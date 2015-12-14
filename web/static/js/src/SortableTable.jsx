@@ -56,7 +56,20 @@ var bd = this.bd || {};
     });
 
 
-    var FilterColumn = React.createClass({
+    function getFromDict(dict, keys) {
+        if (!_.isArray(keys)) {
+            keys = [keys];
+        }
+        return _.reduce(keys, function (acc, prop) {
+            if (_.has(acc, prop)) {
+                return acc[prop];
+            }
+            return null;
+        }, dict);
+    }
+
+
+    var FilterSelect = React.createClass({
 
         handleChange: function (e) {
             var value = e.target.value;
@@ -64,21 +77,21 @@ var bd = this.bd || {};
             if (value === '---') {
                 value = null;
             }
-            this.props.filter(this.props.filterKey, value);
+            this.props.setFilter(this.props.filterKey, value);
         },
 
         getInitialState: function () {
-            var values = _.clone(this.props.values);
-            values.unshift('---');
-            var selected = values[0];
+            var options = _.clone(this.props.options);
+            options.unshift('---');
+            var selected = options[0];
             if (this.props.selected) {
                 selected = this.props.selected;
             }
-            return {values: values, selected: selected};
+            return {options: options    , selected: selected};
         },
 
         render: function () {
-            var options = _.map(this.state.values, function (value) {
+              var options = _.map(this.state.options, function (value) {
                 return (
                     <option
                         key={value}
@@ -87,51 +100,71 @@ var bd = this.bd || {};
                     </option>
                 );
             });
-
+            var id = 'filter_' + this.props.filterKey;
             return (
-                <td>
+                <div className="form-group">
+                    <label htmlFor={id}>{this.props.label}</label>
                     <select
                         onChange={this.handleChange}
                         className="form-control"
+                        id={id}
                         value={this.state.selected}>
                         {options}
                     </select>
-                </td>
+                </div>
             );
         }
     });
 
+
+
+
+
     var FilterRow = React.createClass({
 
-        createFilterColumn: function (column) {
-            if (!column.filterable) {
-                return (<td></td>);
-            }
-            console.log(column);
-            var values = _.chain(this.props.items)
+        createFilter: function (column) {
+
+            var options = _.chain(this.props.items)
                 .map(function (item) {
-                    return item[column.id];
+                    return getFromDict(item, column.sortParams)
                 })
                 .uniq()
                 .sortBy(function (val) {return val;})
                 .value();
-            console.log(values);
+
+            var key = column.sortParams;
+            if (_.isArray(key)) {
+                key = key.join('___');
+            }
             return (
-                <FilterColumn
-                    column={column}
-                    selected={this.props.filterAttrs[column.id]}
-                    filter={this.props.filter}
-                    filterKey={column.id}
-                    values={values} />
+                <FilterSelect
+                    key={key}
+                    setFilter={this.props.filter}
+                    label={column.name}
+                    selected={this.props.filterAttrs[key]}
+                    filterKey={key}
+                    options={options} />
             );
+        },
+
+        getFilters: function () {
+            return _.chain(this.props.columns)
+                .filter(function (column) {
+                    return column.filterable;
+                })
+                .map(this.createFilter)
+                .value();
         },
 
         render: function () {
             return (
-                <tr>
-                    <td></td>
-                    {_.map(this.props.columns, this.createFilterColumn)}
-                </tr>
+                <nav className="navbar navbar-default">
+                    <div className="container-fluid">
+                        <form className="navbar-form navbar-left">
+                            {this.getFilters()}
+                        </form>
+                    </div>
+                </nav>
             );
         }
     });
@@ -153,17 +186,17 @@ var bd = this.bd || {};
         filter: function (id, value) {
             var filterAttrs = _.clone(this.state.filterAttrs);
             filterAttrs[id] = value;
-            console.log(id, value);
 
             var items = _.clone(this.props.items)
                 .filter(function (item) {
                     var matched = _.map(filterAttrs, function (value, key) {
                         if (value !== null) {
-                            return item[key] === value;
+                            var keys = key.split('___');
+                            return getFromDict(item, keys) === value;
                         }
                         return true;
                     });
-                    console.log(matched);
+
                     return matched.indexOf(false) === -1;
                 });
             this.setState({items: items, filterAttrs: filterAttrs});
@@ -193,10 +226,6 @@ var bd = this.bd || {};
             });
         },
 
-        toggleFilter: function () {
-            this.setState({isFiltering: !this.state.isFiltering});
-        },
-
         render: function () {
             var rows = _.map(this.state.items, function (item, i) {
                 return (
@@ -210,18 +239,19 @@ var bd = this.bd || {};
 
 
             var header = _.map(this.state.columns, function (column) {
-                return (<TableHeaderCell
-                            name={column.name}
-                            columnId={column.id}
-                            key={column.id}
-                            onSort={this.onSort}
-                            sortDirection={column.sortDirection}
-                            isSorted={column.isSorted} />
+                return (
+                    <TableHeaderCell
+                        name={column.name}
+                        columnId={column.id}
+                        key={column.id}
+                        onSort={this.onSort}
+                        sortDirection={column.sortDirection}
+                        isSorted={column.isSorted} />
                 );
             }, this);
 
             var filterRow;
-            if (this.props.filterable && this.state.isFiltering) {
+            if (this.props.filterable) {
                 filterRow = (
                     <FilterRow
                         filter={this.filter}
@@ -230,34 +260,22 @@ var bd = this.bd || {};
                         columns={this.props.columns} />
                 );
             }
-            var filterBtn;
-            if (this.props.filterable) {
-                header.unshift((
-                    <th>
-                        <button
-                            onClick={this.toggleFilter}
-                            type="button"
-                            className="btn btn-default">
-                            <i className="fa fa-filter" /> Filtrer
-                        </button>
-                    </th>
-                ));
-            } else {
-                header.unshift((<th>#</th>));
-            }
+            header.unshift((<th key="count">#</th>));
 
             return (
-                <table className="table table-striped table-sortable">
-                    <thead>
-                        <tr>
-                           {header}
-                        </tr>
-                        {filterRow}
-                    </thead>
-                    <tbody>
-                        {rows}
-                    </tbody>
-                </table>
+                <div>
+                    {filterRow}
+                    <table className="table table-striped table-sortable">
+                        <thead>
+                            <tr >
+                               {header}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {rows}
+                        </tbody>
+                    </table>
+                </div>
             );
         }
     });
