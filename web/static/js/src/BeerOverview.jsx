@@ -123,7 +123,7 @@ var bd = this.bd || {};
                     <h4>Beholdningshistorikk</h4>
                     <LineChart
                         data={chartData}
-                        options={{animation: false}}
+                        options={{animation: false, bezierCurve: false}}
                         width="600"
                         height="200"/>
                 </div>
