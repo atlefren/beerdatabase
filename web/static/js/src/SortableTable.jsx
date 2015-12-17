@@ -265,16 +265,18 @@ var bd = this.bd || {};
             return (
                 <div>
                     {filterRow}
-                    <table className="table table-striped table-sortable">
-                        <thead>
-                            <tr >
-                               {header}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {rows}
-                        </tbody>
-                    </table>
+                    <div className="table-responsive">
+                        <table className="table table-striped table-sortable">
+                            <thead>
+                                <tr >
+                                   {header}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {rows}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             );
         }
