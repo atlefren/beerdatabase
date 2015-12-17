@@ -18,9 +18,15 @@
 </head>
 <body>
     <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
+      <div class="container-fluid">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <button 
+            type="button"
+            class="navbar-toggle collapsed"
+            data-toggle="collapse"
+            data-target="#navbar"
+            aria-expanded="false"
+            aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -30,9 +36,6 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li {% if request.url_rule.endpoint == 'index' %}class="active"{% endif %} >
-                <a href="{{ url_for('index')}}">Hjem</a>
-            </li>
             <li {% if request.url_rule.endpoint == 'search' %}class="active"{% endif %} >
                 <a href="{{ url_for('search')}}">Søk</a>
             </li>
@@ -40,32 +43,25 @@
                 <a href="{{ url_for('brewery_list')}}">Bryggerier</a>
             </li>
             <li {% if request.url_rule.endpoint == 'style_list' %}class="active"{% endif %}>
-                <a href="{{ url_for('style_list')}}">Øltyper</a>
+                <a href="{{ url_for('style_list')}}">Ølstiler</a>
             </li>
             <li {% if request.url_rule.endpoint == 'country_list' %}class="active"{% endif %}>
                 <a href="{{ url_for('country_list')}}">Land</a>
             </li>
+
             <li {% if request.url_rule.endpoint == 'pol_shops' %}class="active"{% endif %}>
                 <a href="{{ url_for('pol_shops')}}">Polutsalg</a>
             </li>
+
             <li {% if request.url_rule.endpoint == 'unmatched_beers' %}class="active"{% endif %}>
                 <a href="{{ url_for('unmatched_beers')}}">Umatcha øl</a>
             </li>
-            <!--
-            <li {% if request.url_rule.endpoint == 'match_suggestions' %}class="active"{% endif %}>
-                <a href="{{ url_for('match_suggestions')}}">Matcheforslag</a>
-            </li>
-            -->
           </ul>
-          <!--
-          <ul class="nav navbar-nav navbar-right">
-            <li>
-                <form class="navbar-form navbar-left" role="search">
-                    <div class="form-group" id="find_beer">
-                    </div>
-                </form>
-            </li>
-          </ul> -->
+
+          <form class="navbar-form navbar-right visible-md visible-lg">
+            <div class="form-group" id="find_beer"></div>
+          </form>
+
         </div><!--/.nav-collapse -->
       </div>
     </nav>

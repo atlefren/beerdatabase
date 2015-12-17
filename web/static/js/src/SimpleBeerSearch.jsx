@@ -19,6 +19,6 @@ var bd = this.bd || {};
     });
 
     ns.setupSimpleBeerSearch = function (container) {
-        //ReactDOM.render(<SimpleBeerSearch />, container);
+        ReactDOM.render(<SimpleBeerSearch />, container);
     };
 }(bd));
