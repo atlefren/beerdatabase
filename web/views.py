@@ -36,15 +36,18 @@ pages = [
     {
         'path': '/search/',
         'name': 'search',
+        'title': u'Søk',
         'view_type': 'standard_view',
-        'data_func': search
+        'data_func': search,
+        'in_menu': True
     },
     {
         'path': '/breweries/',
         'name': 'brewery_list',
         'title': 'Bryggerier',
         'data_func': data.queries.get_breweries_at_polet,
-        'js_func': 'bd.renderBreweryListPage'
+        'js_func': 'bd.renderBreweryListPage',
+        'in_menu': True
     },
     {
         'path': '/breweries/<int:id>',
@@ -57,7 +60,8 @@ pages = [
         'name': 'style_list',
         'title': u'Ølstiler',
         'data_func': data.queries.get_style_list,
-        'js_func': 'bd.renderStyleList'
+        'js_func': 'bd.renderStyleList',
+        'in_menu': True
     },
     {
         'path': '/styles/<int:id>',
@@ -70,7 +74,8 @@ pages = [
         'name': 'country_list',
         'title': 'Land',
         'data_func': queries.get_countries,
-        'js_func': 'bd.renderCountryList'
+        'js_func': 'bd.renderCountryList',
+        'in_menu': True
     },
     {
         'path': '/countries/<string:id>',
@@ -83,7 +88,8 @@ pages = [
         'name': 'pol_shop_list',
         'title': u'Polutsalg',
         'data_func': data.get_pol_shop_list,
-        'js_func': 'bd.renderPolShopList'
+        'js_func': 'bd.renderPolShopList',
+        'in_menu': True
     },
     {
         'path': '/pol_shops/<int:id>',
@@ -102,7 +108,8 @@ pages = [
         'name': 'unmatched',
         'title': u'Umatcha øl',
         'data_func': queries.get_unmatched_pol_beers,
-        'js_func': 'bd.renderUnmatchedPolBeersPage'
+        'js_func': 'bd.renderUnmatchedPolBeersPage',
+        'in_menu': True
     },
     {
         'path': '/pol_beers/<int:id>/report',
@@ -125,6 +132,14 @@ pages = [
         'data_func': find_rb_beer
     }
 ]
+
+menu_pages = [{'name': page['name'], 'title': page['title']} for page
+              in pages if page.get('in_menu', False)]
+
+
+@app.context_processor
+def inject_user():
+    return dict(faen="FAEN", menu_pages=menu_pages)
 
 
 add_view = view_adder(app)

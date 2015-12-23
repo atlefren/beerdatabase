@@ -65,7 +65,6 @@ def get_breweries_at_polet():
         .join(Country)\
         .group_by(RatebeerBrewery.id, RatebeerBrewery.name, Country.rb_id, Country.name)\
         .order_by(RatebeerBrewery.name)
-    print breweries
     breweries = breweries.all()
 
     # TODO: incorporate in query
