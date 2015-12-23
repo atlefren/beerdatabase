@@ -23,13 +23,24 @@ def get_param_list_float(param):
         return [float(x) for x in val]
 
 
+search_defaults = {
+    'style': None,
+    'name': '',
+    'overallScore': [0, 100],
+    'styleScore': [0, 100],
+    'price': [0, 200],
+    'abv': [0, 50],
+    'availableAt': ['polet']
+}
+
+
 def search():
-
     styles = queries.get_styles()
-
     search_params = {
         'styles': styles
     }
+
+    search_defaults['style'] = [s.id for s in styles]
 
     search_values = {
         'style': get_param_list_int('style'),
@@ -41,20 +52,9 @@ def search():
         'availableAt': get_param_list_str('availableAt'),
     }
 
-    if search_values.get('style') is None:
-        search_values['style'] = [s.id for s in styles]
-    if search_values.get('name') is None:
-        search_values['name'] = ''
-    if search_values.get('overallScore') is None:
-        search_values['overallScore'] = [0, 100]
-    if search_values.get('styleScore') is None:
-        search_values['styleScore'] = [0, 100]
-    if search_values.get('price') is None:
-        search_values['price'] = [0, 200]
-    if search_values.get('abv') is None:
-        search_values['abv'] = [0, 50]
-    if search_values.get('availableAt') is None:
-        search_values['availableAt'] = ['polet']
+    for key, search_value in search_values.iteritems():
+        if search_value is None:
+            search_values[key] = search_defaults[key]
 
     return render_template(
         'search.html',
