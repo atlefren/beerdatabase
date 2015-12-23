@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from flask.ext.assets import Bundle
 from react import jsx
 
@@ -6,7 +8,7 @@ from web import app
 transformer = jsx.JSXTransformer()
 
 
-def react_filter(_in,out, **kw):
+def react_filter(_in, out, **kw):
     out.write(transformer.transform_string(_in.read()))
 
 
@@ -72,7 +74,7 @@ index_bundle = react_bundle(
 brewery_list_bundle = react_bundle(
     Bundle(
         'js/src/SortableTable.jsx',
-        'js/src/BreweryTable.jsx',
+        'js/src/Pages/BreweryTable.jsx',
         filters=js_filters
     ),
     'brewery_list.js'
@@ -82,6 +84,7 @@ brewery_bundle = react_bundle(
     Bundle(
         'js/src/SortableTable.jsx',
         'js/src/PolBeerTable.jsx',
+        'js/src/Pages/BreweryPage.jsx',
         filters=js_filters
     ),
     'brewery.js'
@@ -89,7 +92,7 @@ brewery_bundle = react_bundle(
 
 style_list_bundle = react_bundle(
     Bundle(
-        'js/src/StyleList.jsx',
+        'js/src/Pages/StyleList.jsx',
         filters=js_filters
     ),
     'style_list.js'
@@ -99,9 +102,30 @@ style_bundle = react_bundle(
     Bundle(
         'js/src/SortableTable.jsx',
         'js/src/PolBeerTable.jsx',
+        'js/src/Pages/StylePage.jsx',
         filters=js_filters
     ),
     'style.js'
+)
+
+
+country_list_bundle = react_bundle(
+    Bundle(
+        'js/src/SortableTable.jsx',
+        'js/src/Pages/CountryList.jsx',
+        filters=js_filters
+    ),
+    'country_list.js'
+)
+
+country_bundle = react_bundle(
+    Bundle(
+        'js/src/SortableTable.jsx',
+        'js/src/PolBeerTable.jsx',
+        'js/src/Pages/BeersInCountryList.jsx',
+        filters=js_filters
+    ),
+    'country.js'
 )
 
 pol_beer_bundle = react_bundle(
@@ -112,7 +136,7 @@ pol_beer_bundle = react_bundle(
         'js/src/SortableTable.jsx',
         'js/src/PolWithBeer.jsx',
         'js/src/Pie.jsx',
-        'js/src/BeerOverview.jsx',
+        'js/src/Pages/BeerOverview.jsx',
         filters=js_filters
     ),
     'pol_beer.js'
@@ -121,7 +145,7 @@ pol_beer_bundle = react_bundle(
 pol_shop_list_bundle = react_bundle(
     Bundle(
         'js/src/SortableTable.jsx',
-        'js/src/PolShopList.jsx',
+        'js/src/Pages/PolShopList.jsx',
         filters=js_filters
     ),
     'pol_shop_list.js'
@@ -131,7 +155,7 @@ pol_shop_bundle = react_bundle(
     Bundle(
         'js/src/SortableTable.jsx',
         'js/src/PolBeerTable.jsx',
-        'js/src/PolShopOverview.jsx',
+        'js/src/Pages/PolShopOverview.jsx',
         filters=js_filters
     ),
     'pol_shop.js'
@@ -142,7 +166,7 @@ search_bundle = react_bundle(
         'js/src/SortableTable.jsx',
         'js/src/PolBeerTable.jsx',
         'js/lib/nouislider/distribute/nouislider.min.js',
-        'js/src/SearchPage.jsx',
+        'js/src/Pages/SearchPage.jsx',
         filters=js_filters
     ),
     'search.js'
@@ -152,6 +176,7 @@ unmatched_bundle = react_bundle(
     Bundle(
         'js/src/SortableTable.jsx',
         'js/src/PolBeerTable.jsx',
+        'js/src/Pages/UnmatchedPolPage.jsx',
         filters=js_filters
     ),
     'unmatched.js'
@@ -159,7 +184,7 @@ unmatched_bundle = react_bundle(
 
 fix_beer_bundle = react_bundle(
     Bundle(
-        'js/src/BeerFixer.jsx',
+        'js/src/Pages/BeerFixer.jsx',
         filters=js_filters
     ),
     'fix_beer.js'
@@ -167,27 +192,8 @@ fix_beer_bundle = react_bundle(
 
 match_suggestions_bundle = react_bundle(
     Bundle(
-        'js/src/BeerFixer.jsx',
+        'js/src/Admin/ManageMatchSuggestions.jsx',
         filters=js_filters
     ),
     'match_suggestions.js'
-)
-
-country_list_bundle = react_bundle(
-    Bundle(
-        'js/src/SortableTable.jsx',
-        'js/src/CountryList.jsx',
-        filters=js_filters
-    ),
-    'country_list.js'
-)
-
-country_bundle = react_bundle(
-    Bundle(
-        'js/src/SortableTable.jsx',
-        'js/src/PolBeerTable.jsx',
-        'js/src/BeersInCountryList.jsx',
-        filters=js_filters
-    ),
-    'country.js'
 )

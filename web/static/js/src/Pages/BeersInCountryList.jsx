@@ -4,7 +4,6 @@ var bd = this.bd || {};
 
     var CountryDetail = React.createClass({
         render: function () {
-            console.log(this.props.beers);
             return (
                 <div>
                 </div>
@@ -12,7 +11,7 @@ var bd = this.bd || {};
         }
     });
 
-    bd.renderBeersInCountryList = function (data, componentId) {
+    bd.renderBeersInCountryList = function (data, componentId, title) {
         var component = document.getElementById(componentId);
 
         var columnIds = ['name', 'brewery', 'style', 'rating', 'abv', 'price'];
@@ -23,7 +22,7 @@ var bd = this.bd || {};
                 component={ns.SortableTable}
                 items={data.beers}
                 columns={columnsForTable}
-                title={'Øl fra ' + data.country.name} />,
+                title={title} />,
             component
         );
     };

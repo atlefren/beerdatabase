@@ -25,12 +25,12 @@ var bd = this.bd || {};
         }
     ];
 
-    ns.renderCountryList = function (countries, componentId) {
+    ns.renderCountryList = function (countries, componentId, title) {
         var component = document.getElementById(componentId);
         ReactDOM.render(
             <ns.Container
                 component={ns.SortableTable}
-                title="Land"
+                title={title}
                 items={countries}
                 columns={columns}
                 idProperty="rb_id" />,

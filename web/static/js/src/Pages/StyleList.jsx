@@ -44,7 +44,7 @@ var bd = this.bd || {};
 
     var StyleListWrapper = React.createClass({
 
-        getDefaultProps: function() {
+        getDefaultProps: function () {
             return {
                 valuesPrColumn: 35
             };
@@ -55,7 +55,7 @@ var bd = this.bd || {};
             var valuesPrColumn = this.props.valuesPrColumn;
             var numColumns = Math.ceil(numElements / this.props.valuesPrColumn);
             var columnSize = Math.floor(12 / numColumns);
-            
+
             var columnClass = columnNames[columnSize - 1];
             var columns = _.map(_.range(numColumns), function (i) {
                 var start = i * valuesPrColumn;
@@ -73,8 +73,16 @@ var bd = this.bd || {};
 
     });
 
-    ns.renderStyleList = function (styles, component) {
-        ReactDOM.render(<StyleListWrapper styles={styles} valuesPrColumn={25}/>, component);
+    ns.renderStyleList = function (styles, componentId, title) {
+        var component = document.getElementById(componentId);
+        ReactDOM.render(
+            <ns.Container
+                component={StyleListWrapper}
+                styles={styles}
+                valuesPrColumn={25}
+                title={title} />,
+            component
+        );
     };
 
 }(bd));

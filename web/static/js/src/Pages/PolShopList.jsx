@@ -347,9 +347,11 @@ var bd = this.bd || {};
     });
 
 
-    ns.renderPolShopList = function (shops, municipalities, component) {
+    ns.renderPolShopList = function (data, componentId, title) {
+        var component = document.getElementById(componentId);
 
-        var categories = _.chain(shops)
+
+        var categories = _.chain(data.shops)
             .pluck('category')
             .uniq()
             .map(function (category) {
@@ -358,7 +360,7 @@ var bd = this.bd || {};
             .sortBy('id')
             .value();
 
-        var counties = _.chain(municipalities)
+        var counties = _.chain(data.municipalities)
             .map(function (municipality) {
                 return {id: municipality.fylkesnr, name: municipality.fylke_name};
             })
@@ -366,12 +368,15 @@ var bd = this.bd || {};
                 return county.id;
             })
             .value();
+
         ReactDOM.render(
-            <PolShopList
-                shops={shops}
+            <ns.Container
+                component={PolShopList}
+                shops={data.shops}
                 categories={categories}
                 counties={counties} 
-                municipalities={municipalities} />,
+                municipalities={data.municipalities}
+                title={title} />,
             component
         );
     };

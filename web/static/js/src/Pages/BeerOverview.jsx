@@ -195,8 +195,6 @@ var bd = this.bd || {};
 
             return (
                 <div>
-                    <h1>{rbbeer.name}</h1>
-
                     <p>
                         Brygget av{' '}
                         <a href={'/breweries/' + rbbeer.brewery.id}>{rbbeer.brewery.name}</a>
@@ -317,8 +315,15 @@ var bd = this.bd || {};
     });
 
 
-    ns.renderBeerOverview = function (beer, component) {
-        ReactDOM.render(<BeerOverview beer={beer} />, component);
+    ns.renderBeerOverview = function (beer, componentId, title) {
+        var component = document.getElementById(componentId);
+        ReactDOM.render(
+            <ns.Container
+                component={BeerOverview}
+                title={title}
+                beer={beer} />,
+            component
+        );
     };
 
 }(bd));

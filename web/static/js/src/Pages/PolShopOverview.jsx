@@ -23,7 +23,6 @@ var bd = this.bd || {};
         render: function () {
             return (
                 <div>
-                    <h1>{this.props.shop.name}</h1>
                     <div className='row'>
                         <div className='col-md-4'>
                             <strong>Kategori</strong><br />
@@ -63,8 +62,16 @@ var bd = this.bd || {};
 
     });
 
-    ns.renderPolShopOverview = function (polShop, beers, component) {
-        ReactDOM.render(<PolShopOverview shop={polShop} beers={beers} />, component);
+    ns.renderPolShopOverview = function (data, componentId, title) {
+        var component = document.getElementById(componentId);
+        ReactDOM.render(
+            <ns.Container
+                component={PolShopOverview}
+                shop={data.shop}
+                beers={data.beers}
+                title={title} />,
+            component
+        );
     };
 
 }(bd));

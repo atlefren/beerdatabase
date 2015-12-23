@@ -54,4 +54,19 @@ var bd = this.bd || {};
         );
     };
 
+    ns.renderBreweryListPage = function (breweries, componentId, title) {
+
+        var columns = getColumnsForTable(['name', 'country', 'num_beers']);
+        var component = document.getElementById(componentId);
+        ReactDOM.render(
+            <ns.Container
+                component={ns.SortableTable}
+                title={title}
+                items={breweries}
+                filterable={true}
+                columns={columns} />,
+            component
+        );
+    };
+
 }(bd));

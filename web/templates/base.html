@@ -50,11 +50,11 @@
             </li>
 
             <li {% if request.url_rule.endpoint == 'pol_shops' %}class="active"{% endif %}>
-                <a href="{{ url_for('pol_shops')}}">Polutsalg</a>
+                <a href="{{ url_for('pol_shop_list')}}">Polutsalg</a>
             </li>
 
             <li {% if request.url_rule.endpoint == 'unmatched_beers' %}class="active"{% endif %}>
-                <a href="{{ url_for('unmatched_beers')}}">Umatcha øl</a>
+                <a href="{{ url_for('unmatched')}}">Umatcha øl</a>
             </li>
           </ul>
 
