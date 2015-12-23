@@ -42,7 +42,7 @@ def search():
 
     search_defaults['style'] = [s.id for s in styles]
 
-    search_values = {
+    init_values = {
         'style': get_param_list_int('style'),
         'name': request.args.get('name', None),
         'overallScore': get_param_list_int('overallScore'),
@@ -52,12 +52,20 @@ def search():
         'availableAt': get_param_list_str('availableAt'),
     }
 
-    for key, search_value in search_values.iteritems():
+    from_query_params = False
+    for key, search_value in init_values.iteritems():
         if search_value is None:
-            search_values[key] = search_defaults[key]
+            init_values[key] = search_defaults[key]
+        else:
+            from_query_params = True
+
+    data = {
+        'search_params': search_params,
+        'init_values': init_values,
+        'startWithSearch': from_query_params
+    }
 
     return render_template(
         'search.html',
-        search_params=json.dumps(search_params),
-        search_values=json.dumps(search_values),
+        data=json.dumps(data)
     )

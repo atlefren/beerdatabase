@@ -441,7 +441,9 @@ var bd = this.bd || {};
         },
 
         componentDidMount: function () {
-            this.doSearch(this.props.initValues);
+            if (this.props.startWithSearch) {
+                this.doSearch(this.props.initValues);
+            }
         },
 
         doSearch: function (params) {
@@ -459,7 +461,6 @@ var bd = this.bd || {};
         },
 
         render: function () {
-
             var results;
             if (this.state.isSearching) {
                 results = (<ns.LoadIndicator text="Søker" />);
@@ -474,7 +475,6 @@ var bd = this.bd || {};
                         columns={resultColumns} />
                 );
             }
-
             return (
                 <div className="row">
                     <div id="search_field" className="col-md-3">
@@ -491,12 +491,13 @@ var bd = this.bd || {};
         }
     });
 
-    ns.renderSearchPage = function (searchParams, initValues, container) {
-
+    ns.renderSearchPage = function (data, containerId) {
+        var container = document.getElementById(containerId);
         ReactDOM.render(
             <SearchPage
-                searchParams={searchParams}
-                initValues={initValues} />,
+                searchParams={data.search_params}
+                startWithSearch={data.startWithSearch}
+                initValues={data.init_values} />,
             container
         );
     };

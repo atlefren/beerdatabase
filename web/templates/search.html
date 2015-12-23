@@ -17,11 +17,7 @@
 
     <script type="text/javascript">
         (function () {
-
-            var searchParams = {{ search_params | safe }};
-            var searchValues = {{ search_values | safe }};
-
-            bd.renderSearchPage(searchParams, searchValues, document.getElementById('search_page'));
+            bd.renderSearchPage({{ data | safe }}, 'search_page');
         }());
     </script>
 
