@@ -58,7 +58,7 @@ var bd = this.bd || {};
             return {
                 beer: _.clone(this.props.beer),
                 brewery: _.clone(this.props.beer.brewery)
-            }
+            };
         },
 
         selectBrewery: function (brewery) {
@@ -227,7 +227,7 @@ var bd = this.bd || {};
 
     });
 
-    ns.renderBeerFixer = function(pol_beer, rb_beer, component) {
+    ns.renderBeerFixer = function (pol_beer, rb_beer, component) {
         ReactDOM.render(<BeerFixer pol_beer={pol_beer} rb_beer={rb_beer} />, component);
     };
 
@@ -239,11 +239,11 @@ var bd = this.bd || {};
     var MatchHandlerMixin = {
 
         confirmSuggestion: function (e) {
-            ns.api.confirmSuggestion(this.props.suggestion, this.props.updated)
+            ns.api.confirmSuggestion(this.props.suggestion, this.props.updated);
         },
 
         rejectSuggestion: function (e) {
-            ns.api.rejectSuggestion(this.props.suggestion, this.props.updated)
+            ns.api.rejectSuggestion(this.props.suggestion, this.props.updated);
         }
     };
 
@@ -256,7 +256,11 @@ var bd = this.bd || {};
             return (
                 <tr key={suggestion.id}>
                     <td>{suggestion.pol_beer.producer}</td>
-                    <td><a href={suggestion.pol_beer.url} target="_blank">{suggestion.pol_beer.name}</a></td>
+                    <td>
+                        <a href={suggestion.pol_beer.url} target="_blank">
+                            {suggestion.pol_beer.name}
+                        </a>
+                    </td>
                     <td>{suggestion.rb_beer.brewery.name}</td>
                     <td>{suggestion.rb_beer.name}</td>
                     <td>{suggestion.comment}</td>
@@ -321,7 +325,11 @@ var bd = this.bd || {};
             return (
                 <tr key={suggestion.id}>
                     <td>{suggestion.pol_beer.producer}</td>
-                    <td><a href={suggestion.pol_beer.url} target="_blank">{suggestion.pol_beer.name}</a></td>
+                    <td>
+                        <a href={suggestion.pol_beer.url} target="_blank">
+                            {suggestion.pol_beer.name}
+                        </a>
+                    </td>
                     <td>{suggestion.pol_beer.ratebeer.brewery.name}</td>
                     <td>{suggestion.pol_beer.ratebeer.name}</td>
                     <td>{suggestion.rb_beer.brewery.name}</td>
@@ -409,8 +417,9 @@ var bd = this.bd || {};
     });
 
 
-    ns.renderBeerFixSuggestions = function(suggestions, component) {
+    ns.renderBeerFixSuggestions = function (suggestions, component) {
         ReactDOM.render(<BeerFixSuggestions suggestions={suggestions} />, component);
     };
 
 }(bd));
+

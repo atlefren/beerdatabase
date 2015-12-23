@@ -5,7 +5,7 @@ var bd = this.bd || {};
     ns.LoadIndicator = React.createClass({
 
         getDefaultProps: function () {
-            return {text: 'Søker'}
+            return {text: 'Søker'};
         },
 
         render: function () {

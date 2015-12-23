@@ -98,7 +98,7 @@ var bd = this.bd || {};
             this.map = new WebatlasMap(element, {customer: 'atlefren_olmonopolet'});
             var markerClicked = this.markerClicked;
             this.shopLayer = L.geoJson([], {
-                pointToLayer: function(featureData, latlng) {
+                pointToLayer: function (featureData, latlng) {
                     return L.marker(latlng, {
                         title: featureData.properties.title
                     }).on('click', markerClicked);
@@ -111,7 +111,7 @@ var bd = this.bd || {};
             window.location.href = '/pol_shops/' + e.target.feature.properties.id;
         },
 
-        componentWillReceiveProps: function(nextProps) {
+        componentWillReceiveProps: function (nextProps) {
             if (_.has(nextProps, 'items')) {
                 this.setGeometries(nextProps.items);
             }
@@ -257,7 +257,7 @@ var bd = this.bd || {};
                 content = (<ns.LoadIndicator text="Laster" />);
             } else {
                 if (this.state.filteredShops.length === 0) {
-                    content = <div>Ingen funnet</div>
+                    content = (<div>Ingen funnet</div>);
                 } else if (this.state.type === 'table') {
                     content = (
                         <ns.SortableTable

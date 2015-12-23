@@ -52,6 +52,6 @@ var bd = this.bd || {};
                 columns={columnsForTable} />,
             component
         );
-    }
+    };
 
 }(bd));

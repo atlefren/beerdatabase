@@ -17,7 +17,7 @@ var bd = this.bd || {};
             id: 'count_pol',
             name: 'Antall øl på polet',
             formatter: function (country) {
-                return country.count
+                return country.count;
             },
             sortParams: 'count',
             isSorted: true,

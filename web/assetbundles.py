@@ -6,7 +6,7 @@ from web import app
 transformer = jsx.JSXTransformer()
 
 
-def react_filter(_in, out, **kw):
+def react_filter(_in,out, **kw):
     out.write(transformer.transform_string(_in.read()))
 
 

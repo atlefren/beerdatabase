@@ -75,7 +75,7 @@ var bd = this.bd || {};
     var StyleChooser = React.createClass({
 
         getDefaultProps: function () {
-            return {value: []}
+            return {value: []};
         },
 
         getInitialState: function () {
@@ -106,7 +106,7 @@ var bd = this.bd || {};
                 selected = _.pluck(this.props.styles, 'id');
                 this.setState({selected: selected, allSelected: true});
             } else {
-                selected = []
+                selected = [];
                 this.setState({selected: selected, allSelected: false});
             }
             this.changed(selected);
@@ -125,7 +125,7 @@ var bd = this.bd || {};
                         {style.name}
                     </option>
                 );
-            })
+            });
 
             return (
                 <fieldset>
@@ -140,7 +140,10 @@ var bd = this.bd || {};
                         </select>
                         <div className="checkbox">
                             <label>
-                                <input onChange={this.toggleAll} checked={this.state.allSelected} type="checkbox" />
+                                <input
+                                    onChange={this.toggleAll}
+                                    checked={this.state.allSelected}
+                                    type="checkbox" />
                                 Velg alle
                             </label>
                         </div>
@@ -203,7 +206,10 @@ var bd = this.bd || {};
                     <div className="form-group">
                         <label>{this.props.label}</label>
                         <div>
-                            <div>{min}{this.props.displayPostfix} til {max}{this.props.displayPostfix}</div>
+                            <div>
+                                {min}{this.props.displayPostfix} til 
+                                {max}{this.props.displayPostfix}
+                            </div>
                             <Slider
                                 {...this.props}
                                 initMin={getFromArr(this.props.value, 0, this.props.min)}
@@ -224,7 +230,7 @@ var bd = this.bd || {};
         },
 
         toggle: function (e) {
-            var checked = e.target.checked
+            var checked = e.target.checked;
             this.setState({checked: checked});
             this.props.onChange(this.props.type, checked);
         },
@@ -420,7 +426,7 @@ var bd = this.bd || {};
                     </a>
                 );
             }
-            return beer.name
+            return beer.name;
         },
         sortParams: 'name',
         isSorted: true,
@@ -431,7 +437,7 @@ var bd = this.bd || {};
     var SearchPage = React.createClass({
 
         getInitialState: function () {
-            return {beers: null}
+            return {beers: null};
         },
 
         componentDidMount: function () {
@@ -449,7 +455,7 @@ var bd = this.bd || {};
         },
 
         searchError: function () {
-            this.setState({beers: []})
+            this.setState({beers: []});
         },
 
         render: function () {
@@ -483,7 +489,7 @@ var bd = this.bd || {};
                 </div>
             );
         }
-    })
+    });
 
     ns.renderSearchPage = function (searchParams, initValues, container) {
 

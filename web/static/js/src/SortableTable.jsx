@@ -87,7 +87,7 @@ var bd = this.bd || {};
             if (this.props.selected) {
                 selected = this.props.selected;
             }
-            return {options: options    , selected: selected};
+            return {options: options, selected: selected};
         },
 
         render: function () {
@@ -117,16 +117,13 @@ var bd = this.bd || {};
     });
 
 
-
-
-
     var FilterRow = React.createClass({
 
         createFilter: function (column) {
 
             var options = _.chain(this.props.items)
                 .map(function (item) {
-                    return getFromDict(item, column.sortParams)
+                    return getFromDict(item, column.sortParams);
                 })
                 .uniq()
                 .sortBy(function (val) {return val;})

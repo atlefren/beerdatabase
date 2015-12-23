@@ -3,7 +3,7 @@ var bd = this.bd || {};
     'use strict';
 
     var SVGComponent = React.createClass({
-        render: function() {
+        render: function () {
             return (
                 <svg
                     version='1.1'
@@ -24,7 +24,7 @@ var bd = this.bd || {};
         getSvg: function () {
             var size = 20;
             var value = this.props.value * 10;
-            var radius  = this.props.size / 2
+            var radius  = this.props.size / 2;
 
             if (value >= 100) {
                 return (

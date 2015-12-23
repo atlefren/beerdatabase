@@ -104,12 +104,12 @@ var bd = this.bd || {};
         return _.filter(columns, function (column) {
             return (columnIds.indexOf(column.id) > -1);
         });
-    }
+    };
 
     ns.renderPolBeerTable = function(beerList, columnIds, component) {
         beerList = beerList.sort(ns.Util.getSorter(['name'], false));
         var columnsForTable = ns.getColumnsForTable(columnIds);
         ReactDOM.render(<ns.SortableTable items={beerList} columns={columnsForTable} />, component);
-    }
+    };
 
 }(bd));

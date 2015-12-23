@@ -32,14 +32,14 @@ var bd = this.bd || {};
                         {style.name}
                     </a>
                 );
-            })
+            });
             return (
                 <div className="list-group">
                     {styles}
                 </div>
             );
         }
-    })
+    });
 
 
     var StyleListWrapper = React.createClass({
@@ -73,7 +73,7 @@ var bd = this.bd || {};
 
     });
 
-    ns.renderStyleList = function(styles, component) {
+    ns.renderStyleList = function (styles, component) {
         ReactDOM.render(<StyleListWrapper styles={styles} valuesPrColumn={25}/>, component);
     };
 

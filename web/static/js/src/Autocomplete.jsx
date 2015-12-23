@@ -120,13 +120,13 @@ var bd = this.bd || {};
         },
 
         render: function () {
-            var resultsStyle = {display: "block"};
+            var resultsStyle = {display: 'block'};
             var itemNodes = [];
             var inputClass = 'form-control';
 
             if (!this.state.results.length || this.state.selectedItem !== null) {
                 //there are no results or we have a selected item
-                resultsStyle = {display: "none"};
+                resultsStyle = {display: 'none'};
             } else {
                 //there are results to display
                 inputClass += ' active';

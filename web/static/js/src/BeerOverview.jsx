@@ -56,7 +56,7 @@ var bd = this.bd || {};
                 </tr>
             );
         }
-    })
+    });
 
     var ScoreDisplay = React.createClass({
 
@@ -65,9 +65,13 @@ var bd = this.bd || {};
                 <div className='col-md-1 score-box'>
                     <strong>Score</strong>
                     <div className='styleHeader'>Overall</div>
-                    <div className='overallScore'>{ns.Util.valueOrNa(this.props.beer.score_overall)}</div>
+                    <div className='overallScore'>
+                        {ns.Util.valueOrNa(this.props.beer.score_overall)}
+                    </div>
                     <div className='styleHeader'>Style</div>
-                    <div className='styleScore'>{ns.Util.valueOrNa(this.props.beer.score_style)}</div>
+                    <div className='styleScore'>
+                        {ns.Util.valueOrNa(this.props.beer.score_style)}
+                    </div>
                 </div>
             );
         }
@@ -186,7 +190,7 @@ var bd = this.bd || {};
 
             var stockHistory;
             if (this.state.showStockHistory) {
-                stockHistory = <StockHistory history={this.state.stockHistory} />
+                stockHistory = (<StockHistory history={this.state.stockHistory} />);
             }
 
             return (
@@ -197,7 +201,10 @@ var bd = this.bd || {};
                         Brygget av{' '}
                         <a href={'/breweries/' + rbbeer.brewery.id}>{rbbeer.brewery.name}</a>
                         {' '}
-                        (<a href={'/countries/' + rbbeer.brewery.country.rb_id}>{rbbeer.brewery.country.name}</a>)</p> 
+                        (<a href={'/countries/' + rbbeer.brewery.country.rb_id}>
+                            {rbbeer.brewery.country.name}
+                        </a>)
+                    </p>
 
                     <div className='row'>
                         <ScoreDisplay beer={rbbeer} />
@@ -207,7 +214,9 @@ var bd = this.bd || {};
                                     <tr>
                                         <th>Stil</th>
                                         <td>
-                                            <a href={'/styles/' + rbbeer.style.id}>{rbbeer.style.name}</a>
+                                            <a href={'/styles/' + rbbeer.style.id}>
+                                                {rbbeer.style.name}
+                                            </a>
                                         </td>
                                     </tr>
                                     <tr>
@@ -258,7 +267,13 @@ var bd = this.bd || {};
                            <Characteristics beer={this.props.beer} />
                             <tr>
                                 <th>Passer til</th>
-                                <td>{[beer.pairs_with_1, beer.pairs_with_2, beer.pairs_with_3].join(' ')} </td>
+                                <td>
+                                    {[
+                                        beer.pairs_with_1,
+                                        beer.pairs_with_2,
+                                        beer.pairs_with_3
+                                    ].join(' ')}
+                                </td>
                             </tr>
                             <tr>
                                 <th>Lukt</th>
@@ -280,7 +295,13 @@ var bd = this.bd || {};
                                 <th>Totalt antall på polet</th>
                                 <td>
                                     {(beer.stock || 0).toLocaleString()} flasker/bokser
-                                    {' '}<button type="button" className="btn btn-default btn-xs" onClick={this.toggleStockHistory}><i className="fa fa-area-chart"></i> Historikk</button>
+                                    {' '}
+                                    <button
+                                        type="button"
+                                        className="btn btn-default btn-xs"
+                                        onClick={this.toggleStockHistory}>
+                                        <i className="fa fa-area-chart"></i> Historikk
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
@@ -296,7 +317,7 @@ var bd = this.bd || {};
     });
 
 
-    ns.renderBeerOverview = function(beer, component) {
+    ns.renderBeerOverview = function (beer, component) {
         ReactDOM.render(<BeerOverview beer={beer} />, component);
     };
 

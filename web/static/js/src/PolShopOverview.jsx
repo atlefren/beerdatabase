@@ -33,7 +33,9 @@ var bd = this.bd || {};
                             <strong>Gateadresse</strong>
                             <address>
                               {this.props.shop.street_address}<br/>
-                              {this.props.shop.street_zipcode}{' '}{this.props.shop.street_place}<br />
+                              {this.props.shop.street_zipcode}
+                              {' '}
+                              {this.props.shop.street_place}<br />
                             </address>
                         </div>
                         <div className='col-md-4'>
@@ -61,7 +63,7 @@ var bd = this.bd || {};
 
     });
 
-    ns.renderPolShopOverview = function(polShop, beers, component) {
+    ns.renderPolShopOverview = function (polShop, beers, component) {
         ReactDOM.render(<PolShopOverview shop={polShop} beers={beers} />, component);
     };
 
