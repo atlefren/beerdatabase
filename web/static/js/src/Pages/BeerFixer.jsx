@@ -165,7 +165,7 @@ var bd = this.bd || {};
                         <div>
                             <button
                                 type="button"
-                                className="btn btn-primary"
+                                className="btn btn-primary btn-spaced"
                                 onClick={this.onClick}
                                 disabled={!this.props.enabled}>
                                 Send
