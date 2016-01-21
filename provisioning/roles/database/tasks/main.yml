@@ -9,7 +9,7 @@
     apt: update_cache=yes
 
   - name: ensure packages are installed
-    apt: name={{item}}
+    apt: name={{item}} state=latest
     with_items:
         - postgresql-9.5
         - python-psycopg2
