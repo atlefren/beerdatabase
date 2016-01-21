@@ -103,8 +103,9 @@ def search_beer():
     brewery_id = request.args.get('brewery', None)
     if brewery_id:
         res = res.filter(RatebeerBeer.brewery_id == brewery_id)
-    x = res.limit(get_limit()).all()
-    return Response(json.dumps(x), content_type='application/json')
+    beers = res.limit(get_limit()).all()
+    beers = [beer.serialize() for beer in beers]
+    return Response(json.dumps(beers), content_type='application/json')
 
 
 @app.route(api_prefix + '/suggestions/', methods=['POST'])
