@@ -37,8 +37,9 @@ def full_search():
 
     styles = request.args.get('style', None)
     if styles is not None:
-        styles = [int(s) for s in styles.split(',')]
-        query = query.filter(RatebeerBeer.style_id.in_(styles))
+        styles = [int(s) for s in styles.split(',') if s != '']
+        if len(styles) > 0:
+            query = query.filter(RatebeerBeer.style_id.in_(styles))
 
     overall_score = request.args.get('overallScore', None)
     if overall_score is not None:

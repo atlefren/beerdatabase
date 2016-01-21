@@ -59,8 +59,8 @@ var bd = this.bd || {};
         render: function () {
             return (
                 <fieldset>
+                    <legend>Navn</legend>
                     <div className="form-group">
-                        <label>Navn</label>
                         <input
                             type="text"
                             onChange={this.onChange}
@@ -71,6 +71,47 @@ var bd = this.bd || {};
             );
         }
     });
+
+    var SelectedStyle = React.createClass({
+
+        click: function () {
+            this.props.deselect(this.props.style.id);
+        },
+
+        render: function () {
+            return (
+                <li className="list-group-item">
+                    {this.props.style.name}
+                    <span
+                        onClick={this.click}
+                        className="glyphicon glyphicon-remove pull-right remove-btn" />
+                </li>
+            );
+        }
+    });
+
+
+    var SelectedStyleList = React.createClass({
+
+        render: function () {
+
+            var styles = _.map(this.props.styles, function (style) {
+                return (
+                    <SelectedStyle
+                        style={style}
+                        key={style.id}
+                        deselect={this.props.deselect} />
+                );
+            }, this);
+
+            return (
+                <ul className="list-group">
+                    {styles}
+                </ul>
+            );
+        }
+    });
+
 
     var StyleChooser = React.createClass({
 
@@ -85,6 +126,18 @@ var bd = this.bd || {};
         },
 
         onChange: function (e) {
+            var selected = _.clone(this.state.selected);
+            if (selected.length < 10) {
+                var add = parseInt(e.target.value, 10);
+                if (add ===  -1) {
+                    return;
+                }
+                selected.push(add);
+            } else {
+                console.log("max")
+            }
+
+            /*
               var options = e.target.options;
 
               var selected = _.chain(options)
@@ -95,20 +148,9 @@ var bd = this.bd || {};
                     return parseInt(option.value, 10);
                 }).
                 value();
+            */
             var allSelected = (selected.length === this.props.styles.length);
             this.setState({selected: selected, allSelected: allSelected});
-            this.changed(selected);
-        },
-
-        toggleAll: function () {
-            var selected;
-            if (!this.state.allSelected) {
-                selected = _.pluck(this.props.styles, 'id');
-                this.setState({selected: selected, allSelected: true});
-            } else {
-                selected = [];
-                this.setState({selected: selected, allSelected: false});
-            }
             this.changed(selected);
         },
 
@@ -116,37 +158,59 @@ var bd = this.bd || {};
             this.props.changed(this.props.type, values);
         },
 
+        deselectStyle: function (styleId) {
+            var selected = _.clone(this.state.selected);
+            selected.splice(selected.indexOf(styleId), 1);
+
+            var allSelected = (selected.length === this.props.styles.length);
+            this.setState({selected: selected, allSelected: allSelected});
+            this.changed(selected);
+        },
+
         render: function () {
-            var styles = _.map(this.props.styles, function (style) {
-                return (
-                    <option
-                        key={style.id}
-                        value={style.id}>
-                        {style.name}
-                    </option>
-                );
-            });
+            var unselectedStyles = _.chain(this.props.styles)
+                .filter(function (style) {
+                    return this.state.selected.indexOf(style.id) === -1;
+                }, this)
+                .map(function (style) {
+                    return (
+                        <option
+                            key={style.id}
+                            value={style.id}>
+                            {style.name}
+                        </option>
+                    );
+                })
+                .value();
+
+            unselectedStyles.unshift((
+                 <option
+                    key="-1"
+                    value="-1">
+                    ---
+                </option>
+            ));
+
+            var selectedStyles = _.filter(this.props.styles, function (style) {
+                return this.state.selected.indexOf(style.id) > -1;
+            }, this);
+
 
             return (
                 <fieldset>
+                    <legend>Stil</legend>
                     <div className="form-group">
-                        <label>Stil</label>
+
+                        <SelectedStyleList
+                            styles={selectedStyles}
+                            deselect={this.deselectStyle} />
                         <select
                             className="form-control"
-                            value={this.state.selected}
                             onChange={this.onChange}
-                            multiple={true}>
-                            {styles}
+                            disabled={this.state.selected.length >= 10}
+                            multiple={false}>
+                            {unselectedStyles}
                         </select>
-                        <div className="checkbox">
-                            <label>
-                                <input
-                                    onChange={this.toggleAll}
-                                    checked={this.state.allSelected}
-                                    type="checkbox" />
-                                Velg alle
-                            </label>
-                        </div>
                     </div>
                 </fieldset>
             );
@@ -201,13 +265,25 @@ var bd = this.bd || {};
                 max = max.toFixed(1);
             }
 
+            var label;
+            if (this.props.label) {
+                label = (<label>{this.props.label}</label>);
+            }
+            var legend;
+            if (this.props.legend) {
+                legend = (<legend>{this.props.legend}</legend>);
+            }
             return (
                 <fieldset>
+                    {legend}
                     <div className="form-group">
-                        <label>{this.props.label}</label>
+                        {label}
                         <div>
                             <div>
-                                {min}{this.props.displayPostfix} til 
+                                {min}{this.props.displayPostfix}
+                                {' '}
+                                til
+                                {' '}
                                 {max}{this.props.displayPostfix}
                             </div>
                             <Slider
@@ -243,6 +319,7 @@ var bd = this.bd || {};
                             type="checkbox"
                             onChange={this.toggle}
                             checked={this.state.checked} />
+                        {' '}
                         {this.props.name}
                     </label>
                 </div>
@@ -344,7 +421,7 @@ var bd = this.bd || {};
             return (
                 <div>
                     <button
-                        className="btn btn-default hidden-lg hidden-md"
+                        className="btn btn-default hidden-lg hidden-md btn-spaced"
                         onClick={this.showSearch}
                         type="button">
                         <span className="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -352,8 +429,9 @@ var bd = this.bd || {};
                         Søk
                     </button>
                     <div className={searchClass}>
+                        <h3 className="hidden-lg hidden-md">Søk</h3>
                         <button
-                            className="btn btn-default hidden-lg hidden-md"
+                            className="btn btn-default hidden-lg hidden-md search-close"
                             onClick={this.hideSearch}
                             type="button">
                             Lukk
@@ -388,7 +466,7 @@ var bd = this.bd || {};
                             <SliderFieldSet
                                 type="price"
                                 value={this.props.initValues.price}
-                                label="Pris"
+                                legend="Pris"
                                 min={10}
                                 max={200}
                                 displayPostfix=" kr"
@@ -396,7 +474,7 @@ var bd = this.bd || {};
                             <SliderFieldSet
                                 type="abv"
                                 value={this.props.initValues.abv}
-                                label="Alkohol"
+                                legend="Alkohol"
                                 min={0}
                                 max={50}
                                 displayPostfix="%"
@@ -477,13 +555,13 @@ var bd = this.bd || {};
             }
             return (
                 <div className="row">
-                    <div id="search_field" className="col-md-3">
+                    <div id="search_field" className="col-md-3 static">
                         <SearchField
                             onSearch={this.doSearch}
                             searchParams={this.props.searchParams}
                             initValues={this.props.initValues} />
                     </div>
-                    <div id="search_results" className="col-md-9">
+                    <div id="search_results" className="col-md-9 static">
                         {results}
                     </div>
                 </div>

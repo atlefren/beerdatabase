@@ -46,6 +46,7 @@ body {
 
 .slider {
     margin-top: 10px;
+    margin-bottom: 20px;
 }
 
 .slider .noUi-connect {
@@ -89,21 +90,39 @@ body {
 
 @media (max-width: 992px) {
   .mobile-search {
-    float: right;
-    padding: 10px;
-    background: #fff;
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 1000;
+    background: none repeat scroll 0 0 #fff;
+    border-bottom: 1px solid #ccc;
     border-right: 1px solid #ccc;
     border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    padding: 10px;
+    z-index: 1040;
   }
 }
 
+.search-close {
+  position: fixed;
+  right: 10px;
+  top: 10px;
+  z-index: 1040;
+}
 
-/*footer*/
+
+.btn-spaced {
+  margin-bottom: 5px;
+}
+
+.static {
+  position: static;
+}
+
+.remove-btn {
+  cursor: pointer;
+}
 
 
 .footer {

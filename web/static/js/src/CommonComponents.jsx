@@ -12,7 +12,7 @@ var bd = this.bd || {};
             return (
                 <p>
                     <i className="fa fa-spinner fa-spin fa-3x"></i>
-                    {' '}
+                    <br />
                     {this.props.text}...
                 </p>
             );

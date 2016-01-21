@@ -7,14 +7,14 @@ import queries
 
 def get_param_list_str(param):
     val = request.args.get(param, None)
-    if val is not None:
+    if val is not None and val != '':
         return val.split(',')
 
 
 def get_param_list_int(param):
     val = get_param_list_str(param)
     if val is not None:
-        return [int(x) for x in val]
+        return [int(x) for x in val if val != '']
 
 
 def get_param_list_float(param):
@@ -40,7 +40,7 @@ def search():
         'styles': styles
     }
 
-    search_defaults['style'] = [s.id for s in styles]
+    search_defaults['style'] = []
 
     init_values = {
         'style': get_param_list_int('style'),
