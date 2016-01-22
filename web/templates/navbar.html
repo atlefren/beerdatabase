@@ -1,6 +1,12 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
-        <div class="navbar-header">
+        <div class="navbar-header pull-left">
+            <a class="navbar-brand" href="{{ url_for('index')}}">Ølmonopolet</a>
+        </div>
+        <div class="navbar-header pull-right">
+            <button id="search-btn" type="button" class="btn btn-default navbar-btn pull-left nav-search" title="Søk">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+            </button>
             <button 
                 type="button"
                 class="navbar-toggle collapsed"
@@ -13,7 +19,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{ url_for('index')}}">Ølmonopolet</a>
+            
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
@@ -23,10 +29,7 @@
                 </li>
               {% endfor %}
             </ul>
-
-            <form class="navbar-form navbar-right visible-md visible-lg">
-                <div class="form-group" id="find_beer"></div>
-            </form>
         </div><!--/.nav-collapse -->
     </div>
 </nav>
+<div id="search-field" class="hidden"></div>

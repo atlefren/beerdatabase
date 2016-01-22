@@ -139,6 +139,14 @@ body {
   margin: 20px 0;
 }
 
+.nav-search {
+  margin-right: 5px;
+  background-color: transparent;
+}
+
+.quicksearch {
+  margin-bottom: 10px;
+}
 
 /*!
  * IE10 viewport hack for Surface/desktop Windows 8 bug

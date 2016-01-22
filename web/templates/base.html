@@ -47,9 +47,11 @@
     {% block js %}
     <script type="text/javascript">
         (function () {
-            bd.setupSimpleBeerSearch(
-                document.getElementById('find_beer')
-            );
+            $('#search-btn').click(function () {
+                $('#search-field').toggleClass('hidden');
+            });
+
+            bd.setupSimpleBeerSearch(document.getElementById('search-field'));
         }());
     </script>
     {% endblock %}
