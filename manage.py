@@ -17,6 +17,10 @@ migrate.init_app(app, db, directory=DIR + '/alembic')
 manager.add_command('db', MigrateCommand)
 
 
+def log_write(message):
+    with open('log.txt', 'a') as logfile:
+            logfile.write('%s %s\n' % (message, datetime.now()))
+
 @manager.command
 def update_ratebeer():
     print 'Importing data from ratebeer'
@@ -40,16 +44,20 @@ def update_pol():
 
 @manager.command
 def update_ratebeer_cron():
-    update_ratebeer()
-    with open('log.txt', 'a') as logfile:
-        logfile.write('%s Updated RB\n' % datetime.now())
+    try:
+        update_ratebeer()
+        log_write('Updated RB')
+    except Exception:
+        log_write('RB failed')
 
 
 @manager.command
 def update_pol_cron():
-    update_pol()
-    with open('log.txt', 'a') as logfile:
-        logfile.write('%s Updated POL\n' % datetime.now())
+    try:
+        update_pol()
+        log_write('Updated POL')
+    except Exception:
+        log_write('POL failed')
 
 
 @manager.command
