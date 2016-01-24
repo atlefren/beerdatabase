@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+
+{% block main %}
+<h1>Oppdateringslogg</h1>
+{% for line in data %}
+    <h2>{{line.type}}</h2>
+    <p>{{line.updated.strftime('%d.%m.%Y %H:%M')}}</p>
+{%endfor %}
+{%endblock %}
+
+{% block js %}
+
+    {% assets "index_bundle" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+    {{ super() }}
+
+{% endblock %}

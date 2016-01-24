@@ -6,7 +6,7 @@ from sqlalchemy import distinct
 
 from models import (PoletBeer, PolShop, PolStock, RatebeerBrewery,
                     RatebeerBeer, Country, BeerStyle, RbPolBeerMapping,
-                    Municipality)
+                    Municipality, UpdateLog)
 
 
 def get_pol_beers_list():
@@ -169,3 +169,14 @@ def get_country(id):
         'country': country,
         'beers': [b.get_list_response() for b in beers]
     }
+
+
+def get_update_log():
+    data = current_app.db_session.query(func.max(UpdateLog.last_updated), UpdateLog.type)\
+        .group_by(UpdateLog.type)
+
+    res = []
+    for d in data.all():
+        res.append({'type': d[1], 'updated': d[0]})
+
+    return res

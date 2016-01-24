@@ -347,3 +347,11 @@ class Municipality(Base):
     name = sa.Column('name', sa.Unicode(255))
     fylkesnr = sa.Column('fylkesnr', sa.Integer)
     fylke_name = sa.Column('fylke_name', sa.Unicode(255))
+
+
+class UpdateLog(Base):
+    __tablename__ = 'update_log'
+    id = sa.Column('id', sa.Integer, primary_key=True)
+    type = sa.Column('type', sa.Unicode(255))
+    datetime = sa.Column('datetime', sa.DateTime(timezone=True))
+    last_updated = sa.Column('last_updated', sa.DateTime(timezone=True))

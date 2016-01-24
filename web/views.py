@@ -26,12 +26,23 @@ def find_rb_beer(id):
 def index():
     return render_template('index.html')
 
+
+def update_log():
+    d = queries.get_update_log()
+    return render_template('update_log.html', data=d)
+
 pages = [
     {
         'path': '/',
         'name': 'index',
         'view_type': 'standard_view',
         'data_func': index,
+    },
+    {
+        'path': '/update_log',
+        'name': 'update_log',
+        'view_type': 'standard_view',
+        'data_func': update_log,
     },
     {
         'path': '/search/',
