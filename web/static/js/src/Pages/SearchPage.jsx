@@ -377,9 +377,13 @@ var bd = this.bd || {};
 
     var SearchField = React.createClass({
 
+        getDefaultProps: function () {
+            return {showMobileSearch: true};
+        },
+
         getInitialState: function () {
             var state = _.clone(this.props.initValues);
-            state.showMobileSearch = false;
+            state.showMobileSearch = this.props.showMobileSearch;
             return state;
         },
 
@@ -413,7 +417,7 @@ var bd = this.bd || {};
                         type="button">
                         <span className="glyphicon glyphicon-search" aria-hidden="true"></span>
                         {' '}
-                        Søk
+                        Filtrer
                     </button>
                     <div className={searchClass}>
                         <h3 className="hidden-lg hidden-md">Søk</h3>
@@ -421,8 +425,9 @@ var bd = this.bd || {};
                             className="btn btn-default hidden-lg hidden-md search-close"
                             onClick={this.hideSearch}
                             type="button">
-                            Lukk
+                            Søk
                         </button>
+                        <p>Antall treff:{' '}{this.props.numHits}</p>
                         <form>
                             <NameSearcher
                                 type="name"
@@ -502,7 +507,7 @@ var bd = this.bd || {};
     var SearchPage = React.createClass({
 
         getInitialState: function () {
-            return {beers: null};
+            return {beers: [], queryNumber: 0};
         },
 
         componentDidMount: function () {
@@ -512,9 +517,14 @@ var bd = this.bd || {};
         },
 
         doSearch: function (params) {
-            this.setState({isSearching: true});
+            var queryNumber = this.state.queryNumber + 1;
+            this.setState({isSearching: true, queryNumber: queryNumber});
             ns.Util.setQueryParams(params);
-            ns.api.fullsearchBeer(params, this.gotSearchResults, this.searchError);
+            ns.api.fullsearchBeer(params, _.bind(function (res) {
+                if (queryNumber === this.state.queryNumber) {
+                    this.gotSearchResults(res);
+                }
+            }, this), this.searchError);
         },
 
         gotSearchResults: function (beers) {
@@ -544,7 +554,9 @@ var bd = this.bd || {};
                 <div className="row">
                     <div id="search_field" className="col-md-3 static">
                         <SearchField
+                            showMobileSearch={!this.props.startWithSearch}
                             onSearch={this.doSearch}
+                            numHits={this.state.beers.length}
                             searchParams={this.props.searchParams}
                             initValues={this.props.initValues} />
                     </div>

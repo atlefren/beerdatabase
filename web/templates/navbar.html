@@ -4,9 +4,11 @@
             <a class="navbar-brand" href="{{ url_for('index')}}">Ølmonopolet</a>
         </div>
         <div class="navbar-header pull-right">
+            {% if request.url_rule.endpoint != 'search' %}
             <button id="search-btn" type="button" class="btn btn-default navbar-btn pull-left nav-search" title="Søk">
                 <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
             </button>
+            {% endif %}
             <button 
                 type="button"
                 class="navbar-toggle collapsed"
