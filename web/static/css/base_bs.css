@@ -146,6 +146,18 @@ body {
 
 .quicksearch {
   margin-bottom: 10px;
+  position:relative;
+}
+
+
+.quicksearch-results {
+    position: absolute;
+    z-index: 1020;
+    margin-top: 5px;
+    left: 15px;
+    right: 15px;
+    box-shadow: 2px 2px 1px #ccc;
+
 }
 
 /*!

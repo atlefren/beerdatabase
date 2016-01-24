@@ -48,6 +48,9 @@
     <script type="text/javascript">
         (function () {
             $('#search-btn').click(function () {
+                if ($('#search-field').hasClass('hidden')){
+                    scroll(0, 0);
+                }
                 $('#search-field').toggleClass('hidden');
             });
 

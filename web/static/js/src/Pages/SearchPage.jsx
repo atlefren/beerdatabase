@@ -134,21 +134,8 @@ var bd = this.bd || {};
                 }
                 selected.push(add);
             } else {
-                console.log("max")
+                //display warning about max?
             }
-
-            /*
-              var options = e.target.options;
-
-              var selected = _.chain(options)
-                .filter(function (option) {
-                    return option.selected;
-                })
-                .map(function (option) {
-                    return parseInt(option.value, 10);
-                }).
-                value();
-            */
             var allSelected = (selected.length === this.props.styles.length);
             this.setState({selected: selected, allSelected: allSelected});
             this.changed(selected);

@@ -17,6 +17,18 @@ def get_limit():
     return limit if limit <= 100 else 100
 
 
+@app.route(api_prefix + '/search/autocomplete/')
+def autocomplete_search():
+    name = request.args.get('name', None)
+
+    query = current_app.db_session.query(RatebeerBeer)\
+        .join(PoletBeer)\
+        .filter(RatebeerBeer.name.ilike('%' + name + '%'))\
+        .limit(10)
+    beer_list = [b.get_list_response() for b in query.all()]
+    return Response(json.dumps(beer_list), content_type='application/json')
+
+
 @app.route(api_prefix + '/search/full/')
 def full_search():
     query = current_app.db_session.query(RatebeerBeer)

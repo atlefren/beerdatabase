@@ -115,4 +115,15 @@ bd.api = bd.api || {};
             });
     };  
 
+    ns.autocompleteSearch = function (value, success, error) {
+        var url = API_BASE + 'search/autocomplete/?name=' + encodeURIComponent(value);
+        atomic.get(url)
+            .success(function (data, xhr) {
+                success(data);
+            })
+            .error(function (data, xhr) {
+                console.error(data);
+            });
+    };
+
 }(bd.api));
