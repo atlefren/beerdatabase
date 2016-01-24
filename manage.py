@@ -19,7 +19,8 @@ manager.add_command('db', MigrateCommand)
 
 def log_write(message):
     with open('log.txt', 'a') as logfile:
-            logfile.write('%s %s\n' % (message, datetime.now()))
+        logfile.write('%s %s\n' % (message, datetime.now()))
+
 
 @manager.command
 def update_ratebeer():
@@ -65,5 +66,5 @@ def update_admin():
     conn_str = app.config.get('SQLALCHEMY_DATABASE_URI', None)
     update_adminareas(conn_str)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     manager.run()

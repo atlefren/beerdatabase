@@ -3,6 +3,8 @@ import re
 
 import requests
 from beertools.util import get_line_parser, parsers
+from pytz import timezone
+import dateutil.parser
 
 from db import Database
 
@@ -176,6 +178,14 @@ def save_shops(shops, db):
     db.run_upserts(sql, shops)
 
 
+def get_datetime(shops):
+    dt = shops[0]['Datotid']
+    no_tz = timezone('Europe/Oslo')
+    return no_tz.localize(
+        dateutil.parser.parse(dt)
+    )
+
+
 def read(conn_str=None):
     db = Database(conn_str)
     r = requests.get(URL)
@@ -188,7 +198,8 @@ def read(conn_str=None):
         shop['Kategori'] = int(shop['Kategori'].replace('Kategori ', ''))
         shop['id'] = shop_ids.get(shop['Butikknavn'], None)
     save_shops(shops, db)
-    db.add_log('pol_shops')
+    datetime = get_datetime(shops)
+    db.add_log('pol_shops', datetime)
 
 if __name__ == '__main__':
     read()

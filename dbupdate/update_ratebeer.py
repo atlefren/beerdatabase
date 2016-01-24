@@ -30,12 +30,13 @@ def update_rb_beers(beers, db):
 
 def update_ratebeer(conn_str=None):
     db = Database(conn_str)
-    breweries = read_ratebeer_breweries()
+    breweries, breweries_updated = read_ratebeer_breweries()
     update_rb_breweries(breweries, db)
+    db.add_log('ratebeer_breweries', breweries_updated)
 
-    beers = read_ratebeer_beers()
+    beers, beers_updated = read_ratebeer_beers()
     update_rb_beers(beers, db)
-    db.add_log('ratebeer')
+    db.add_log('ratebeer_beers', beers_updated)
 
 
 if __name__ == '__main__':

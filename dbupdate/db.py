@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import urlparse
+from datetime import datetime
 
 import psycopg2
 
@@ -123,11 +124,17 @@ class Database(object):
         conn.close()
         return shops
 
-    def add_log(self, operation_type):
-        sql = 'INSERT INTO update_log (type, datetime) VALUES (%(operation_type)s, now())'
+    def add_log(self, operation_type, last_updated=None):
+        if last_updated is None:
+            last_updated = datetime.now()
+        sql = '''
+            INSERT INTO update_log (type, datetime, last_updated)
+            VALUES (%(operation_type)s, now(), %(last_updated)s)
+        '''
         conn = self.get_connection()
         cur = conn.cursor()
-        cur.execute(sql, {'operation_type': operation_type})
+        data = {'operation_type': operation_type, 'last_updated': last_updated}
+        cur.execute(sql, data)
         conn.commit()
         cur.close()
         conn.close()

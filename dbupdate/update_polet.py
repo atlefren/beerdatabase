@@ -74,7 +74,7 @@ def match_pol_beers(rb_brewery, rb_beers_for_brewery, pol_breweries, beers_polet
 
 def update_pol_beers(conn_str=None):
     db = Database(conn_str)
-    beers_polet = read_pol_beers()
+    beers_polet, updated = read_pol_beers()
 
     breweries_rb = db.get_rb_breweries()
     breweries_pol = get_breweries_polet(beers_polet)
@@ -93,7 +93,7 @@ def update_pol_beers(conn_str=None):
             db
         )
     save_pol_beers(matched_beers, db)
-    db.add_log('pol_beer')
+    db.add_log('pol_beers', updated)
 
 if __name__ == '__main__':
     update_pol_beers()
