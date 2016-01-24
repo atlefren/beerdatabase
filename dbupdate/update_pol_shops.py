@@ -188,7 +188,7 @@ def read(conn_str=None):
         shop['Kategori'] = int(shop['Kategori'].replace('Kategori ', ''))
         shop['id'] = shop_ids.get(shop['Butikknavn'], None)
     save_shops(shops, db)
-
+    db.add_log('pol_shops')
 
 if __name__ == '__main__':
     read()

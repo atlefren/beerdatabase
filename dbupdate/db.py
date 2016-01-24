@@ -122,3 +122,12 @@ class Database(object):
         cur.close()
         conn.close()
         return shops
+
+    def add_log(self, operation_type):
+        sql = 'INSERT INTO update_log (type, datetime) VALUES (%(operation_type)s, now())'
+        conn = self.get_connection()
+        cur = conn.cursor()
+        cur.execute(sql, {'operation_type': operation_type})
+        conn.commit()
+        cur.close()
+        conn.close()

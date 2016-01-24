@@ -93,7 +93,7 @@ def update_pol_beers(conn_str=None):
             db
         )
     save_pol_beers(matched_beers, db)
-
+    db.add_log('pol_beer')
 
 if __name__ == '__main__':
     update_pol_beers()

@@ -37,6 +37,7 @@ def update_pol_stock(conn_str=None):
                 'updated': updated
             })
     save_stock(stock_by_pol, db)
+    db.add_log('pol_stock')
 
 if __name__ == '__main__':
     update_pol_stock()

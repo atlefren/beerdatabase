@@ -35,6 +35,8 @@ def update_ratebeer(conn_str=None):
 
     beers = read_ratebeer_beers()
     update_rb_beers(beers, db)
+    db.add_log('ratebeer')
+
 
 if __name__ == '__main__':
     update_ratebeer()
