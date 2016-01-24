@@ -2,6 +2,14 @@ var bd = this.bd || {};
 (function (ns) {
     'use strict';
 
+    var predefSearches = [
+        {name: 'Beste humleøl', overallScore: [95, 100], style: [114, 81, 17, 18, 121], styleScore: [95, 100]},
+        {name: 'Beste Stout/porter', overallScore: [95, 100], style: [63, 22, 79, 24, 113, 5, 6, 23, 16], styleScore: [95, 100]},
+        {name: 'Beste surøl', overallScore: [90, 100], style: [77, 14, 73, 78, 52, 119, 118, 61, 117], styleScore: [50, 100]},
+        {name: 'Frukt- / krydderøl', style: [14, 40, 120, 57, 122]},
+        {name: 'Hveteøl', style: [48, 61, 100, 25, 19, 7, 82, 85]}
+    ];
+
     var Slider = React.createClass({
 
         getInitialState: function () {
@@ -375,6 +383,36 @@ var bd = this.bd || {};
         }
     });
 
+
+    var PredefinedSearches = React.createClass({
+
+        render: function () {
+            var searches = _.map(this.props.searches, function (search) {
+                var query = _.chain(['style', 'overallScore', 'styleScore'])
+                    .map(function (prop) {
+                        if (!_.has(search, prop)) {
+                            return;
+                        }
+                        return prop +'=' + encodeURIComponent(search[prop].join(','));
+                    })
+                    .compact()
+                    .value();
+                var url = '/search?' + query.join('&'); 
+                return (
+                    <a href={url} className="list-group-item">{search.name}</a>
+                );
+            });
+            return (
+                <fieldset>
+                    <legend>Standardsøk</legend>
+                    <div className="list-group">
+                        {searches}
+                    </div>
+                </fieldset>
+            );
+        }
+    });
+
     var SearchField = React.createClass({
 
         getDefaultProps: function () {
@@ -476,6 +514,7 @@ var bd = this.bd || {};
                                 type="availableAt"
                                 value={this.props.initValues.availableAt}
                                 changed={this.valueChanged} />
+                            <PredefinedSearches searches={predefSearches}/>
                         </form>
                     </div>
                 </div>
