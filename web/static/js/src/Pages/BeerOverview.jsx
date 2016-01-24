@@ -292,7 +292,7 @@ var bd = this.bd || {};
                             <tr>
                                 <th>Totalt antall på polet</th>
                                 <td>
-                                    {(beer.stock || 0).toLocaleString()} flasker/bokser
+                                    {(beer.stock || 0).toLocaleString()}{' '}flasker/bokser
                                     {' '}
                                     <button
                                         type="button"
