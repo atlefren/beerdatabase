@@ -83,11 +83,11 @@ var bd = this.bd || {};
     var PolChooser  = React.createClass({
 
         getInitialState: function () {
-            return {searching: false};
+            return {searching: false, error: null};
         },
 
         gotPol: function (res) {
-            this.setState({searching: false});
+            this.setState({searching: false, error: null});
             this.props.changed(this.props.type, _.chain(res).pluck('id').first(5).value());
         },
 
@@ -97,9 +97,13 @@ var bd = this.bd || {};
             bd.api.getNearbyPolShops(lat, lon, this.gotPol);
         },
 
+        positionError: function () {
+            this.setState({error: 'Kunne ikke hente posisjon', searching: false});
+        },
+
         getClosest: function () {
-            this.setState({searching: true});
-            navigator.geolocation.getCurrentPosition(this.gotUserPosition, console.log);
+            this.setState({searching: true, error: false});
+            navigator.geolocation.getCurrentPosition(this.gotUserPosition, this.positionError);
         },
 
         render: function () {
@@ -117,11 +121,16 @@ var bd = this.bd || {};
                     </button>
                 );
             }
+            var error;
+            if (this.state.error) {
+                error = (<div className="alert alert-danger" role="alert">{this.state.error}</div>);
+            }
 
             return (
                 <div>
                     <ns.ItemChooser {...this.props} />
                     {button}
+                    {error}
                 </div>
             );
         }
