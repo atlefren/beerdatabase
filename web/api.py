@@ -36,6 +36,13 @@ def get_int_arr_from_request(key):
     return []
 
 
+def get_float_arr_from_request(key):
+    data = request.args.get(key, None)
+    if data is not None:
+        return [float(d) for d in data.split(',') if d != '']
+    return []
+
+
 @app.route(api_prefix + '/search/full/')
 def full_search():
     query = current_app.db_session.query(RatebeerBeer)
@@ -70,7 +77,7 @@ def full_search():
             PoletBeer.price <= price_limit[1]
         ))
 
-    abv_limit = get_int_arr_from_request('abv')
+    abv_limit = get_float_arr_from_request('abv')
     if len(abv_limit) == 2:
         query = query.filter(and_(
             RatebeerBeer.abv >= abv_limit[0],
