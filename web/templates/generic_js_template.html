@@ -2,6 +2,10 @@
 
 {% block css %}
 {{ super() }}
+{% for css in external_css %}
+    <link href="{{css}}" rel="stylesheet" type="text/css" />
+{% endfor %}
+!!
 {% endblock %}
 
 {% block title %}{{ super() }} - {{title}}{% endblock %}
@@ -11,6 +15,9 @@
 {%endblock %}
 
 {% block js %}
+    {% for js in external_js %}
+    <script type="text/javascript" src="{{ js }}"></script>
+    {% endfor %}
     {% assets jsbundle %}
     <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}

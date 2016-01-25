@@ -6,12 +6,14 @@ from flask.views import View
 
 class GenericView(View):
 
-    def __init__(self, data_func, jsbundle, div_name, init_func, title):
+    def __init__(self, data_func, jsbundle, div_name, init_func, title, external_js, external_css):
         self.data_func = data_func
         self.jsbundle = jsbundle
         self.div_name = div_name
         self.init_func = init_func
         self.title = title
+        self.external_js = external_js
+        self.external_css = external_css
 
     def dispatch_request(self, id=None):
 
@@ -41,6 +43,8 @@ class GenericView(View):
             div_name=self.div_name,
             jsbundle=self.jsbundle,
             init_func=self.init_func,
+            external_js=self.external_js,
+            external_css=self.external_css,
             title=title
         )
 
@@ -63,7 +67,9 @@ def view_adder(app):
                     data_func=data.get('data_func', None),
                     jsbundle=data.get('name', '') + '_bundle',
                     div_name=data.get('name', None),
-                    init_func=data.get('js_func', None)
+                    init_func=data.get('js_func', None),
+                    external_js=data.get('external_js', []),
+                    external_css=data.get('external_css', []),
                 )
             )
 

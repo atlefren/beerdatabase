@@ -100,7 +100,9 @@ pages = [
         'title': u'Polutsalg',
         'data_func': data.get_pol_shop_list,
         'js_func': 'bd.renderPolShopList',
-        'in_menu': True
+        'in_menu': True,
+        'external_js': ['http://www.webatlas.no/sh/3/v/101014/webatlas.js'],
+        'external_css': ['http://www.webatlas.no/sh/3/v/101014/webatlas.css']
     },
     {
         'path': '/pol_shops/<int:id>',
