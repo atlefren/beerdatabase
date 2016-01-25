@@ -5,7 +5,7 @@ html {
 
 body {
   padding-top: 70px;
-  margin-bottom: 60px;
+  margin-bottom: 100px;
 }
 
 .list-inline.pies {
@@ -126,12 +126,13 @@ body {
 
 
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 60px;
-  background-color: #f5f5f5;
+
+    background-color: #f5f5f5;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 100px;
+    width: 100%;
 }
 
 .container .text-muted {
