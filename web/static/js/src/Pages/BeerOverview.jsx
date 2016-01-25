@@ -154,6 +154,21 @@ var bd = this.bd || {};
             );
         },
 
+        getAliasMsg: function () {
+            if (!this.props.beer.ratebeer.alias) {
+                return;
+            }
+            var err_url = '/beers/' + this.props.beer.ratebeer.id + '/fix_alias';
+            return (
+                <div className='alert alert-warning'>
+                    <strong>Hjelp:</strong>{' '}
+                    Dette ølet er et såkalt alias-øl hos Ratebeer. Det betyr at vi 
+                    ikke får vist all informasjon om det.
+                    Hvis du vil hjelpe oss å finne riktig øl, gå <a href={err_url}>hit</a>.
+                </div>
+            );
+        },
+
         getExternalLinks: function () {
             return [
                 {name: 'Ratebeer', url: this.props.beer.ratebeer.url},
@@ -309,6 +324,8 @@ var bd = this.bd || {};
 
                     <ns.PolWithBeerList beerId={this.props.beer.id}/>
                     {this.getHelpMsg()}
+
+                    {this.getAliasMsg()}
                 </div>
             );
         }

@@ -23,7 +23,7 @@ var bd = this.bd || {};
         render: function () {
             var componentProps = _.omit(this.props, 'component', 'title');
             var Component = this.props.component;
-
+            console.log(Component)
             return (
                 <div>
                     <h1>{this.props.title}</h1>
