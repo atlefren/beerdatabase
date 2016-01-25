@@ -10,15 +10,15 @@ var bd = this.bd || {};
             if (this.props.beers.length) {
                 return (
                     <p>
-                        Det er pr nå registrert {this.props.beers.length} øl{' '}
-                        av stilen {this.props.style.name} hos Vinmonopolet.
+                        Det er pr nå registrert{' '}{this.props.beers.length}{' '}øl{' '}
+                        av stilen{' '}{this.props.style.name}{' '}hos Vinmonopolet.
                     </p>
                 );
             }
             return (
                 <p>
-                    Det er pr nå ikke registrert noen øl fra {' '}
-                    av stilen {this.props.style.name} hos Vinmonopolet.
+                    Det er pr nå ikke registrert noen øl
+                    av stilen{' '}{this.props.style.name}{' '}hos Vinmonopolet.
                 </p>
             );
         },
