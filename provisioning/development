@@ -1,2 +1,2 @@
 [development]
-172.16.10.15
+localhost ansible_connection=local
