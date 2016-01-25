@@ -285,7 +285,7 @@ var bd = this.bd || {};
     var SearchPage = React.createClass({
 
         getInitialState: function () {
-            return {beers: [], queryNumber: 0};
+            return {beers: [], queryNumber: 0, params: {}};
         },
 
         componentDidMount: function () {
@@ -296,7 +296,11 @@ var bd = this.bd || {};
 
         doSearch: function (params) {
             var queryNumber = this.state.queryNumber + 1;
-            this.setState({isSearching: true, queryNumber: queryNumber});
+            this.setState({
+                isSearching: true,
+                queryNumber: queryNumber,
+                params: params
+            });
             ns.Util.setQueryParams(params);
             ns.api.fullsearchBeer(params, _.bind(function (res) {
                 if (queryNumber === this.state.queryNumber) {
@@ -313,6 +317,15 @@ var bd = this.bd || {};
             this.setState({beers: []});
         },
 
+        onSort: function (columnId, direction) {
+            console.log(columnId);
+            var params = _.clone(this.state.params);
+            params.initialSort = columnId;
+            params.initialSortDir = direction;
+            ns.Util.setQueryParams(params);
+            this.setState(params);
+        },
+
         render: function () {
             var results;
             if (this.state.isSearching) {
@@ -325,6 +338,8 @@ var bd = this.bd || {};
                 results = (
                     <ns.SortableTable
                         initialSort={this.props.initialSort}
+                        initialSortDir={this.props.initialSortDir}
+                        onSort={this.onSort}
                         items={this.state.beers}
                         columns={resultColumns} />
                 );
@@ -354,6 +369,7 @@ var bd = this.bd || {};
                 searchParams={data.search_params}
                 startWithSearch={data.startWithSearch}
                 initialSort={data.initialSort}
+                initialSortDir={data.initialSortDir}
                 initValues={data.init_values} />,
             container
         );

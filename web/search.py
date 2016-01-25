@@ -68,6 +68,7 @@ def search():
         'init_values': init_values,
         'startWithSearch': from_query_params,
         'initialSort': request.args.get('initialSort', None),
+        'initialSortDir': request.args.get('initialSortDir', None),
     }
 
     return render_template(

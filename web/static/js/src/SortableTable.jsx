@@ -228,6 +228,9 @@ var bd = this.bd || {};
                 columns: columns,
                 items: items
             });
+            if (this.props.onSort) {
+                this.props.onSort(columnId, direction);
+            }
         },
 
         render: function () {
