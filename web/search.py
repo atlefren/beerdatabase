@@ -62,7 +62,8 @@ def search():
     data = {
         'search_params': search_params,
         'init_values': init_values,
-        'startWithSearch': from_query_params
+        'startWithSearch': from_query_params,
+        'initialSort': request.args.get('initialSort', None)
     }
 
     return render_template(

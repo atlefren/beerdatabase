@@ -3,9 +3,9 @@ var bd = this.bd || {};
     'use strict';
 
     var predefSearches = [
-        {name: 'Beste humleøl', overallScore: [95, 100], style: [114, 81, 17, 18, 121], styleScore: [95, 100]},
-        {name: 'Beste Stout/porter', overallScore: [95, 100], style: [63, 22, 79, 24, 113, 5, 6, 23, 16], styleScore: [95, 100]},
-        {name: 'Beste surøl', overallScore: [90, 100], style: [77, 14, 73, 78, 52, 119, 118, 61, 117], styleScore: [50, 100]},
+        {name: 'Beste humleøl', overallScore: [95, 100], style: [114, 81, 17, 18, 121], styleScore: [95, 100], initialSort: 'rating'},
+        {name: 'Beste Stout/porter', overallScore: [95, 100], style: [63, 22, 79, 24, 113, 5, 6, 23, 16], styleScore: [95, 100], initialSort: 'rating'},
+        {name: 'Beste surøl', overallScore: [90, 100], style: [77, 14, 73, 78, 52, 119, 118, 61, 117], styleScore: [50, 100], initialSort: 'rating'},
         {name: 'Frukt- / krydderøl', style: [14, 40, 120, 57, 122]},
         {name: 'Hveteøl', style: [48, 61, 100, 25, 19, 7, 82, 85]}
     ];
@@ -388,12 +388,16 @@ var bd = this.bd || {};
 
         render: function () {
             var searches = _.map(this.props.searches, function (search) {
-                var query = _.chain(['style', 'overallScore', 'styleScore'])
+                var query = _.chain(['style', 'overallScore', 'styleScore', 'initialSort'])
                     .map(function (prop) {
                         if (!_.has(search, prop)) {
                             return;
                         }
-                        return prop +'=' + encodeURIComponent(search[prop].join(','));
+                        var val = search[prop];
+                        if (_.isArray(val)) {
+                            val = val.join(',');
+                        }
+                        return prop +'=' + encodeURIComponent(val);
                     })
                     .compact()
                     .value();
@@ -585,6 +589,7 @@ var bd = this.bd || {};
             } else {
                 results = (
                     <ns.SortableTable
+                        initialSort={this.props.initialSort}
                         items={this.state.beers}
                         columns={resultColumns} />
                 );
@@ -613,6 +618,7 @@ var bd = this.bd || {};
             <SearchPage
                 searchParams={data.search_params}
                 startWithSearch={data.startWithSearch}
+                initialSort={data.initialSort}
                 initValues={data.init_values} />,
             container
         );

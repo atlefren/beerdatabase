@@ -180,6 +180,12 @@ var bd = this.bd || {};
             };
         },
 
+        componentDidMount: function () {
+            if (this.props.initialSort) {
+                this.onSort(this.props.initialSort, this.props.initialSortDir || 'desc');
+            }
+        },
+
         filter: function (id, value) {
             var filterAttrs = _.clone(this.state.filterAttrs);
             filterAttrs[id] = value;
@@ -200,6 +206,7 @@ var bd = this.bd || {};
         },
 
         onSort: function (columnId, direction) {
+            //console.log(columnId, direction);
             var desc = (direction === 'desc');
             var col = _.find(this.state.columns, function (column) {
                 return (column.id === columnId);
