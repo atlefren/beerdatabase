@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from datetime import datetime
 from beertools.polchecker import check_beer
 
 from db import Database
@@ -23,6 +24,7 @@ def save_stock(stock_by_pol, db):
 def update_pol_stock(conn_str=None):
     db = Database(conn_str)
     beers = db.get_pol_beers()
+    shops = [pol['id'] for pol in db.get_pol_shops()]
 
     stock_by_pol = []
     for beer in beers:
@@ -36,6 +38,15 @@ def update_pol_stock(conn_str=None):
                 'stock': num,
                 'updated': updated
             })
+        shops_with_beer = [int(stock['pol_id']) for stock in stocks]
+        for pol_id in shops:
+            if pol_id not in shops_with_beer:
+                stock_by_pol.append({
+                    'shop_id': pol_id,
+                    'pol_beer_id': beer['id'],
+                    'stock': 0,
+                    'updated': datetime.now()
+                })
     save_stock(stock_by_pol, db)
     db.add_log('pol_stock')
 

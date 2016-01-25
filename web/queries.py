@@ -103,7 +103,8 @@ def get_beers_for_shop(shop_id):
 
     beers = current_app.db_session.query(PoletBeer, PolStock)\
         .join(PolStock)\
-        .filter(PolStock.shop_id == shop_id)
+        .filter(PolStock.shop_id == shop_id)\
+        .filter(PolStock.stock > 0)
 
     return [b[0].get_list_response({
         'stock': b[1].stock,

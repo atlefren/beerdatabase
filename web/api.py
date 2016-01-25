@@ -193,7 +193,8 @@ def get_stock_for_beer(beer_id):
 
     shops = current_app.db_session.query(PolShop, PolStock)\
         .filter(PolStock.shop_id == PolShop.id)\
-        .filter(PolStock.pol_beer_id == beer_id)
+        .filter(PolStock.pol_beer_id == beer_id)\
+        .filter(PolStock.stock > 0)
 
     if lat and lon:
         lat = float(lat)
