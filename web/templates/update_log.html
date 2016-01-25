@@ -3,10 +3,49 @@
 
 {% block main %}
 <h1>Oppdateringslogg</h1>
-{% for line in data %}
-    <h2>{{line.type}}</h2>
-    <p>{{line.updated.strftime('%d.%m.%Y %H:%M')}}</p>
-{%endfor %}
+<div class="row">
+    <div class="col-md-4 col-md-offset-2">
+        <h2>Ratebeer-data</h2>
+
+        <h3>Øl</h3>
+        <ul>
+            {% for tz in data.ratebeer.beers %}
+            <li>{{tz.strftime('%d.%m.%Y %H:%M')}}</li>
+            {%endfor %}
+        </ul>
+        
+        <h3>Bryggerier</h3>
+        <ul>
+            {% for tz in data.ratebeer.breweries %}
+            <li>{{tz.strftime('%d.%m.%Y %H:%M')}}</li>
+            {%endfor %}
+        </ul>
+    </div>
+    <div class="col-md-4">
+        <h2>Pol-data</h2>
+        <h3>Øl</h3>
+        <ul>
+            {% for tz in data.pol.beers %}
+            <li>{{tz.strftime('%d.%m.%Y %H:%M')}}</li>
+            {%endfor %}
+        </ul>
+
+        <h3>Varebeholdning</h3>
+        <ul>
+            {% for tz in data.pol.stock %}
+            <li>{{tz.strftime('%d.%m.%Y %H:%M')}}</li>
+            {%endfor %}
+        </ul>
+
+        <h3>Polutsalg</h3>
+        <ul>
+            {% for tz in data.pol.shops %}
+            <li>{{tz.strftime('%d.%m.%Y %H:%M')}}</li>
+            {%endfor %}
+        </ul>
+    </div>
+</div>
+
 {%endblock %}
 
 {% block js %}

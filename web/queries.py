@@ -177,11 +177,16 @@ def get_country(id):
 
 
 def get_update_log():
-    data = current_app.db_session.query(func.max(UpdateLog.last_updated), UpdateLog.type)\
-        .group_by(UpdateLog.type)
+    data = current_app.db_session.query(UpdateLog).all()
 
-    res = []
-    for d in data.all():
-        res.append({'type': d[1], 'updated': d[0]})
-
-    return res
+    return {
+        'ratebeer': {
+            'beers': sorted(set([d.last_updated for d in data if d.type == 'ratebeer_beers']), reverse=True),
+            'breweries': sorted(set([d.last_updated for d in data if d.type == 'ratebeer_breweries']), reverse=True),
+        },
+        'pol': {
+            'beers': sorted(set([d.last_updated for d in data if d.type == 'pol_beers']), reverse=True),
+            'shops': sorted(set([d.last_updated for d in data if d.type == 'pol_shops']), reverse=True),
+            'stock': sorted(set([d.last_updated for d in data if d.type == 'pol_stock']), reverse=True),
+        }
+    }
