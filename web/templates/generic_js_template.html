@@ -24,7 +24,7 @@
 
     <script type="text/javascript">
         (function () {
-            {{init_func}}({{ json | safe }}, '{{div_name}}', '{{title}}');
+            {{init_func}}({{ json | safe }}, '{{div_name}}', '{{title | safe}}');
         }());
     </script>
 {% endblock %}
