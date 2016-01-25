@@ -10,44 +10,6 @@ var bd = this.bd || {};
         {name: 'Hveteøl', style: [48, 61, 100, 25, 19, 7, 82, 85]}
     ];
 
-    var Slider = React.createClass({
-
-        getInitialState: function () {
-            return {
-                min: this.props.min,
-                max: this.props.max
-            };
-        },
-
-        componentDidMount: function () {
-            var element = ReactDOM.findDOMNode(this);
-            noUiSlider.create(element, {
-                start: [this.props.initMin, this.props.initMax],
-                connect: true,
-                step: this.props.step,
-                range: {
-                    min: this.props.min,
-                    max: this.props.max
-                }
-            });
-
-            element.noUiSlider.on('update', this.sliderChanged);
-        },
-
-        sliderChanged: function (values, handle) {
-            var min = parseFloat(values[0]);
-            var max = parseFloat(values[1]);
-            if (min !== this.state.min || max !== this.state.max) {
-                this.setState({min: min, max: max});
-                this.props.change(min, max);
-            }
-        },
-
-        render: function () {
-            return (<div className="slider noUi-extended" />);
-        }
-    });
-
     var NameSearcher = React.createClass({
 
         getDefaultProps: function () {
@@ -80,310 +42,6 @@ var bd = this.bd || {};
         }
     });
 
-    var SelectedStyle = React.createClass({
-
-        click: function () {
-            this.props.deselect(this.props.style.id);
-        },
-
-        render: function () {
-            return (
-                <li className="list-group-item">
-                    {this.props.style.name}
-                    <span
-                        onClick={this.click}
-                        className="glyphicon glyphicon-remove pull-right remove-btn" />
-                </li>
-            );
-        }
-    });
-
-
-    var SelectedStyleList = React.createClass({
-
-        render: function () {
-
-            var styles = _.map(this.props.styles, function (style) {
-                return (
-                    <SelectedStyle
-                        style={style}
-                        key={style.id}
-                        deselect={this.props.deselect} />
-                );
-            }, this);
-
-            return (
-                <ul className="list-group">
-                    {styles}
-                </ul>
-            );
-        }
-    });
-
-
-    var StyleChooser = React.createClass({
-
-        getDefaultProps: function () {
-            return {value: []};
-        },
-
-        getInitialState: function () {
-            var selected = _.pluck(this.props.styles, 'id');
-            var allSelected = (selected.length === this.props.value.length);
-            return {selected: this.props.value, allSelected: allSelected};
-        },
-
-        onChange: function (e) {
-            var selected = _.clone(this.state.selected);
-            if (selected.length < 10) {
-                var add = parseInt(e.target.value, 10);
-                if (add ===  -1) {
-                    return;
-                }
-                selected.push(add);
-            } else {
-                //display warning about max?
-            }
-            var allSelected = (selected.length === this.props.styles.length);
-            this.setState({selected: selected, allSelected: allSelected});
-            this.changed(selected);
-        },
-
-        changed: function (values) {
-            this.props.changed(this.props.type, values);
-        },
-
-        deselectStyle: function (styleId) {
-            var selected = _.clone(this.state.selected);
-            selected.splice(selected.indexOf(styleId), 1);
-
-            var allSelected = (selected.length === this.props.styles.length);
-            this.setState({selected: selected, allSelected: allSelected});
-            this.changed(selected);
-        },
-
-        render: function () {
-            var unselectedStyles = _.chain(this.props.styles)
-                .filter(function (style) {
-                    return this.state.selected.indexOf(style.id) === -1;
-                }, this)
-                .map(function (style) {
-                    return (
-                        <option
-                            key={style.id}
-                            value={style.id}>
-                            {style.name}
-                        </option>
-                    );
-                })
-                .value();
-
-            unselectedStyles.unshift((
-                 <option
-                    key="-1"
-                    value="-1">
-                    ---
-                </option>
-            ));
-
-            var selectedStyles = _.filter(this.props.styles, function (style) {
-                return this.state.selected.indexOf(style.id) > -1;
-            }, this);
-
-
-            return (
-                <fieldset>
-                    <legend>Stil</legend>
-                    <div className="form-group">
-
-                        <SelectedStyleList
-                            styles={selectedStyles}
-                            deselect={this.deselectStyle} />
-                        <select
-                            className="form-control"
-                            onChange={this.onChange}
-                            disabled={this.state.selected.length >= 10}
-                            multiple={false}>
-                            {unselectedStyles}
-                        </select>
-                    </div>
-                </fieldset>
-            );
-        }
-    });
-
-    function getFromArr(arr, idx, fallback) {
-        if (_.isUndefined(arr)) {
-            return fallback;
-        }
-        var val = arr[idx];
-        if (!_.isUndefined(val)) {
-            return val;
-        }
-        return fallback;
-    }
-
-    var SliderFieldSet = React.createClass({
-
-        getDefaultProps: function () {
-            return {
-                min: 0,
-                max: 100,
-                step: 1,
-                displayPostfix: ''
-            };
-        },
-
-        getInitialState: function () {
-            var min = this.props.min;
-            var max = this.props.max;
-            if (this.props.value && this.props.value.length === 2) {
-                min = this.props.value[0];
-                max = this.props.value[1];
-            }
-            return {min: min, max: max};
-        },
-
-        sliderChanged: function (min, max) {
-            this.setState({min: min, max: max});
-            if (this.props.changed) {
-                this.props.changed(this.props.type, [min, max]);
-            }
-        },
-
-        render: function () {
-
-            var min = this.state.min;
-            var max = this.state.max;
-            if (this.props.step < 1 && this.min) {
-                min = min.toFixed(1);
-                max = max.toFixed(1);
-            }
-
-            var label;
-            if (this.props.label) {
-                label = (<label>{this.props.label}</label>);
-            }
-            var legend;
-            if (this.props.legend) {
-                legend = (<legend>{this.props.legend}</legend>);
-            }
-            return (
-                <fieldset>
-                    {legend}
-                    <div className="form-group">
-                        {label}
-                        <div>
-                            <div>
-                                {min}{this.props.displayPostfix}
-                                {' '}
-                                til
-                                {' '}
-                                {max}{this.props.displayPostfix}
-                            </div>
-                            <Slider
-                                {...this.props}
-                                initMin={getFromArr(this.props.value, 0, this.props.min)}
-                                initMax={getFromArr(this.props.value, 1, this.props.max)}
-                                change={this.sliderChanged} />
-                        </div>
-                    </div>
-                </fieldset>
-            );
-        }
-    });
-
-
-    var CheckboxComponent = React.createClass({
-
-        getInitialState: function () {
-            return {checked: this.props.selected};
-        },
-
-        toggle: function (e) {
-            var checked = e.target.checked;
-            this.setState({checked: checked});
-            this.props.onChange(this.props.type, checked);
-        },
-
-        render: function () {
-            return (
-                <div className="checkbox">
-                    <label>
-                        <input
-                            type="checkbox"
-                            onChange={this.toggle}
-                            checked={this.state.checked} />
-                        {' '}
-                        {this.props.name}
-                    </label>
-                </div>
-            );
-        }
-    });
-
-    var AvailableAtChooser = React.createClass({
-
-        getDefaultProps: function () {
-            var options = [
-                {name: 'Polet', key: 'polet'}/*,
-                {name: 'Gulating', key: 'gulating'}*/
-            ];
-            return {options: options, value: []};
-        },
-
-        getInitialState: function () {
-            var initValue = this.props.value;
-            var selected = _.chain(this.props.options)
-                .filter(function (option) {
-                    return (initValue.indexOf(option.key) !== -1);
-                })
-                .map(function (option) {
-                    return option.key;
-                })
-                .value();
-            return {selected: selected};
-        },
-
-        onChange: function (key, selected) {
-            var prevSelected = _.clone(this.state.selected);
-            var index = prevSelected.indexOf(key);
-
-            if (selected && index === -1) {
-                prevSelected.push(key);
-            }
-            if (!selected && index > -1) {
-                prevSelected.splice(index, 1);
-            }
-            this.setState({selected: prevSelected});
-
-            this.props.changed(this.props.type, prevSelected);
-        },
-
-        render: function () {
-
-            var checkboxes = _.map(this.props.options, function (option) {
-                var selected = this.state.selected.indexOf(option.key) !== -1;
-                return (
-                    <CheckboxComponent
-                        onChange={this.onChange}
-                        name={option.name}
-                        type={option.key}
-                        key={option.key}
-                        selected={selected} />
-                    );
-            }, this);
-
-            return (
-                <fieldset>
-                    <legend>Tilgjengelig på</legend>
-                    {checkboxes}
-                </fieldset>
-            );
-        }
-    });
-
-
     var PredefinedSearches = React.createClass({
 
         render: function () {
@@ -403,7 +61,12 @@ var bd = this.bd || {};
                     .value();
                 var url = '/search?' + query.join('&'); 
                 return (
-                    <a href={url} className="list-group-item">{search.name}</a>
+                    <a
+                        href={url}
+                        key={url}
+                        className="list-group-item">
+                        {search.name}
+                    </a>
                 );
             });
             return (
@@ -413,6 +76,53 @@ var bd = this.bd || {};
                         {searches}
                     </div>
                 </fieldset>
+            );
+        }
+    });
+
+    var PolChooser  = React.createClass({
+
+        getInitialState: function () {
+            return {searching: false};
+        },
+
+        gotPol: function (res) {
+            this.setState({searching: false});
+            this.props.changed(this.props.type, _.chain(res).pluck('id').first(5).value());
+        },
+
+        gotUserPosition: function (e) {
+            var lat = e.coords.latitude;
+            var lon = e.coords.longitude;
+            bd.api.getNearbyPolShops(lat, lon, this.gotPol);
+        },
+
+        getClosest: function () {
+            this.setState({searching: true});
+            navigator.geolocation.getCurrentPosition(this.gotUserPosition, console.log);
+        },
+
+        render: function () {
+
+            var button;
+            if (this.state.searching) {
+                button = (<i className="fa fa-spinner fa-spin fa-2x"></i>);
+            } else {
+                button = (
+                    <button
+                        className="btn"
+                        type="button"
+                        onClick={this.getClosest}>
+                        Nærmeste pol
+                    </button>
+                );
+            }
+
+            return (
+                <div>
+                    <ns.ItemChooser {...this.props} />
+                    {button}
+                </div>
             );
         }
     });
@@ -431,6 +141,9 @@ var bd = this.bd || {};
 
         valueChanged: function (key, value) {
             var data = _.clone(this.state);
+            if (_.isEqual(value, data[key])) {
+                return;
+            }
             data[key] = value;
             this.setState(data);
             this.props.onSearch(data);
@@ -445,7 +158,6 @@ var bd = this.bd || {};
         },
 
         render: function () {
-
             var searchClass = 'hidden-xs hidden-sm';
             if (this.state.showMobileSearch) {
                 searchClass = 'mobile-search';
@@ -461,6 +173,7 @@ var bd = this.bd || {};
                         {' '}
                         Filtrer
                     </button>
+
                     <div className={searchClass}>
                         <h3 className="hidden-lg hidden-md">Søk</h3>
                         <button
@@ -473,51 +186,64 @@ var bd = this.bd || {};
                         <form>
                             <NameSearcher
                                 type="name"
-                                value={this.props.initValues.name}
+                                value={this.state.name}
                                 changed={this.valueChanged} />
-                            <StyleChooser 
-                                type="style"
-                                value={this.props.initValues.style}
-                                changed={this.valueChanged}
-                                styles={this.props.searchParams.styles} />
+                            <fieldset>
+                                <legend>Stil</legend>
+                                <ns.ItemChooser
+                                    type="style"
+                                    value={this.state.style}
+                                    changed={this.valueChanged}
+                                    items={this.props.searchParams.styles} />
+                            </fieldset>
                             <fieldset>
                                 <legend>Score</legend>
-                                <SliderFieldSet
+                                <ns.SliderFormGroup
                                     type="overallScore"
                                     label="Overall"
-                                    value={this.props.initValues.overallScore}
+                                    value={this.state.overallScore}
                                     min={0}
                                     max={100}
                                     changed={this.valueChanged} />
-                                <SliderFieldSet
+                                <ns.SliderFormGroup
                                     type="styleScore"
                                     label="Style"
-                                    value={this.props.initValues.styleScore}
+                                    value={this.state.styleScore}
                                     min={0}
                                     max={100}
                                     changed={this.valueChanged} />
                             </fieldset>
-                            <SliderFieldSet
-                                type="price"
-                                value={this.props.initValues.price}
-                                legend="Pris"
-                                min={10}
-                                max={200}
-                                displayPostfix=" kr"
-                                changed={this.valueChanged} />
-                            <SliderFieldSet
-                                type="abv"
-                                value={this.props.initValues.abv}
-                                legend="Alkohol"
-                                min={0}
-                                max={50}
-                                displayPostfix="%"
-                                step={0.5}
-                                changed={this.valueChanged} />
-                            <AvailableAtChooser
-                                type="availableAt"
-                                value={this.props.initValues.availableAt}
-                                changed={this.valueChanged} />
+                            <fieldset>
+                                <legend>Pris</legend>
+                                <ns.SliderFormGroup
+                                    type="price"
+                                    value={this.state.price}
+                                    legend=""
+                                    min={10}
+                                    max={200}
+                                    displayPostfix=" kr"
+                                    changed={this.valueChanged} />
+                            </fieldset>
+                            <fieldset>
+                                <legend>Alkohol</legend>
+                                <ns.SliderFormGroup
+                                    type="abv"
+                                    value={this.state.abv}
+                                    legend=""
+                                    min={0}
+                                    max={50}
+                                    displayPostfix="%"
+                                    step={0.5}
+                                    changed={this.valueChanged} />
+                            </fieldset>
+                            <fieldset>
+                                <legend>Tilgjengelig på pol</legend>
+                                <PolChooser
+                                    type="pol"
+                                    value={this.state.pol}
+                                    changed={this.valueChanged}
+                                    items={this.props.searchParams.pol}/>
+                            </fieldset>
                             <PredefinedSearches searches={predefSearches}/>
                         </form>
                     </div>

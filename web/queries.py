@@ -26,6 +26,10 @@ def get_styles():
     return current_app.db_session.query(BeerStyle).all()
 
 
+def get_pol():
+    return current_app.db_session.query(PolShop).order_by(PolShop.fylkesnr, PolShop.name).all()
+
+
 def get_total_pol_beer_stock(beer_id):
     return current_app.db_session\
         .query(func.sum(PolStock.stock).label('stock'))\

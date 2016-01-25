@@ -165,6 +165,8 @@ search_bundle = react_bundle(
     Bundle(
         'js/src/SortableTable.jsx',
         'js/src/PolBeerTable.jsx',
+        'js/src/ItemChooser.jsx',
+        'js/src/SliderFormGroup.jsx',
         'js/lib/nouislider/distribute/nouislider.min.js',
         'js/src/Pages/SearchPage.jsx',
         filters=js_filters

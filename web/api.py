@@ -29,65 +29,59 @@ def autocomplete_search():
     return Response(json.dumps(beer_list), content_type='application/json')
 
 
+def get_int_arr_from_request(key):
+    data = request.args.get(key, None)
+    if data is not None:
+        return [int(d) for d in data.split(',') if d != '']
+    return []
+
+
 @app.route(api_prefix + '/search/full/')
 def full_search():
     query = current_app.db_session.query(RatebeerBeer)
-
-    at_polet = False
-    available_at = request.args.get('availableAt', None)
-    if available_at is not None:
-        available_at = available_at.split(',')
-        if 'polet' in available_at:
-            at_polet = True
-            query = query.join(PoletBeer)
-        else:
-            return Response(json.dumps([]), content_type='application/json')
+    query = query.join(PoletBeer)
 
     name = request.args.get('name', None)
     if name is not None:
         query = query.filter(RatebeerBeer.name.ilike('%' + name + '%'))
 
-    styles = request.args.get('style', None)
-    if styles is not None:
-        styles = [int(s) for s in styles.split(',') if s != '']
-        if len(styles) > 0:
-            query = query.filter(RatebeerBeer.style_id.in_(styles))
+    styles = get_int_arr_from_request('style')
+    if len(styles) > 0:
+        query = query.filter(RatebeerBeer.style_id.in_(styles))
 
-    overall_score = request.args.get('overallScore', None)
-    if overall_score is not None:
-        score_limit = [int(s) for s in overall_score.split(',')]
-        if len(score_limit) == 2:
-            query = query.filter(and_(
-                RatebeerBeer.score_overall >= score_limit[0],
-                RatebeerBeer.score_overall <= score_limit[1]
-            ))
+    overall_score_limit = get_int_arr_from_request('overallScore')
+    if len(overall_score_limit) == 2:
+        query = query.filter(and_(
+            RatebeerBeer.score_overall >= overall_score_limit[0],
+            RatebeerBeer.score_overall <= overall_score_limit[1]
+        ))
 
-    style_score = request.args.get('styleScore', None)
-    if style_score is not None:
-        score_limit = [int(s) for s in style_score.split(',')]
-        if len(score_limit) == 2:
-            query = query.filter(and_(
-                RatebeerBeer.score_style >= score_limit[0],
-                RatebeerBeer.score_style <= score_limit[1]
-            ))
+    style_score_limit = get_int_arr_from_request('styleScore')
+    if len(style_score_limit) == 2:
+        query = query.filter(and_(
+            RatebeerBeer.score_style >= style_score_limit[0],
+            RatebeerBeer.score_style <= style_score_limit[1]
+        ))
 
-    price = request.args.get('price', None)
-    if price is not None and at_polet:
-        price_limit = [int(s) for s in price.split(',')]
-        if len(price_limit) == 2:
-            query = query.filter(and_(
-                PoletBeer.price >= price_limit[0],
-                PoletBeer.price <= price_limit[1]
-            ))
+    price_limit = get_int_arr_from_request('price')
+    if len(price_limit) == 2:
+        query = query.filter(and_(
+            PoletBeer.price >= price_limit[0],
+            PoletBeer.price <= price_limit[1]
+        ))
 
-    abv = request.args.get('abv', None)
-    if abv is not None:
-        abv_limit = [float(s) for s in abv.split(',')]
-        if len(score_limit) == 2:
-            query = query.filter(and_(
-                RatebeerBeer.abv >= abv_limit[0],
-                RatebeerBeer.abv <= abv_limit[1]
-            ))
+    abv_limit = get_int_arr_from_request('abv')
+    if len(abv_limit) == 2:
+        query = query.filter(and_(
+            RatebeerBeer.abv >= abv_limit[0],
+            RatebeerBeer.abv <= abv_limit[1]
+        ))
+
+    pol = get_int_arr_from_request('pol')
+    if len(pol) > 0:
+        query = query.join(PolStock)\
+            .filter(PolStock.shop_id.in_(pol))\
+            .filter(PolStock.stock > 0)
 
     query = query.order_by(RatebeerBeer.name)
 

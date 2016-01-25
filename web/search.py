@@ -36,11 +36,14 @@ search_defaults = {
 
 def search():
     styles = queries.get_styles()
+    pol = queries.get_pol()
     search_params = {
-        'styles': styles
+        'styles': styles,
+        'pol': pol
     }
 
     search_defaults['style'] = []
+    search_defaults['pol'] = []
 
     init_values = {
         'style': get_param_list_int('style'),
@@ -50,6 +53,7 @@ def search():
         'price': get_param_list_int('price'),
         'abv': get_param_list_float('abv'),
         'availableAt': get_param_list_str('availableAt'),
+        'pol': get_param_list_int('pol'),
     }
 
     from_query_params = False
@@ -63,7 +67,7 @@ def search():
         'search_params': search_params,
         'init_values': init_values,
         'startWithSearch': from_query_params,
-        'initialSort': request.args.get('initialSort', None)
+        'initialSort': request.args.get('initialSort', None),
     }
 
     return render_template(
