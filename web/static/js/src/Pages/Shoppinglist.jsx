@@ -33,9 +33,89 @@ var bd = this.bd || {};
     var AvailabilityList = React.createClass({
 
         render: function () {
+
+            if (_.isEmpty(this.props.shops)) {
+                return (
+                    <div className="alert alert-warning" role="alert">
+                        Ingen pol har disse ølene (dog: det kan finnes i bestillingsutvalget. Sjekk polets sider).
+                    </div>
+                );
+            }
+
+            var shops = _.chain(this.props.shops)
+                .map(function (shop) {
+                    var hasBeers = _.pluck(shop.beers, 'pol_beer_id');
+                    shop.shop.missing = _.filter(this.props.beers, function (beer) {
+                        return hasBeers.indexOf(beer.id) === -1;
+                    });
+                    return shop;
+                }, this)
+                .filter(function (shop) {
+                    return shop.shop.missing.length < this.props.beers.length;
+                }, this)
+                .sortBy(function (shop) {
+                    return -shop.beers.length;
+                })
+                .map(function (shop) {
+                    return shop.shop;
+                }, this)
+                .map(function (shop) {
+                    var missing, fraction;
+                    if (shop.missing.length > 0) {
+                        fraction = this.props.beers.length - shop.missing.length + '/' + this.props.beers.length;
+                        var missingBeers = _.map(shop.missing, function (beer) {
+                            return (
+                                <span key={beer.id}>
+                                    <a href={'/pol_beers/' + beer.id}>
+                                        {beer.name}
+                                    </a>
+                                </span>
+                            );
+                        });
+                        missingBeers = bd.Util.intersperse(missingBeers, ', ');
+                        missing = (
+                            <div>
+                                <small>
+                                    Mangler:{' '}{missingBeers}
+                                </small>
+                            </div>
+                        );
+                    }
+
+                    var bg;
+                    var frac = (this.props.beers.length - shop.missing.length) / this.props.beers.length;
+                    if (frac === 1) {
+                        bg = 'bg-success';
+                    } else if (frac >= 0.5) {
+                        bg = 'bg-warning';
+                    } else {
+                        bg = 'bg-danger';
+                    }
+
+                    return (
+                        <tr key={shop.id} className={bg}>
+                            <td>
+                                <a href={'/pol_shops/' + shop.id}>{shop.name}</a>
+                                {missing}
+                            </td>
+                            <td>{shop.missing.length === 0 ? 'Alle' : fraction}</td>
+                        </tr>
+                    );
+                }, this)
+                .value();
+
             return (
-                <p>Her skal det komme en liste over hvilke pol som har ølene i 
-                handlelista di!</p>
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th>Butikk</th>
+                            <th>Antall øl</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {shops}
+                    </tbody>
+                </table>
             );
         }
     });
@@ -47,16 +127,20 @@ var bd = this.bd || {};
             if (ids.length > 0) {
                 bd.api.getShoppingList(ids, this.gotList);
             } else {
-                this.gotList([]);
+                this.gotList({beers: [], shops: []});
             }
         },
 
-        gotList: function (beers) {
-            this.setState({beers: beers, loading: false});
+        gotList: function (data) {
+            this.setState({
+                beers: data.beers,
+                loading: false,
+                shops: data.shops
+            });
         },
 
         getInitialState: function () {
-            return {beers: [], loading: true};
+            return {beers: [], loading: true, shops: []};
         },
 
         removeBeer: function (id) {
@@ -81,6 +165,12 @@ var bd = this.bd || {};
                 );
             }, this);
 
+            var availabilityList;
+            if (!this.state.loading) {
+                availabilityList = (
+                    <AvailabilityList beers={this.state.beers} shops={this.state.shops} />
+                );
+            }
             return (
                 <div>
                     <div className="row">
@@ -88,7 +178,7 @@ var bd = this.bd || {};
                             <ul className="list-group">{beers}</ul>
                         </div>
                     </div>
-                    <AvailabilityList beers={this.state.beers} />
+                    {availabilityList}
                 </div>
             );
         }

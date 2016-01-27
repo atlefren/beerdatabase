@@ -262,6 +262,24 @@ def get_pol_stock_history(beer_id):
     )
 
 
+def parse_stock_data(data):
+
+    shops = {}
+    for d in data:
+        stock = d[0]
+        shop = d[1]
+        if shop.id not in shops:
+            shops[shop.id] = {
+                'shop': shop,
+                'beers': []
+            }
+        shops[shop.id]['beers'].append({
+            'pol_beer_id': stock.pol_beer_id,
+            'stock': stock.stock
+        })
+    return shops
+
+
 @app.route(api_prefix + '/shoppinglist', methods=['POST'])
 def get_shoppinglist():
     beer_ids = request.json
@@ -269,8 +287,15 @@ def get_shoppinglist():
         .join(RatebeerBeer)\
         .filter(PoletBeer.id.in_(beer_ids))\
         .all()
+
+    data = current_app.db_session.query(PolStock, PolShop)\
+        .join(PolShop, PolShop.id == PolStock.shop_id)\
+        .filter(PolStock.pol_beer_id.in_(beer_ids))\
+        .filter(PolStock.stock > 0)\
+        .all()
+    shops = parse_stock_data(data)
     return Response(
-        json.dumps(beers),
+        json.dumps({'beers': beers, 'shops': shops}),
         content_type='application/json',
         status=200
     )

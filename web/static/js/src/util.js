@@ -67,4 +67,15 @@ bd.Util = {};
         };
     };
 
+    //see http://stackoverflow.com/a/23619085
+    ns.intersperse = function (arr, sep) {
+        if (arr.length === 0) {
+            return [];
+        }
+
+        return arr.slice(1).reduce(function (xs, x, i) {
+            return xs.concat([sep, x]);
+        }, [arr[0]]);
+    };
+
 }(bd.Util));
