@@ -150,6 +150,12 @@ pages = [
         'title': u'Fiks alias',
         'data_func': queries.get_beer,
         'js_func': 'bd.renderAliasFixer'
+    },
+    {
+        'path': '/shoppinglist',
+        'name': 'shoppinglist',
+        'title': u'Handleliste',
+        'js_func': 'bd.renderShoppingList'
     }
 ]
 

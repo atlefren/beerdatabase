@@ -126,4 +126,12 @@ bd.api = bd.api || {};
             });
     };
 
+    ns.getShoppingList = function (beerIds, success, error) {
+        atomic.post(API_BASE + 'shoppinglist', beerIds)
+            .success(success)
+            .error(function (data, xhr) {
+                console.error(data);
+            });
+    };
+
 }(bd.api));

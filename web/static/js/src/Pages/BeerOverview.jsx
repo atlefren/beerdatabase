@@ -135,6 +135,33 @@ var bd = this.bd || {};
         }
     });
 
+    var ShoppingListBtn = React.createClass({
+
+        getInitialState: function () {
+            return {inList: this.props.shoppingListStore.hasBeer(this.props.beerId)};
+        },
+
+        toggle: function () {
+            console.log('toggle');
+            this.setState({inList: this.props.shoppingListStore.toggleBeer(this.props.beerId)});
+        },
+
+        render: function () {
+            return (
+                <button
+                    type="button"
+                    className={'btn btn-default btn-xs btn-' + ((this.state.inList ? 
+                        'danger' : 
+                        'success'
+                    ))}
+                    onClick={this.toggle}>
+                    <i className="fa fa-list-ul"></i>&nbsp;
+                    {(this.state.inList ? 'Fjern fra' : 'Legg til') + ' handleliste'}
+                </button>
+            );
+        }
+    });
+
     var BeerOverview = React.createClass({
 
         getInitialState: function () {
@@ -207,6 +234,14 @@ var bd = this.bd || {};
             if (this.state.showStockHistory) {
                 stockHistory = (<StockHistory history={this.state.stockHistory} />);
             }
+            var shoppingListBtn;
+            if (this.props.shoppingListStore.isSupported) {
+                shoppingListBtn = (
+                    <ShoppingListBtn
+                        beerId={beer.id}
+                        shoppingListStore={this.props.shoppingListStore}/>
+                );
+            }
 
             return (
                 <div>
@@ -241,8 +276,9 @@ var bd = this.bd || {};
                                         <td>{ns.Util.valueOrNa(rbbeer.ibu)}</td>
                                     </tr>
                                     <tr>
-                                        <th>Alias</th>
-                                        <td>{rbbeer.alias}</td>
+                                        <td colSpan="2">
+                                            {shoppingListBtn}
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -338,6 +374,7 @@ var bd = this.bd || {};
             <ns.Container
                 component={BeerOverview}
                 title={title}
+                shoppingListStore={ns.shoppingListStore}
                 beer={beer} />,
             component
         );

@@ -25,11 +25,14 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-              {% for page in menu_pages %}
-              <li {% if request.url_rule.endpoint == page.name %}class="active"{% endif %}>
+                {% for page in menu_pages %}
+                <li {% if request.url_rule.endpoint == page.name %}class="active"{% endif %}>
                     <a href="{{ url_for(page.name)}}">{{page.title}}</a>
                 </li>
               {% endfor %}
+              <li {% if request.url_rule.endpoint == 'shoppinglist' %}class="active"{% endif %}>
+                    <a href="{{ url_for('shoppinglist')}}">Handleliste <span id="shopping-list-count"></span></a>
+                </li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>

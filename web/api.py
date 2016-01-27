@@ -260,3 +260,17 @@ def get_pol_stock_history(beer_id):
         content_type='application/json',
         status=200
     )
+
+
+@app.route(api_prefix + '/shoppinglist', methods=['POST'])
+def get_shoppinglist():
+    beer_ids = request.json
+    beers = current_app.db_session.query(PoletBeer)\
+        .join(RatebeerBeer)\
+        .filter(PoletBeer.id.in_(beer_ids))\
+        .all()
+    return Response(
+        json.dumps(beers),
+        content_type='application/json',
+        status=200
+    )

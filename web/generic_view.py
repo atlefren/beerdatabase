@@ -17,9 +17,10 @@ class GenericView(View):
 
     def dispatch_request(self, id=None):
 
+        d = None
         if id is not None:
             d = self.data_func(id)
-        else:
+        elif self.data_func is not None:
             d = self.data_func()
 
         if isinstance(d, tuple):

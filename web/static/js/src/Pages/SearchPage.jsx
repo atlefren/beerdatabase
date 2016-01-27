@@ -318,7 +318,6 @@ var bd = this.bd || {};
         },
 
         onSort: function (columnId, direction) {
-            console.log(columnId);
             var params = _.clone(this.state.params);
             params.initialSort = columnId;
             params.initialSortDir = direction;

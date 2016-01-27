@@ -53,6 +53,7 @@ base_bundle = Bundle(
         'js/src/CommonComponents.jsx',
         'js/src/Autocomplete.jsx',
         'js/src/SimpleBeerSearch.jsx',
+        'js/src/shoppingListStore.js',
         filters=js_filters
     )
 )
@@ -206,4 +207,12 @@ fix_alias_bundle = react_bundle(
         filters=js_filters
     ),
     'alias_fixer.js'
+)
+
+shoppinglist_bundle = react_bundle(
+    Bundle(
+        'js/src/Pages/Shoppinglist.jsx',
+        filters=js_filters
+    ),
+    'shoppinglist.js'
 )
