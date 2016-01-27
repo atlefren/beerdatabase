@@ -60,12 +60,16 @@ var bd = this.bd || {};
                 if (!supportsGeoloc) {
                     bd.api.getPolStoresWithBeer(this.props.beerId, null, null, this.gotStores);
                 } else {
-                    navigator.geolocation.getCurrentPosition(this.gotUserPosition, console.log);
+                    navigator.geolocation.getCurrentPosition(this.gotUserPosition, this.noUserPosition);
                 }
             }
         },
 
-        gotUserPosition: function (e) {
+        noUserPosition: function (e) {
+            bd.api.getPolStoresWithBeer(this.props.beerId, null, null, this.gotStores);
+        },
+
+         gotUserPosition: function (e) {
             var lat = e.coords.latitude;
             var lon = e.coords.longitude;
             columns[0].isSorted = false;
