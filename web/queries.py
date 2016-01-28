@@ -188,12 +188,12 @@ def get_update_log():
 
     return {
         'ratebeer': {
-            'beers': sorted(set([d.last_updated for d in data if d.type == 'ratebeer_beers']), reverse=True),
-            'breweries': sorted(set([d.last_updated for d in data if d.type == 'ratebeer_breweries']), reverse=True),
+            'beers': sorted(set([d.last_updated for d in data if d.type == 'ratebeer_beers']), reverse=True)[:5],
+            'breweries': sorted(set([d.last_updated for d in data if d.type == 'ratebeer_breweries']), reverse=True)[:5],
         },
         'pol': {
-            'beers': sorted(set([d.last_updated for d in data if d.type == 'pol_beers']), reverse=True),
-            'shops': sorted(set([d.last_updated for d in data if d.type == 'pol_shops']), reverse=True),
-            'stock': sorted(set([d.last_updated for d in data if d.type == 'pol_stock']), reverse=True),
+            'beers': sorted(set([d.last_updated for d in data if d.type == 'pol_beers']), reverse=True)[:5],
+            'shops': sorted(set([d.last_updated for d in data if d.type == 'pol_shops']), reverse=True)[:5],
+            'stock': sorted(set([d.last_updated for d in data if d.type == 'pol_stock']), reverse=True)[:5],
         }
     }
