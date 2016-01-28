@@ -152,13 +152,6 @@ pages = [
         'data_func': find_rb_beer
     },
     {
-        'path': '/beers/<int:id>/fix_alias',
-        'name': 'fix_alias',
-        'title': u'Fiks alias',
-        'data_func': queries.get_beer,
-        'js_func': 'bd.renderAliasFixer'
-    },
-    {
         'path': '/shoppinglist',
         'name': 'shoppinglist',
         'title': u'Handleliste',

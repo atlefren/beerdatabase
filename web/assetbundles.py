@@ -201,14 +201,6 @@ match_suggestions_bundle = react_bundle(
     'match_suggestions.js'
 )
 
-fix_alias_bundle = react_bundle(
-    Bundle(
-        'js/src/Pages/FixAlias.jsx',
-        filters=js_filters
-    ),
-    'alias_fixer.js'
-)
-
 shoppinglist_bundle = react_bundle(
     Bundle(
         'js/src/Pages/Shoppinglist.jsx',
