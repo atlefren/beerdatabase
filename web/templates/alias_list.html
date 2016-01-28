@@ -2,9 +2,10 @@
 
 
 {% block main %}
-<h1>Alias-list</h1>
-<p>Ølene på denne listen er øl som har blitt matchet med "Alias"-øl på Ratebeer. Det betyr at de ikke har 
-noe score-informasjon. Hvis du vil hjelpe til med å finne det rette ølet klikk på ølet og foreslå riktig match.</p>
+<h1>Alias-øl</h1>
+ <div class='alert alert-warning'>
+<strong>Hjelp:</strong><p>Ølene på denne listen er øl som har blitt matchet med "Alias"-øl på Ratebeer. Det betyr at de ikke har 
+noe score-informasjon. Hvis du vil hjelpe til med å finne det rette ølet klikk på ølet og foreslå riktig match.</p></div>
 
 <div class="list-group">
 {% for beer in beers %}

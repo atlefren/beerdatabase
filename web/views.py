@@ -27,6 +27,10 @@ def index():
     return render_template('index.html')
 
 
+def about():
+    return render_template('about.html')
+
+
 def update_log():
     d = queries.get_update_log()
     return render_template('update_log.html', data=d)
@@ -155,15 +159,24 @@ pages = [
         'path': '/shoppinglist',
         'name': 'shoppinglist',
         'title': u'Handleliste',
+        'in_menu': True,
         'js_func': 'bd.renderShoppingList'
     },
     {
         'path': '/alias_beers',
         'name': 'alias_beers',
-        'title': u'Umatcha øl',
         'view_type': 'standard_view',
         'data_func': alias_list,
+    },
+    {
+        'path': '/about',
+        'name': 'about',
+        'view_type': 'standard_view',
+        'data_func': about,
+        'title': u'Om',
+        'in_menu': True
     }
+
 ]
 
 menu_pages = [{'name': page['name'], 'title': page['title']} for page

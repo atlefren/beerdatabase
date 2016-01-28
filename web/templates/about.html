@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+
+{% block main %}
+
+
+<h3>Oppdatering</h3>
+<p>Data fra vinmonopolet oppdateres daglig, via dataene <a href="http://www.vinmonopolet.no/artikkel/om-vinmonopolet/datadeling">her</a>, samt screen-scraping for lagerbeholdning. Ratebeer-data hentes ukentlig.</p>
+<p>For en oversikt over oppdateringstidspunkter, se <a href="{{ url_for('update_log')}}">her</a></p>
+
+<h3>Ølfeil</h3>
+<p>Matching av øl fra Vinmonopolet og Ratebeer er ikke lett. Jeg har laget en 
+algoritme som prøver etter beste evne, men denne er ikke 100% korrekt. Finner du 
+feil finnes det en "rapporter feil" - link på hver detalj-side.</p>
+
+<p>For å gjøre ting værre er det noen øl algoritmen ikke matcher, se 
+<a href="{{ url_for('unmatched')}}">her</a> for en liste over disse og mulighet til
+å foreslå match.</p>
+
+<p>Det er også noen øl som matches med "Alias-øl" hos Ratebeer, disse vil ikke 
+score vises for. se 
+<a href="{{ url_for('alias_beers')}}">her</a> for en liste over disse og mulighet til
+å foreslå endringer.</p>
+
+<h3>Støtte</h3>
+<p>Jeg bruker ikke mye penger på denne siden, men det koster litt med serverplass og det går jo med noe tid. Hvis du ønsker å støtte meg med penger, bruk <a href="https://flattr.com/submit/auto?user_id=atlefren&url=http%3A%2F%2Folmonopolet.no" target="_blank"><img src="//button.flattr.com/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0"></a>. Ellers kan du jo vurdere å kjøpe en øl til meg om du ser meg på en pub?</p>
+
+<h3>Feilrapportering / forslag</h3>
+<p>Hvis du oppdager noen feil, eller har inspill til hvordan siden kan gjøres bedre, opprett et issue på <a href="https://github.com/atlefren/beerdatabase/issues" target="_blank">GitHub</a>. 
+
+
+<h3>Takk</h3>
+<p>Takk til Morten Barbarossa Brekkevold som har vært så vennlig å donere domenet ølmonopolet.no!</p>
+<p>Takk til alle som har kommet med forslag, rapportert feil og dere som sprer ordet om sida!</p>
+
+{% endblock %}
+
+
+{% block js %}
+
+    {% assets "index_bundle" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+    {{ super() }}
+
+{% endblock %}
+
