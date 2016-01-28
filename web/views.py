@@ -31,6 +31,13 @@ def update_log():
     d = queries.get_update_log()
     return render_template('update_log.html', data=d)
 
+
+def alias_list():
+    d = queries.get_alias_beers()
+    print d
+    return render_template('alias_list.html', beers=d)
+
+
 pages = [
     {
         'path': '/',
@@ -156,6 +163,13 @@ pages = [
         'name': 'shoppinglist',
         'title': u'Handleliste',
         'js_func': 'bd.renderShoppingList'
+    },
+    {
+        'path': '/alias_beers',
+        'name': 'alias_beers',
+        'title': u'Umatcha øl',
+        'view_type': 'standard_view',
+        'data_func': alias_list,
     }
 ]
 

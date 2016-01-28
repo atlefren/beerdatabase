@@ -44,6 +44,67 @@ var bd = this.bd || {};
         }
     });
 
+    function parseRatebeerUrl(url) {
+        if (url.indexOf('ratebeer.com/beer/') !== -1) {
+            var data = [];
+            var getKeyValue = function (a, b, c, d) {
+                data.push(b);
+            };
+            url.replace(/\/(\d+)/g, getKeyValue);
+            return parseInt(_.last(data), 10);
+        }
+        return null;
+    }
+
+    var RatebeerUrlMatcher = React.createClass({
+
+        getInitialState: function () {
+            return {validUrl: true, url: this.props.value};
+        },
+
+        gotError: function () {
+            this.setState({validUrl: false});
+        },
+
+        foundBeer: function (beer) {
+            this.props.selectBrewery(beer.brewery);
+            this.props.selectBeer(beer);
+        },
+
+        getBeer: function (id) {
+            bd.api.getRatebeerBeer(id, this.foundBeer, this.gotError);
+        },
+
+        onChange: function (e) {
+            var url = e.target.value;
+            var id = parseRatebeerUrl(url);
+            if (id || url === '') {
+                this.setState({url: url, validUrl: true});
+                this.getBeer(id);
+            } else {
+                this.setState({url: url, validUrl: false});
+            }
+        },
+
+        focus: function () {
+            this.setState({url: '', validUrl: true});
+        },
+
+        render: function () {
+            return (
+                <div className={'form-group' + (this.state.validUrl ? '' : ' has-error')}>
+                    <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Url"
+                        onFocus={this.focus}
+                        onChange={this.onChange}
+                        value={this.state.url} />
+                </div>
+            );
+        }
+    });
+
     var RbBeerOverview = React.createClass({
 
         getInitialState: function () {
@@ -82,12 +143,14 @@ var bd = this.bd || {};
                                 <th>Abv</th>
                                 <th>Ibu</th>
                                 <th>Ratebeer Url</th>
+                                <th>Alias</th>
                             </tr>
                             <tr>
                                 <td>{this.state.beer.style.name}</td>
                                 <td>{ns.Util.fixedOrNa(this.state.beer.abv, 2)}</td>
                                 <td>{this.state.beer.ibu}</td>
                                 <td><a href={this.state.beer.url} target="_blank">Link</a></td>
+                                <td>{this.state.beer.alias ? 'Ja' : 'Nei'}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -107,25 +170,38 @@ var bd = this.bd || {};
                                 <tr>
                                     <th>Bryggeri</th>
                                     <td>
-                                     <ns.Autocomplete 
-                                        placeholder="Bryggeri"
-                                        ref="brewery"
-                                        initialVal={this.state.brewery.name}
-                                        autocompleteSearch={ns.api.searchBrewery}
-                                        select={this.selectBrewery} />
+                                         <ns.Autocomplete
+                                            placeholder="Bryggeri"
+                                            ref="brewery"
+                                            key={this.state.brewery.id}
+                                            initialVal={this.state.brewery.name}
+                                            autocompleteSearch={ns.api.searchBrewery}
+                                            select={this.selectBrewery} />
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>Navn</th>
                                     <td>
-                                    <ns.Autocomplete 
-                                        placeholder="øl"
-                                        ref="beer"
-                                        initialVal={this.state.beer.name}
-                                        extraParams={beerSearchParams}
-                                        disabled={beerDisabled}
-                                        autocompleteSearch={ns.api.searchBeer}
-                                        select={this.selectBeer} />
+                                        <ns.Autocomplete
+                                            placeholder="øl"
+                                            ref="beer"
+                                            initialVal={this.state.beer.name}
+                                            key={this.state.beer.id}
+                                            selectedItem={this.state.beer}
+                                            extraParams={beerSearchParams}
+                                            disabled={beerDisabled}
+                                            autocompleteSearch={ns.api.searchBeer}
+                                            select={this.selectBeer} />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Ratebeer-url</th>
+                                    <td>
+                                        <RatebeerUrlMatcher
+                                            key={this.state.beer.id}
+                                            value={this.state.beer.url}
+                                            selectBrewery={this.selectBrewery}
+                                            selectBeer={this.selectBeer}/>
                                     </td>
                                 </tr>
                             </tbody>

@@ -280,6 +280,16 @@ def parse_stock_data(data):
     return shops
 
 
+@app.route(api_prefix + '/ratebeerbeers/<int:beer_id>')
+def get_ratebeerbeer(beer_id):
+    beer = current_app.db_session.query(RatebeerBeer).get(beer_id)
+    if beer is not None:
+        return Response(
+            json.dumps(beer.serialize()),
+            content_type='application/json',
+            status=200
+        )
+
 @app.route(api_prefix + '/shoppinglist', methods=['POST'])
 def get_shoppinglist():
     beer_ids = request.json

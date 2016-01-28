@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+
+{% block main %}
+<h1>Alias-list</h1>
+<p>Ølene på denne listen er øl som har blitt matchet med "Alias"-øl på Ratebeer. Det betyr at de ikke har 
+noe score-informasjon. Hvis du vil hjelpe til med å finne det rette ølet klikk på ølet og foreslå riktig match.</p>
+
+<div class="list-group">
+{% for beer in beers %}
+    <a href="/pol_beers/{{beer.id}}/report"  class="list-group-item">{{beer.ratebeer.name}}</a>
+{% endfor %}
+</div>
+{% endblock %}
+
+{% block js %}
+
+    {% assets "index_bundle" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+    {{ super() }}
+
+{% endblock %}

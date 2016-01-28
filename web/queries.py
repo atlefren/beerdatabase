@@ -14,6 +14,13 @@ def get_pol_beers_list():
     return [b.get_list_response() for b in pol_beers]
 
 
+def get_alias_beers():
+    return current_app.db_session.query(PoletBeer)\
+        .join(RatebeerBeer)\
+        .filter(RatebeerBeer.alias == True)\
+        .all()
+
+
 def get_pol_beer(beer_id):
     return current_app.db_session.query(PoletBeer).get(beer_id)
 

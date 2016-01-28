@@ -134,4 +134,19 @@ bd.api = bd.api || {};
             });
     };
 
+    ns.getRatebeerBeer = function (beerId, success, error) {
+        var url = API_BASE + 'ratebeerbeers/' + beerId;
+        atomic.get(url)
+            .success(function (data, xhr) {
+                success(data);
+            })
+            .error(function (data, xhr) {
+                if (error) {
+                    error();
+                } else {
+                    console.error(data);
+                }
+            });
+    };
+
 }(bd.api));

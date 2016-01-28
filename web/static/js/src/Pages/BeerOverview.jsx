@@ -185,13 +185,13 @@ var bd = this.bd || {};
             if (!this.props.beer.ratebeer.alias) {
                 return;
             }
-            var err_url = '/beers/' + this.props.beer.ratebeer.id + '/fix_alias';
+            var err_url = '/pol_beers/' + this.props.beer.id + '/report';
             return (
                 <div className='alert alert-warning'>
                     <strong>Hjelp:</strong>{' '}
-                    Dette ølet er et såkalt alias-øl hos Ratebeer. Det betyr at vi 
-                    ikke får vist all informasjon om det.
-                    Hvis du vil hjelpe oss å finne riktig øl, gå <a href={err_url}>hit</a>.
+                    Dette ølet er et såkalt alias-øl hos Ratebeer.{' '}Det betyr at vi 
+                    ikke får vist all informasjon om det.{' '}
+                    Hvis du vil hjelpe oss å finne riktig øl,{' '}gå{' '}<a href={err_url}>hit</a>.
                 </div>
             );
         },
