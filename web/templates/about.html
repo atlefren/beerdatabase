@@ -8,6 +8,12 @@
 <p>Data fra vinmonopolet oppdateres daglig, via dataene <a href="http://www.vinmonopolet.no/artikkel/om-vinmonopolet/datadeling">her</a>, samt screen-scraping for lagerbeholdning. Ratebeer-data hentes ukentlig.</p>
 <p>For en oversikt over oppdateringstidspunkter, se <a href="{{ url_for('update_log')}}">her</a></p>
 
+<h3>Hjelp</h3>
+<p>I tabellene over øl er det begrenset med plass, og noen forkortelser og 
+merkelige skrivemåter kan forekomme. Forkortelsen "ABV" står for Alcohol By Volume,
+og er volumprosent alkohol. Score presenteres på formen "100 (100)" der det første 
+tallet er Ratebeer sin "Overall score" (maks 100) og tallet i parantes er "Style score" (maks 100).</p>
+
 <h3>Ølfeil</h3>
 <p>Matching av øl fra Vinmonopolet og Ratebeer er ikke lett. Jeg har laget en 
 algoritme som prøver etter beste evne, men denne er ikke 100% korrekt. Finner du 
