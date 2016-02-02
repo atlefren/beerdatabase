@@ -34,13 +34,13 @@ def update_pol():
     conn_str = app.config.get('SQLALCHEMY_DATABASE_URI', None)
 
     print 'Import shops'
-    update_pol_shops(conn_str)
+    #update_pol_shops(conn_str)
 
     print 'Import beers'
     update_pol_beers(conn_str)
 
     print 'Import stock'
-    update_pol_stock(conn_str)
+    #update_pol_stock(conn_str)
 
 
 @manager.command

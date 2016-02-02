@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from collections import defaultdict
+from datetime import datetime
 
 from beertools import read_pol_beers, BreweryNameMatcher, BeerNameMatcher
 
@@ -20,9 +21,13 @@ def get_breweries_polet(beers_polet):
 
 
 def save_pol_beers(beers, db):
+    now = datetime.now()
+    for beer in beers:
+        beer['created'] = now
+
     sql = '''
-        INSERT INTO pol_beer (id, name, store_category, produktutvalg, producer, distributor, varenummer, abv, volume, color, smell, taste, method, cork_type, packaging_type, price, country, district, subdistrict, url, vintage, ingredients, pairs_with_1, pairs_with_2, pairs_with_3, storage_notes, sweetness, freshness, bitterness, richness, ratebeer_id)
-        VALUES (%(Varenummer)s, %(Varenavn)s, %(Butikkategori)s, %(Produktutvalg)s, %(Produsent)s, %(Distributor)s, %(Varenummer)s, %(Alkohol)s, %(Volum)s, %(Farge)s, %(Lukt)s, %(Smak)s, %(Metode)s, %(Korktype)s, %(Emballasjetype)s, %(Pris)s, %(Land)s, %(Distrikt)s, %(Underdistrikt)s, %(Vareurl)s, %(Argang)s, %(Rastoff)s, %(Passertil01)s, %(Passertil02)s, %(Passertil03)s, %(Lagringsgrad)s, %(Sodme)s, %(Friskhet)s, %(Bitterhet)s, %(Fylde)s, %(ratebeer_id)s)
+        INSERT INTO pol_beer (id, name, store_category, produktutvalg, producer, distributor, varenummer, abv, volume, color, smell, taste, method, cork_type, packaging_type, price, country, district, subdistrict, url, vintage, ingredients, pairs_with_1, pairs_with_2, pairs_with_3, storage_notes, sweetness, freshness, bitterness, richness, ratebeer_id, created)
+        VALUES (%(Varenummer)s, %(Varenavn)s, %(Butikkategori)s, %(Produktutvalg)s, %(Produsent)s, %(Distributor)s, %(Varenummer)s, %(Alkohol)s, %(Volum)s, %(Farge)s, %(Lukt)s, %(Smak)s, %(Metode)s, %(Korktype)s, %(Emballasjetype)s, %(Pris)s, %(Land)s, %(Distrikt)s, %(Underdistrikt)s, %(Vareurl)s, %(Argang)s, %(Rastoff)s, %(Passertil01)s, %(Passertil02)s, %(Passertil03)s, %(Lagringsgrad)s, %(Sodme)s, %(Friskhet)s, %(Bitterhet)s, %(Fylde)s, %(ratebeer_id)s, %(created)s)
         ON CONFLICT (id) DO UPDATE
         SET (id, name, store_category, produktutvalg, producer, distributor, varenummer, abv, volume, color, smell, taste, method, cork_type, packaging_type, price, country, district, subdistrict, url, vintage, ingredients, pairs_with_1, pairs_with_2, pairs_with_3, storage_notes, sweetness, freshness, bitterness, richness, ratebeer_id) = 
         (%(Varenummer)s, %(Varenavn)s, %(Butikkategori)s, %(Produktutvalg)s, %(Produsent)s, %(Distributor)s, %(Varenummer)s, %(Alkohol)s, %(Volum)s, %(Farge)s, %(Lukt)s, %(Smak)s, %(Metode)s, %(Korktype)s, %(Emballasjetype)s, %(Pris)s, %(Land)s, %(Distrikt)s, %(Underdistrikt)s, %(Vareurl)s, %(Argang)s, %(Rastoff)s, %(Passertil01)s, %(Passertil02)s, %(Passertil03)s, %(Lagringsgrad)s, %(Sodme)s, %(Friskhet)s, %(Bitterhet)s, %(Fylde)s, %(ratebeer_id)s);
