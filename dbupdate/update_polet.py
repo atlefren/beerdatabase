@@ -22,8 +22,6 @@ def get_breweries_polet(beers_polet):
 
 def save_pol_beers(beers, db):
     now = datetime.now()
-    for beer in beers:
-        beer['created'] = now
 
     sql = '''
         INSERT INTO pol_beer (id, name, store_category, produktutvalg, producer, distributor, varenummer, abv, volume, color, smell, taste, method, cork_type, packaging_type, price, country, district, subdistrict, url, vintage, ingredients, pairs_with_1, pairs_with_2, pairs_with_3, storage_notes, sweetness, freshness, bitterness, richness, ratebeer_id, created)
@@ -32,7 +30,30 @@ def save_pol_beers(beers, db):
         SET (id, name, store_category, produktutvalg, producer, distributor, varenummer, abv, volume, color, smell, taste, method, cork_type, packaging_type, price, country, district, subdistrict, url, vintage, ingredients, pairs_with_1, pairs_with_2, pairs_with_3, storage_notes, sweetness, freshness, bitterness, richness, ratebeer_id) = 
         (%(Varenummer)s, %(Varenavn)s, %(Butikkategori)s, %(Produktutvalg)s, %(Produsent)s, %(Distributor)s, %(Varenummer)s, %(Alkohol)s, %(Volum)s, %(Farge)s, %(Lukt)s, %(Smak)s, %(Metode)s, %(Korktype)s, %(Emballasjetype)s, %(Pris)s, %(Land)s, %(Distrikt)s, %(Underdistrikt)s, %(Vareurl)s, %(Argang)s, %(Rastoff)s, %(Passertil01)s, %(Passertil02)s, %(Passertil03)s, %(Lagringsgrad)s, %(Sodme)s, %(Friskhet)s, %(Bitterhet)s, %(Fylde)s, %(ratebeer_id)s);
     '''
-    db.run_upserts(sql, beers)
+    price_sql = '''
+        INSERT INTO pol_beer_price (pol_beer_id, price, updated)
+        VALUES (%(Varenummer)s,  %(Pris)s, %(updated)s);
+    '''
+    conn = db.get_connection()
+    cur = conn.cursor()
+    counter = 0
+    for beer in beers:
+        beer['created'] = now
+        price = {
+            'Varenummer': beer['Varenummer'],
+            'Pris': beer['Pris'],
+            'updated': now
+        }
+        cur.execute(sql, (beer))
+        cur.execute(price_sql, (price))
+        counter += 1
+        if counter % 1000 == 0:
+            conn.commit()
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
 
 
 def match_pol_breweries(breweries_pol, breweries_rb):
@@ -80,6 +101,9 @@ def match_pol_beers(rb_brewery, rb_beers_for_brewery, pol_breweries, beers_polet
 def update_pol_beers(conn_str=None):
     db = Database(conn_str)
     beers_polet, updated = read_pol_beers()
+
+    # ok, unwrap generator
+    beers_polet = [b for b in beers_polet]
 
     breweries_rb = db.get_rb_breweries()
     breweries_pol = get_breweries_polet(beers_polet)
