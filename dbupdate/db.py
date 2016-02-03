@@ -96,6 +96,20 @@ class Database(object):
         conn.close()
         return breweries
 
+    def get_rb_breweries_for_country(self, country_id):
+        conn = self.get_connection()
+        cur = conn.cursor()
+        cur.execute('SELECT id, name FROM rb_brewery WHERE country=%s', (country_id,))
+        breweries = []
+        for row in cur.fetchall():
+            breweries.append({
+                'id': row[0],
+                'name': row[1]
+            })
+        cur.close()
+        conn.close()
+        return breweries
+
     def get_pol_beers(self):
         conn = self.get_connection()
         cur = conn.cursor()

@@ -6,7 +6,8 @@ from flask.ext.migrate import Migrate, MigrateCommand
 
 from web import app, db
 from dbupdate import (update_ratebeer as rb_update, update_pol_beers,
-                      update_pol_shops, update_pol_stock, update_adminareas)
+                      update_pol_shops, update_pol_stock, update_adminareas,
+                      update_brewery_positions)
 
 manager = Manager(app)
 
@@ -27,6 +28,12 @@ def update_ratebeer():
     print 'Importing data from ratebeer'
     rb_update(app.config.get('SQLALCHEMY_DATABASE_URI', None))
 
+@manager.command
+def update_positions():
+    print 'update brewery positions'
+    conn_str = app.config.get('SQLALCHEMY_DATABASE_URI', None)
+    update_brewery_positions(conn_str)
+
 
 @manager.command
 def update_pol():
@@ -41,6 +48,15 @@ def update_pol():
 
     print 'Import stock'
     update_pol_stock(conn_str)
+
+
+@manager.command
+def update_osm_cron():
+    try:
+        update_positions()
+        log_write('Updated OSM')
+    except Exception:
+        log_write('OSM failed')
 
 
 @manager.command
