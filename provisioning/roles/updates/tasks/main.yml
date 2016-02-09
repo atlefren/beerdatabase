@@ -27,4 +27,4 @@
             #group=root
 
 - name: setup crontab for osm
-  cron: name="update pol" hour="5" minute="50" job="{{app.root}}/update_osm.sh" state=present
+  cron: name="update osm" hour="5" minute="50" job="{{app.root}}/update_osm.sh" state=present
