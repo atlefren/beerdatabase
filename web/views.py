@@ -95,7 +95,7 @@ pages = [
         'path': '/countries/',
         'name': 'country_list',
         'title': 'Land',
-        'data_func': queries.get_countries,
+        'data_func': data.get_countries,
         'js_func': 'bd.renderCountryList',
         'in_menu': True
     },

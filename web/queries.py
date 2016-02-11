@@ -6,7 +6,7 @@ from sqlalchemy import distinct
 
 from models import (PoletBeer, PolShop, PolStock, RatebeerBrewery,
                     RatebeerBeer, Country, BeerStyle, RbPolBeerMapping,
-                    Municipality, UpdateLog)
+                    Municipality, UpdateLog, CountryGeom)
 
 
 def get_pol_beers_list():
@@ -181,6 +181,12 @@ def get_country(id):
         'country': country,
         'beers': [b.get_list_response() for b in beers]
     }
+
+
+def get_country_geoms():
+    return current_app.db_session.query(CountryGeom)\
+        .filter(CountryGeom.iso_code != 'AQ')\
+        .all()
 
 
 def get_update_log():

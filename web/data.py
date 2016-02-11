@@ -34,6 +34,13 @@ def get_country(id):
     return data, u'Øl fra ' + data['country'].name, None
 
 
+def get_countries():
+    return {
+        'countries': queries.get_countries(),
+        'geoms':  queries.get_country_geoms(),
+    }
+
+
 def get_pol_shop_list():
     return {
         'shops': queries.get_pol_shops(),

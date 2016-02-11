@@ -355,3 +355,10 @@ class UpdateLog(Base):
     type = sa.Column('type', sa.Unicode(255))
     datetime = sa.Column('datetime', sa.DateTime(timezone=True))
     last_updated = sa.Column('last_updated', sa.DateTime(timezone=True))
+
+
+class CountryGeom(Base):
+    __tablename__ = 'country_geom'
+    iso_code = sa.Column('iso_code', sa.Unicode(2), primary_key=True)
+    continent = sa.Column('continent', sa.Text())
+    geom = sa.Column('geog', Geometry)

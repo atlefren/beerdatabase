@@ -112,7 +112,10 @@ style_bundle = react_bundle(
 
 country_list_bundle = react_bundle(
     Bundle(
+        'js/lib/d3.v3.min.js',
+        'js/lib/d3.geo.projection.v0.min.js',
         'js/src/SortableTable.jsx',
+        'js/src/CountryMap.jsx',
         'js/src/Pages/CountryList.jsx',
         filters=js_filters
     ),
