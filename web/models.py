@@ -145,7 +145,7 @@ class PoletBeer(Base):
     produktutvalg = sa.Column('produktutvalg', sa.Unicode(100))
     producer = sa.Column('producer', sa.Unicode(100))
     distributor = sa.Column('distributor', sa.Unicode(100))
-    varenummer = sa.Column('varenummer', sa.Integer)
+    varenummer = sa.Column('varenummer', sa.BigInteger)
     abv = sa.Column('abv', sa.Float)
     volume = sa.Column('volume', sa.Float)
     color = sa.Column('color', sa.Unicode(100))
@@ -334,7 +334,7 @@ class PolStock(Base):
     )
     pol_beer_id = sa.Column(
         'pol_beer_id',
-        sa.Integer,
+        sa.BigInteger,
         sa.ForeignKey('pol_beer.id'),
         nullable=False,
         primary_key=True
