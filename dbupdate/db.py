@@ -29,11 +29,14 @@ class Database(object):
             host=hostname
         )
 
-    def execute_sql(self, sql):
+    def execute_sql(self, sql, data=None):
         conn = self.get_connection()
         cur = conn.cursor()
+        if data:
+            cur.execute(sql, (data,))
+        else:
+            cur.execute(sql)
         conn.commit()
-        cur.execute(sql)
         cur.close()
         conn.close()
 
