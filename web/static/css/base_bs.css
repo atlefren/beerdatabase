@@ -183,6 +183,26 @@ path {
     fill: black;
   }
 
+.fullscreenmap {
+    position: fixed;
+    top: 50px;
+    bottom: 100px;
+    left: 0;
+    right: 0;
+}
+
+#country_map .popup {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    bottom: 20px;
+    width: 400px;
+    z-index: 314159;
+}
+
+#country_map .popup .well {
+  height: 100%;
+}
 
 /*!
  * IE10 viewport hack for Surface/desktop Windows 8 bug

@@ -83,3 +83,11 @@ def get_beer_fix_data(beer_id):
         'pol_beer': pol_beer.serialize(),
         'rb_beer': rb_beer.serialize() if rb_beer is not None else None
     }
+
+
+def get_country_map(country_id):
+    country = queries.get_country_name(country_id)
+    return {
+        'country': country.name,
+        'breweries': queries.get_osm_breweries_for_country(country_id)
+    }

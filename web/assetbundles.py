@@ -31,6 +31,8 @@ css_base = Bundle(
     Bundle(
         'js/lib/bootstrap/dist/css/bootstrap.min.css',
         'js/lib/nouislider/distribute/nouislider.min.css',
+        'js/lib/leaflet.markercluster/dist/MarkerCluster.css',
+        'js/lib/leaflet.markercluster/dist/MarkerCluster.Default.css',
         'css/base_bs.css',
         'css/auocomplete_bs.css',
         filters=css_filters
@@ -210,4 +212,15 @@ shoppinglist_bundle = react_bundle(
         filters=js_filters
     ),
     'shoppinglist.js'
+)
+
+
+country_map_bundle = react_bundle(
+    Bundle(
+        'js/lib/makimarkers.js',
+        'js/lib/leaflet.markercluster/dist/leaflet.markercluster.js',
+        'js/src/Pages/CountryMap.jsx',
+        filters=js_filters
+    ),
+    'country_map.js'
 )

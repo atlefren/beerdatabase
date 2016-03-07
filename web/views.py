@@ -106,6 +106,14 @@ pages = [
         'js_func': 'bd.renderBeersInCountryList'
     },
     {
+        'path': '/countries/<string:id>/map',
+        'name': 'country_map',
+        'data_func': data.get_country_map,
+        'js_func': 'bd.renderCountryMap',
+        'external_js': ['http://www.webatlas.no/sh/3/v/101014/webatlas.js'],
+        'external_css': ['http://www.webatlas.no/sh/3/v/101014/webatlas.css']
+    },
+    {
         'path': '/pol_shops/',
         'name': 'pol_shop_list',
         'title': u'Polutsalg',

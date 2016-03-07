@@ -6,7 +6,7 @@ from sqlalchemy import distinct
 
 from models import (PoletBeer, PolShop, PolStock, RatebeerBrewery,
                     RatebeerBeer, Country, BeerStyle, RbPolBeerMapping,
-                    Municipality, UpdateLog, CountryGeom)
+                    Municipality, UpdateLog, CountryGeom, OsmBrewery)
 
 
 def get_pol_beers_list():
@@ -166,6 +166,13 @@ def get_countries():
     return [c[0].serialize(extra_data={'count': c[1]}) for c in countries]
 
 
+def get_country_name(id):
+    country = current_app.db_session.query(Country).get(id)
+    if not country:
+        abort(404)
+    return country
+
+
 def get_country(id):
     country = current_app.db_session.query(Country).get(id)
     if not country:
@@ -203,3 +210,10 @@ def get_update_log():
             'stock': sorted(set([d.last_updated for d in data if d.type == 'pol_stock']), reverse=True)[:5],
         }
     }
+
+
+def get_osm_breweries_for_country(country_id):
+    breweries = current_app.db_session.query(OsmBrewery)\
+        .filter(OsmBrewery.country_id == int(country_id))
+
+    return breweries.all()

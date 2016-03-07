@@ -10,15 +10,15 @@ var bd = this.bd || {};
             if (this.props.beers.length) {
                 return (
                     <p>
-                        Det er pr nå registrert {this.props.beers.length} øl{' '}
-                        fra {this.props.brewery.name} hos Vinmonopolet.
+                        Det er pr nå registrert{' '}{this.props.beers.length}{' '}øl{' '}
+                        fra{' '}{this.props.brewery.name}{' '}hos Vinmonopolet.
                     </p>
                 );
             }
             return (
                 <p>
                     Det er pr nå ikke registrert noen øl fra {' '}
-                    {this.props.brewery.name} hos Vinmonopolet.
+                    {this.props.brewery.name}{' '}hos Vinmonopolet.
                 </p>
             );
         },
@@ -39,7 +39,7 @@ var bd = this.bd || {};
                 <div>
                     <p>
                         Fra <a href={'/countries/' + this.props.brewery.country.rb_id}>
-                            {this.props.brewery.country.name}
+                            {' '}{this.props.brewery.country.name}
                         </a>
                     </p>
                     {this.getNumBeerText()}

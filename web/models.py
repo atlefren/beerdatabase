@@ -362,3 +362,29 @@ class CountryGeom(Base):
     iso_code = sa.Column('iso_code', sa.Unicode(2), primary_key=True)
     continent = sa.Column('continent', sa.Text())
     geom = sa.Column('geog', Geometry)
+
+
+class OsmBrewery(Base):
+    __tablename__ = 'osm_breweries'
+    osm_id = sa.Column('osm_id', sa.BigInteger, primary_key=True)
+    country_id = sa.Column('country_id', sa.Integer)
+    geom = sa.Column('geom', Geometry)
+    website = sa.Column('website', sa.Text())
+    amenity = sa.Column('amenity', sa.Text())
+    housenumber = sa.Column('housenumber', sa.Text())
+    city = sa.Column('city', sa.Text())
+    postcode = sa.Column('postcode', sa.Text())
+    street = sa.Column('street', sa.Text())
+    country = sa.Column('country', sa.Text())
+    name = sa.Column('name', sa.Text())
+    operator = sa.Column('operator', sa.Text())
+    ratebeer_id = sa.Column(
+        'ratebeer_id',
+        sa.Integer,
+        sa.ForeignKey('rb_brewery.id'),
+        nullable=True
+    )
+    ratebeer = relationship(
+        'RatebeerBrewery',
+        lazy=False
+    )
