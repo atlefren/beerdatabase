@@ -91,8 +91,24 @@ var bd = this.bd || {};
 
         componentDidMount: function () {
             var element = ReactDOM.findDOMNode(this);
-            var map = new WebatlasMap(element, {customer: 'atlefren_olmonopolet', zoomControl: false});
+            var map = new L.Map(element, {zoomControl: false});
             new L.Control.Zoom({position: 'topright'}).addTo(map);
+            var apikey = this.props.maptoken;
+            var baseLayers = {
+                'Kart': L.tileLayer.webatlas({
+                    mapType: L.TileLayer.Webatlas.Type.VECTOR,
+                    apikey: apikey
+                }).addTo(map),
+                'Foto': L.tileLayer.webatlas({
+                    mapType: L.TileLayer.Webatlas.Type.AERIAL,
+                    apikey: apikey
+                }),
+                'Hybrid': L.tileLayer.webatlas({
+                    mapType: L.TileLayer.Webatlas.Type.HYBRID,
+                    apikey: apikey
+                })
+            };
+            L.control.layers(baseLayers, {}).addTo(map);
             var markers = _.map(this.props.breweries, function (brewery) {
                 var l = L.geoJson(brewery.geom).getLayers()[0];
                 var icon = L.MakiMarkers.icon({icon: 'beer', color: '#267FCA', size: 'm'});
@@ -141,6 +157,7 @@ var bd = this.bd || {};
         } else {
             ReactDOM.render(
                 <CountryMap
+                    maptoken={data.maptoken}
                     breweries={data.breweries} />,
                 component
             );

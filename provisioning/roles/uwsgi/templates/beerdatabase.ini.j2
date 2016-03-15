@@ -10,3 +10,4 @@ callable = app
 env = SECRET_KEY={{flask_settings.secret_key}}
 env = DEBUG={{flask_settings.debug}}
 env = SQLALCHEMY_DATABASE_URI=postgresql://{{database.username}}:{{database.password}}@localhost:5432/{{database.name}}
+env = WEBATLAS_API_TOKEN={{webatlas.apikey}}

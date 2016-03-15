@@ -94,8 +94,27 @@ var bd = this.bd || {};
         map: null,
 
         componentDidMount: function () {
+            L.Icon.Default.imagePath = '/static/js/lib/leaflet/dist/images/';
             var element = ReactDOM.findDOMNode(this);
-            this.map = new WebatlasMap(element, {customer: 'atlefren_olmonopolet'});
+            this.map = new L.Map(element);
+
+            var apikey = this.props.maptoken;
+            var baseLayers = {
+                'Kart': L.tileLayer.webatlas({
+                    mapType: L.TileLayer.Webatlas.Type.VECTOR,
+                    apikey: apikey
+                }).addTo(this.map),
+                'Foto': L.tileLayer.webatlas({
+                    mapType: L.TileLayer.Webatlas.Type.AERIAL,
+                    apikey: apikey
+                }),
+                'Hybrid': L.tileLayer.webatlas({
+                    mapType: L.TileLayer.Webatlas.Type.HYBRID,
+                    apikey: apikey
+                })
+            };
+            L.control.layers(baseLayers, {}).addTo(this.map);
+
             var markerClicked = this.markerClicked;
             this.shopLayer = L.geoJson([], {
                 pointToLayer: function (featureData, latlng) {
@@ -266,7 +285,7 @@ var bd = this.bd || {};
                             columns={columns} />
                     );
                 } else if (this.state.type === 'map') {
-                    content = (<Map items={this.state.filteredShops} />);
+                    content = (<Map items={this.state.filteredShops} maptoken={this.props.maptoken} />);
                 }
             }
 
@@ -376,6 +395,7 @@ var bd = this.bd || {};
                 categories={categories}
                 counties={counties} 
                 municipalities={data.municipalities}
+                maptoken={data.maptoken}
                 title={title} />,
             component
         );

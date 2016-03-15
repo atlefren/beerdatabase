@@ -16,3 +16,6 @@
   app:
     root: /vagrant
     name: newbeercellar
+
+  webatlas:
+    apikey: API_TOKEN

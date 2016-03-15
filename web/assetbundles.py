@@ -33,6 +33,7 @@ css_base = Bundle(
         'js/lib/nouislider/distribute/nouislider.min.css',
         'js/lib/leaflet.markercluster/dist/MarkerCluster.css',
         'js/lib/leaflet.markercluster/dist/MarkerCluster.Default.css',
+        'js/lib/leaflet/dist/leaflet.css',
         'css/base_bs.css',
         'css/auocomplete_bs.css',
         filters=css_filters
@@ -150,6 +151,8 @@ pol_beer_bundle = react_bundle(
 
 pol_shop_list_bundle = react_bundle(
     Bundle(
+        'js/lib/leaflet/dist/leaflet.js',
+        'js/lib/L.TileLayer.Webatlas.min.js',
         'js/src/SortableTable.jsx',
         'js/src/Pages/PolShopList.jsx',
         filters=js_filters
@@ -214,9 +217,10 @@ shoppinglist_bundle = react_bundle(
     'shoppinglist.js'
 )
 
-
 country_map_bundle = react_bundle(
     Bundle(
+        'js/lib/leaflet/dist/leaflet.js',
+        'js/lib/L.TileLayer.Webatlas.min.js',
         'js/lib/makimarkers.js',
         'js/lib/leaflet.markercluster/dist/leaflet.markercluster.js',
         'js/src/Pages/CountryMap.jsx',

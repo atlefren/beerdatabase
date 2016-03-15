@@ -18,3 +18,6 @@
     version: master
     repo: ssh://git@github.com/atlefren/newbeercellar.git
     name: newbeercellar
+
+  webatlas:
+    apikey: API_TOKEN

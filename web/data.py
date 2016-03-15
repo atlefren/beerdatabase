@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
+import os
 
 from flask import abort, redirect, url_for
 import queries
 
+WEBATLAS_API_TOKEN = os.environ.get('WEBATLAS_API_TOKEN', '')
+
+print WEBATLAS_API_TOKEN
 
 def get_brewery_data(brewery_id):
     brewery = queries.get_brewery(brewery_id)
@@ -44,7 +48,8 @@ def get_countries():
 def get_pol_shop_list():
     return {
         'shops': queries.get_pol_shops(),
-        'municipalities': queries.get_all_municipalities()
+        'municipalities': queries.get_all_municipalities(),
+        'maptoken': WEBATLAS_API_TOKEN
     }
 
 
@@ -89,5 +94,6 @@ def get_country_map(country_id):
     country = queries.get_country_name(country_id)
     return {
         'country': country.name,
-        'breweries': queries.get_osm_breweries_for_country(country_id)
+        'breweries': queries.get_osm_breweries_for_country(country_id),
+        'maptoken': WEBATLAS_API_TOKEN
     }

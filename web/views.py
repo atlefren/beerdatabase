@@ -109,9 +109,7 @@ pages = [
         'path': '/countries/<string:id>/map',
         'name': 'country_map',
         'data_func': data.get_country_map,
-        'js_func': 'bd.renderCountryMap',
-        'external_js': ['http://www.webatlas.no/sh/3/v/101014/webatlas.js'],
-        'external_css': ['http://www.webatlas.no/sh/3/v/101014/webatlas.css']
+        'js_func': 'bd.renderCountryMap'
     },
     {
         'path': '/pol_shops/',
@@ -119,9 +117,7 @@ pages = [
         'title': u'Polutsalg',
         'data_func': data.get_pol_shop_list,
         'js_func': 'bd.renderPolShopList',
-        'in_menu': True,
-        'external_js': ['http://www.webatlas.no/sh/3/v/101014/webatlas.js'],
-        'external_css': ['http://www.webatlas.no/sh/3/v/101014/webatlas.css']
+        'in_menu': True
     },
     {
         'path': '/pol_shops/<int:id>',
