@@ -8,3 +8,5 @@ update_pol.sh
 update_rb.sh
 log.txt
 .vagrant
+env.sh
+node_modules
