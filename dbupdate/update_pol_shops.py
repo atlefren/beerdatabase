@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
+import math
 
 import requests
 from beertools.util import get_line_parser, parsers
@@ -8,7 +9,7 @@ import dateutil.parser
 
 from db import Database
 
-URL = 'http://www.vinmonopolet.no/api/butikker'
+URL = 'https://www.vinmonopolet.no/medias/sys_master/locations/locations/h3c/h4a/8834253946910.csv'
 
 
 FIELDS = [
@@ -42,21 +43,22 @@ FIELDS = [
 
 
 def get_ids():
-    data = requests.get('http://www.vinmonopolet.no/butikker')
-    res = []
-    for line in data.text.splitlines():
-        line = line.strip()
-        if line.startswith('var shopName ='):
-            matches = re.findall(r'\"(.+?)\"', line)
-            res.append(matches[0])
 
-        if line.startswith('window.open("'):
-            matches = re.findall(r'\?butikk_id=(.+?)\"', line)
-            res.append(matches[0])
+    hits = []
 
+    first = requests.get('https://www.vinmonopolet.no/vmpSite/store-finder?q=*&page=0').json()
+
+    hits += first['data']
+
+    num_pages = int(math.ceil(first['total'] / 10))
+
+    for page in range(1, num_pages + 1):
+        resp = requests.get('https://www.vinmonopolet.no/vmpSite/store-finder?q=*&page=%s' % page).json()
+        hits += resp['data']
     shops = {}
-    for id, name in zip(res[1::2], res[0::2]):
-        shops[name] = id
+    for shop in hits:
+        shops[shop['displayName']] = shop['name']
+
     return shops
 
 
