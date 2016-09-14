@@ -6,7 +6,9 @@ provisioning/host_vars/172.16.10.15
 provisioning/host_vars/beerdatabase_do
 update_pol.sh
 update_rb.sh
+update_osm.sh
 log.txt
 .vagrant
 env.sh
 node_modules
+*.retry
