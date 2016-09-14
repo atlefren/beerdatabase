@@ -28,6 +28,7 @@ def update_ratebeer():
     print 'Importing data from ratebeer'
     rb_update(app.config.get('SQLALCHEMY_DATABASE_URI', None))
 
+
 @manager.command
 def update_positions():
     print 'update brewery positions'

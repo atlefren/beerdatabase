@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
-from beertools.polchecker import check_beer
+from beertools.get_pol_stock_for_pol import get_pol_stock_for_pol
 
 from db import Database
 
@@ -23,31 +22,23 @@ def save_stock(stock_by_pol, db):
 
 def update_pol_stock(conn_str=None):
     db = Database(conn_str)
-    beers = db.get_pol_beers()
+    beer_ids = [beer['id'] for beer in db.get_pol_beers()]
     shops = [pol['id'] for pol in db.get_pol_shops()]
 
-    stock_by_pol = []
-    for beer in beers:
-        stocks = check_beer(beer['id'])
-        for stock in stocks:
-            num = stock['stock']
-            updated = stock['updated']
-            stock_by_pol.append({
-                'shop_id': stock['pol_id'],
-                'pol_beer_id': beer['id'],
-                'stock': num,
-                'updated': updated
-            })
-        shops_with_beer = [int(stock['pol_id']) for stock in stocks]
-        for pol_id in shops:
-            if pol_id not in shops_with_beer:
+    for shop_id in shops:
+        stock_for_pol = get_pol_stock_for_pol(shop_id)
+        stock_by_pol = []
+        for stock in stock_for_pol:
+            beer_id = stock['product_id']
+            if beer_id in beer_ids:
                 stock_by_pol.append({
-                    'shop_id': pol_id,
-                    'pol_beer_id': beer['id'],
-                    'stock': 0,
-                    'updated': datetime.now()
+                    'shop_id': shop_id,
+                    'pol_beer_id': beer_id,
+                    'stock': stock['stock'],
+                    'updated': stock['updated']
                 })
-    save_stock(stock_by_pol, db)
+        save_stock(stock_by_pol, db)
+
     db.add_log('pol_stock')
 
 if __name__ == '__main__':
